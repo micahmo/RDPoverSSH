@@ -1,6 +1,7 @@
 ﻿using System.Windows;
+using RDPoverSSH.ViewModels;
 
-namespace RDPoverSSH
+namespace RDPoverSSH.Views
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
@@ -10,6 +11,8 @@ namespace RDPoverSSH
         public MainWindow()
         {
             InitializeComponent();
+            MainWindowViewModel viewModel = new MainWindowViewModel();
+            DataContext = viewModel;
         }
     }
 }
