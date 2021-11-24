@@ -13,12 +13,12 @@ namespace RDPoverSSH.DataStore
             {
                 return _databaseInstance ??= new Func<LiteDatabase>(() =>
                 {
-                    if (!Directory.Exists(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), ProgramDataFolderName)))
+                    if (!Directory.Exists(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonDocuments), ProgramDataFolderName)))
                     {
-                        Directory.CreateDirectory(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), ProgramDataFolderName));
+                        Directory.CreateDirectory(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonDocuments), ProgramDataFolderName));
                     }
 
-                    return new LiteDatabase(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), ProgramDataFolderName, DbName));
+                    return new LiteDatabase(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonDocuments), ProgramDataFolderName, DbName));
                 })();
             }
         }

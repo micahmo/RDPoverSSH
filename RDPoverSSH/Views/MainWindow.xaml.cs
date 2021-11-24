@@ -23,7 +23,7 @@ namespace RDPoverSSH.Views
             {
                 RootModel.Instance.Load();
             }
-            catch (IOException)
+            catch (Exception ex) when (ex is IOException || ex is UnauthorizedAccessException)
             {
                 MessageBox.Show("There was an error accessing the database configuration file. Shutting down.", "RDPoverSSH Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 throw;

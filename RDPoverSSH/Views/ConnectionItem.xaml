@@ -30,12 +30,38 @@
                 <Grid.RowDefinitions>
                     <RowDefinition Height="10"/>
                     <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
                     <RowDefinition Height="10"/>
                 </Grid.RowDefinitions>
 
                 <TextBox Grid.Column="1" Grid.Row="1" Padding="10" ui:ControlHelper.PlaceholderText="Enter connection name..." 
                          Text="{Binding Model.Name, UpdateSourceTrigger=PropertyChanged}"/>
-                <views:CommandButton Grid.Column="3" Grid.Row="1" DataContext="{Binding DeleteConnectionItemViewModel}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=views:ConnectionItem}, Path=DataContext}"/>
+                <views:CommandButton Grid.Column="3" Grid.Row="1" DataContext="{Binding DeleteConnectionCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=views:ConnectionItem}, Path=DataContext}"/>
+
+                <Grid Grid.Row="2" Grid.ColumnSpan="5">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <TextBlock Grid.Column="0" Text="{Binding MachineName}" HorizontalAlignment="Center"/>
+                    <views:CommandButton Grid.Column="1" DataContext="{Binding ToggleConnectionDirectionCommand}" />
+                    <TextBlock Grid.Column="2" Text="Remote Computer" HorizontalAlignment="Center"/>
+                </Grid>
+
+                <Grid Grid.Row="3" Grid.ColumnSpan="5">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <TextBlock Grid.Column="0" Text="{Binding MachineName}" HorizontalAlignment="Center"/>
+                    <views:CommandButton Grid.Column="1" DataContext="{Binding ToggleTunnelDirectionCommand}" />
+                    <TextBlock Grid.Column="2" Text="Remote Computer" HorizontalAlignment="Center"/>
+                </Grid>
             </Grid>
         </Border>
     </Grid>

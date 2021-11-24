@@ -33,6 +33,6 @@ namespace RDPoverSSH.ViewModels
 
         public RootModel Model => RootModel.Instance;
 
-        public List<ConnectionViewModel> Connections => Model.Connections.Select(c => new ConnectionViewModel {Model = c}).ToList();
+        public List<ConnectionViewModel> Connections => Model.Connections.Select(c => new ConnectionViewModel(c)).ToList();
     }
 }

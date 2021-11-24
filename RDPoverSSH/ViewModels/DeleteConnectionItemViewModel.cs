@@ -20,7 +20,7 @@ namespace RDPoverSSH.ViewModels
         private ICommand _command;
 
         /// <inheritdoc/>
-        public override string IconGlyph => "\xE74D";
+        public override string IconGlyph { get; set; } = "\xE74D";
 
         #endregion
 
