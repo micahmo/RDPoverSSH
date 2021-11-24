@@ -12,7 +12,8 @@
         
         Background="{DynamicResource SystemControlPageBackgroundAltHighBrush}"
         Foreground="{DynamicResource SystemControlPageTextBaseHighBrush}"
-        ui:ThemeManager.IsThemeAware="True">
+        ui:ThemeManager.IsThemeAware="True"
+        Closing="Window_Closing">
     
     <Grid>
         <Grid>

@@ -13,7 +13,7 @@ namespace RDPoverSSH.Controls
         /// <summary>
         /// Show a MessageBox with the given options
         /// </summary>
-        public static Task<ContentDialogResult> Show(string title, string message, MessageBoxButton buttons)
+        public static Task<ContentDialogResult> Show(string message, string title, MessageBoxButton buttons)
         {
             ContentDialog contentDialog = new ContentDialog
             {

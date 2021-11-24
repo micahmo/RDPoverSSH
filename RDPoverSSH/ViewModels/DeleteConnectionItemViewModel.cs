@@ -30,7 +30,7 @@ namespace RDPoverSSH.ViewModels
         {
             if (param is ConnectionViewModel connectionViewModel)
             {
-                var res = await MessageBoxHelper.Show("Confirm", $"Are you sure you want to delete connection '{connectionViewModel.Model.Name}'?", MessageBoxButton.YesNo);
+                var res = await MessageBoxHelper.Show($"Are you sure you want to delete connection '{connectionViewModel.Model.Name}'?", "Confirm", MessageBoxButton.YesNo);
                 if (res == ContentDialogResult.Primary)
                 {
                     RootModel.Instance.Connections.Remove(connectionViewModel.Model);

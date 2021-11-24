@@ -1,4 +1,6 @@
 ﻿using System.Collections.ObjectModel;
+using System.Linq;
+using RDPoverSSH.DataStore;
 
 namespace RDPoverSSH.Models
 {
@@ -20,5 +22,18 @@ namespace RDPoverSSH.Models
         /// The list of connections
         /// </summary>
         public ObservableCollection<ConnectionModel> Connections { get; } = new ObservableCollection<ConnectionModel>();
+
+        public void Save()
+        {
+            var objectIds = Connections.Select(c => c.ObjectId).ToList();
+            DatabaseEngine.ConnectionCollection.DeleteMany(c => !objectIds.Contains(c.ObjectId));
+            Connections.ToList().ForEach(c => DatabaseEngine.ConnectionCollection.Upsert(c));
+        }
+
+        public void Load()
+        {
+            Connections.Clear();
+            DatabaseEngine.ConnectionCollection.Query().ToList().ForEach(c => Connections.Add(c));
+        }
     }
 }
