@@ -1,6 +1,7 @@
-﻿using System.Windows;
+﻿using System;
 using System.Windows.Input;
 using Microsoft.Toolkit.Mvvm.Input;
+using RDPoverSSH.Models;
 
 namespace RDPoverSSH.ViewModels
 {
@@ -27,7 +28,7 @@ namespace RDPoverSSH.ViewModels
 
         private void NewConnectionCommand()
         {
-            MessageBox.Show("yo");
+            RootModel.Instance.Connections.Add(new ConnectionModel {Name = Guid.NewGuid().ToString()});
         }
 
         #endregion

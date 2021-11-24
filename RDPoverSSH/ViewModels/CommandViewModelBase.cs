@@ -1,12 +1,11 @@
 ﻿using System.Windows.Input;
-using Microsoft.Toolkit.Mvvm.ComponentModel;
 
 namespace RDPoverSSH.ViewModels
 {
     /// <summary>
     /// The base class for commands
     /// </summary>
-    public abstract class CommandViewModelBase : ObservableObject
+    public abstract class CommandViewModelBase
     {
         /// <summary>
         /// The user-friendly name of the command
@@ -25,5 +24,13 @@ namespace RDPoverSSH.ViewModels
         /// https://docs.microsoft.com/en-us/windows/apps/design/style/segoe-ui-symbol-font
         /// </remarks>
         public abstract string IconGlyph { get; }
+
+        /// <summary>
+        /// Whether or not this command has a user-friendly name
+        /// </summary>
+        /// <remarks>
+        /// Useful for binding
+        /// </remarks>
+        public bool HasName => !string.IsNullOrWhiteSpace(Name);
     }
 }

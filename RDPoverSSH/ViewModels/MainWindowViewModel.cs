@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Microsoft.Toolkit.Mvvm.ComponentModel;
+using RDPoverSSH.Models;
 
 namespace RDPoverSSH.ViewModels
 {
@@ -8,6 +10,18 @@ namespace RDPoverSSH.ViewModels
     /// </summary>
     public class MainWindowViewModel : ObservableObject
     {
+        #region Constructor
+
+        public MainWindowViewModel()
+        {
+            Model.Connections.CollectionChanged += (_, __) =>
+            {
+                OnPropertyChanged(nameof(Connections));
+            };
+        }
+
+        #endregion
+
         /// <summary>
         /// The list of commands to show on the main window
         /// </summary>
@@ -16,5 +30,9 @@ namespace RDPoverSSH.ViewModels
             new SettingsCommandViewModel(),
             new NewConnectionCommandViewModel()
         };
+
+        public RootModel Model => RootModel.Instance;
+
+        public List<ConnectionViewModel> Connections => Model.Connections.Select(c => new ConnectionViewModel {Model = c}).ToList();
     }
 }

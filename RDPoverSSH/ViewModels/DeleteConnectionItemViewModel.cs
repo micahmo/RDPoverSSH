@@ -1,0 +1,43 @@
+﻿using System.Windows;
+using System.Windows.Input;
+using Microsoft.Toolkit.Mvvm.Input;
+using ModernWpf.Controls;
+using RDPoverSSH.Controls;
+using RDPoverSSH.Models;
+
+namespace RDPoverSSH.ViewModels
+{
+    public class DeleteConnectionItemViewModel : CommandViewModelBase
+    {
+        #region CommandViewModelBase
+
+        /// <inheritdoc/>
+        //public override string Name => "Delete";
+        public override string Name => string.Empty;
+
+        /// <inheritdoc/>
+        public override ICommand Command => _command ??= new RelayCommand<object>(DeleteConnectionItem);
+        private ICommand _command;
+
+        /// <inheritdoc/>
+        public override string IconGlyph => "\xE74D";
+
+        #endregion
+
+        #region Command
+
+        private async void DeleteConnectionItem(object param)
+        {
+            if (param is ConnectionViewModel connectionViewModel)
+            {
+                var res = await MessageBoxHelper.Show("Confirm", $"Are you sure you want to delete connection '{connectionViewModel.Model.Name}'?", MessageBoxButton.YesNo);
+                if (res == ContentDialogResult.Primary)
+                {
+                    RootModel.Instance.Connections.Remove(connectionViewModel.Model);
+                }
+            }
+        }
+
+        #endregion
+    }
+}

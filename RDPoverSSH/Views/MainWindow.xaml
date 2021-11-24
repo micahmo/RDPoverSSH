@@ -5,43 +5,54 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:viewModels="clr-namespace:RDPoverSSH.ViewModels"
         xmlns:ui="http://schemas.modernwpf.com/2019"
-        xmlns:controls="clr-namespace:RDPoverSSH.Controls"
-        ui:WindowHelper.UseModernWindowStyle="True"
+        xmlns:views="clr-namespace:RDPoverSSH.Views"
         mc:Ignorable="d"
         d:DataContext="{d:DesignInstance Type={x:Type viewModels:MainWindowViewModel}}"
-        Title="RDPoverSSH" Height="450" Width="800">
-    <Window.Resources>
-        <Style TargetType="{x:Type Button}" BasedOn="{StaticResource DefaultButtonStyle}">
-            <Setter Property="Margin" Value="5"/>
-        </Style>
-    </Window.Resources>
+        Title="RDPoverSSH" Height="450" Width="800"
+        
+        Background="{DynamicResource SystemControlPageBackgroundAltHighBrush}"
+        Foreground="{DynamicResource SystemControlPageTextBaseHighBrush}"
+        ui:ThemeManager.IsThemeAware="True">
     
-    <Grid Margin="10">
-
+    <Grid>
         <Grid>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="Auto"/>
-            </Grid.ColumnDefinitions>
-
             <Grid.RowDefinitions>
                 <RowDefinition Height="50"/>
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
 
-            <ItemsControl Grid.Column="1" Grid.Row="0" ItemsSource="{Binding Commands}" >
-                <!-- Horizontal orientation for the ItemsControl -->
-                <ItemsControl.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <StackPanel Orientation="Horizontal"/>
-                    </ItemsPanelTemplate>
-                </ItemsControl.ItemsPanel>
-                <ItemsControl.ItemTemplate>
-                    <DataTemplate>
-                        <controls:CommandButton DataContext="{Binding}"/>
-                    </DataTemplate>
-                </ItemsControl.ItemTemplate>
-            </ItemsControl>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <!-- Settings buttons right padding -->
+                    <ColumnDefinition Width="15"/>
+                </Grid.ColumnDefinitions>
+
+                <ItemsControl Grid.Column="1" ItemsSource="{Binding Commands}" >
+                    <!-- Horizontal orientation for the ItemsControl -->
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <StackPanel Orientation="Horizontal"/>
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <views:CommandButton DataContext="{Binding}"/>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </Grid>
+
+            <ScrollViewer Grid.Row="1">
+                <ItemsControl ItemsSource="{Binding Connections}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <views:ConnectionItem DataContext="{Binding}" Margin="5"/>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </ScrollViewer>
         </Grid>
     </Grid>
 </Window>

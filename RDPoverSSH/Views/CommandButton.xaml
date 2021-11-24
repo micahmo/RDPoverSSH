@@ -1,18 +1,20 @@
-﻿<UserControl x:Class="RDPoverSSH.Controls.CommandButton"
+﻿<UserControl x:Class="RDPoverSSH.Views.CommandButton"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:ui="http://schemas.modernwpf.com/2019"
              xmlns:viewModels="clr-namespace:RDPoverSSH.ViewModels"
+             xmlns:c="clr-namespace:CalcBinding;assembly=CalcBinding"
              mc:Ignorable="d" 
-             d:DataContext="{d:DesignInstance Type={x:Type viewModels:CommandViewModelBase}}">
+             d:DataContext="{d:DesignInstance Type={x:Type viewModels:CommandViewModelBase}}"
+             x:Name="This">
     <Grid>
-        <Button Command="{Binding Command}">
+        <Button Command="{Binding Command}" CommandParameter="{Binding ElementName=This, Path=CommandParameter}">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="5"/>
+                    <ColumnDefinition Width="{c:Binding 'HasName ? 5 : 0'}"/>
                     <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
 
