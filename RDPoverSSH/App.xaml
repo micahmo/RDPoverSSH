@@ -15,6 +15,12 @@
             <Style TargetType="{x:Type Button}" BasedOn="{StaticResource DefaultButtonStyle}">
                 <Setter Property="Margin" Value="5"/>
             </Style>
+
+            <Style TargetType="{x:Type TextBox}" BasedOn="{StaticResource DefaultTextBoxStyle}">
+                <Setter Property="Margin" Value="5"/>
+                <Setter Property="Height" Value="10"/>
+                <Setter Property="VerticalContentAlignment" Value="Center"/>
+            </Style>
         </ResourceDictionary>
     </Application.Resources>
 </Application>
