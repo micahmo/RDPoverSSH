@@ -39,8 +39,8 @@ namespace RDPoverSSH.ViewModels
 
         public string ConnectionDirectionGlyph => Model.ConnectionDirection switch
         {
-            Direction.Normal => "\xF0AF",
-            Direction.Reverse => "\xF0B0",
+            Direction.Outgoing => "\xF0AF",
+            Direction.Incoming => "\xF0B0",
             _ => "\xF0AF"
         };
 
@@ -50,8 +50,8 @@ namespace RDPoverSSH.ViewModels
 
         public string TunnelDirectionGlyph => Model.TunnelDirection switch
         {
-            Direction.Normal => "\xF0AF",
-            Direction.Reverse => "\xF0B0",
+            Direction.Outgoing => "\xF0AF",
+            Direction.Incoming => "\xF0B0",
             _ => "\xF0AF"
         };
 

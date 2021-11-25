@@ -33,12 +33,12 @@ namespace RDPoverSSH.Models
         /// <summary>
         /// From this computer to the remote computer
         /// </summary>
-        Normal,
+        Outgoing,
 
         /// <summary>
         /// From the remote computer to this computer
         /// </summary>
-        Reverse
+        Incoming
     }
 
     /// <summary>
@@ -57,9 +57,9 @@ namespace RDPoverSSH.Models
         {
             direction = direction switch
             {
-                Direction.Normal => Direction.Reverse,
-                Direction.Reverse => Direction.Normal,
-                _ => Direction.Normal
+                Direction.Outgoing => Direction.Incoming,
+                Direction.Incoming => Direction.Outgoing,
+                _ => Direction.Outgoing
             };
 
             return direction;
