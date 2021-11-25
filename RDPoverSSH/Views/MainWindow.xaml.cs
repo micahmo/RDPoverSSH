@@ -2,6 +2,8 @@
 using System.IO;
 using System.Timers;
 using System.Windows;
+using LinqKit;
+using RDPoverSSH.BusinessLogic;
 using RDPoverSSH.DataStore;
 using RDPoverSSH.Models;
 using RDPoverSSH.ViewModels;
@@ -21,7 +23,7 @@ namespace RDPoverSSH.Views
 
             try
             {
-                RootModel.Instance.Load();
+                RootModel.Instance.Load(PredicateBuilder.New<ConnectionModel>(true));
             }
             catch (Exception ex) when (ex is IOException || ex is UnauthorizedAccessException)
             {
@@ -29,10 +31,28 @@ namespace RDPoverSSH.Views
                 throw;
             }
 
-            Timer autoSaveTimer = new Timer { Interval = TimeSpan.FromMinutes(1).TotalMilliseconds };
+            Timer autoSaveTimer = new Timer { Interval = TimeSpan.FromSeconds(5).TotalMilliseconds };
             autoSaveTimer.Elapsed += AutoSaveTimer_Elapsed;
             autoSaveTimer.Start();
 
+            // TODO: These go in Windows services?
+            SshServerWorker.Instance.Start();
+            SshClientWorker.Instance.Start();
+
+            viewModel.PropertyChanged += (_, args) =>
+            {
+                if (args.PropertyName.Equals(nameof(MainWindowViewModel.Filter)))
+                {
+                    ExpressionStarter<ConnectionModel> predicate = PredicateBuilder.New<ConnectionModel>(true);
+
+                    if (!string.IsNullOrEmpty(viewModel.Filter))
+                    {
+                        predicate = predicate.And(i => i.Name.Contains(viewModel.Filter));
+                    }
+
+                    RootModel.Instance.Load(predicate);
+                }
+            };
         }
 
         private void AutoSaveTimer_Elapsed(object sender, ElapsedEventArgs e)
@@ -42,6 +62,9 @@ namespace RDPoverSSH.Views
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
+            SshServerWorker.Instance.Stop();
+            SshClientWorker.Instance.Stop();
+
             RootModel.Instance.Save();
             DatabaseEngine.Shutdown();
         }

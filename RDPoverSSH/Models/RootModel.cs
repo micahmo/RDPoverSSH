@@ -1,5 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 using System.Linq;
+using LinqKit;
 using RDPoverSSH.DataStore;
 
 namespace RDPoverSSH.Models
@@ -25,15 +26,13 @@ namespace RDPoverSSH.Models
 
         public void Save()
         {
-            var objectIds = Connections.Select(c => c.ObjectId).ToList();
-            DatabaseEngine.ConnectionCollection.DeleteMany(c => !objectIds.Contains(c.ObjectId));
             Connections.ToList().ForEach(c => DatabaseEngine.ConnectionCollection.Upsert(c));
         }
 
-        public void Load()
+        public void Load(ExpressionStarter<ConnectionModel> connectionPredicate)
         {
             Connections.Clear();
-            DatabaseEngine.ConnectionCollection.Query().ToList().ForEach(c => Connections.Add(c));
+            DatabaseEngine.ConnectionCollection.Find(connectionPredicate).ToList().ForEach(c => Connections.Add(c));
         }
     }
 }

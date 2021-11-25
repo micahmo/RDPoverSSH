@@ -34,5 +34,12 @@ namespace RDPoverSSH.ViewModels
         public RootModel Model => RootModel.Instance;
 
         public List<ConnectionViewModel> Connections => Model.Connections.Select(c => new ConnectionViewModel(c)).ToList();
+
+        public string Filter
+        {
+            get => _filter;
+            set => SetProperty(ref _filter, value);
+        }
+        private string _filter;
     }
 }

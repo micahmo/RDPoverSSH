@@ -3,6 +3,7 @@ using System.Windows.Input;
 using Microsoft.Toolkit.Mvvm.Input;
 using ModernWpf.Controls;
 using RDPoverSSH.Controls;
+using RDPoverSSH.DataStore;
 using RDPoverSSH.Models;
 
 namespace RDPoverSSH.ViewModels
@@ -34,6 +35,7 @@ namespace RDPoverSSH.ViewModels
                 if (res == ContentDialogResult.Primary)
                 {
                     RootModel.Instance.Connections.Remove(connectionViewModel.Model);
+                    DatabaseEngine.ConnectionCollection.Delete(connectionViewModel.Model.ObjectId);
                 }
             }
         }
