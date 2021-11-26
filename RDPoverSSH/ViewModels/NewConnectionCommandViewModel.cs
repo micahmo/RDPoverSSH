@@ -21,7 +21,7 @@ namespace RDPoverSSH.ViewModels
         private RelayCommand _command;
 
         /// <inheritdoc/>
-        public override string IconGlyph { get; set; } = "\xECC8";
+        public override string IconGlyph => "\xECC8";
 
         #endregion
 

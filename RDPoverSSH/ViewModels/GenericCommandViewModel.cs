@@ -12,17 +12,26 @@ namespace RDPoverSSH.ViewModels
         /// <summary>
         /// Constructor
         /// </summary>
-        public GenericCommandViewModel(string name, ICommand command, string iconGlyph)
+        public GenericCommandViewModel(string name, ICommand command, string iconGlyph, string description = default)
         {
             Name = name;
             Command = command;
             IconGlyph = iconGlyph;
+            Description = description;
         }
 
         #endregion
         
         /// <inheritdoc/>
         public override string Name { get; }
+
+        /// <inheritdoc/>
+        public override string Description
+        {
+            get => _description;
+            set => SetProperty(ref _description, value);
+        }
+        private string _description;
 
         /// <inheritdoc/>
         public override ICommand Command { get; }

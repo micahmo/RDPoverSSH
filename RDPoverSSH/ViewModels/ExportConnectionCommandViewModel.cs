@@ -6,7 +6,7 @@ using RDPoverSSH.Properties;
 
 namespace RDPoverSSH.ViewModels
 {
-    public class DuplicateConnectionCommandViewModel : CommandViewModelBase
+    public class ExportConnectionCommandViewModel : CommandViewModelBase
     {
         #region CommandViewModelBase
 
@@ -14,20 +14,20 @@ namespace RDPoverSSH.ViewModels
         public override string Name => string.Empty;
 
         /// <inheritdoc/>
-        public override string Description => Resources.DuplicateConnection;
+        public override string Description => Resources.ExportCommandDescription;
 
         /// <inheritdoc/>
-        public override ICommand Command => _command ??= new RelayCommand<object>(DeleteConnectionItem);
+        public override ICommand Command => _command ??= new RelayCommand<object>(ExportConnectionItem);
         private ICommand _command;
 
         /// <inheritdoc/>
-        public override string IconGlyph => "\xE8C8";
+        public override string IconGlyph => "\xE898";
 
         #endregion
 
         #region Command
 
-        private async void DeleteConnectionItem(object param)
+        private async void ExportConnectionItem(object param)
         {
             if (param is ConnectionViewModel connectionViewModel)
             {

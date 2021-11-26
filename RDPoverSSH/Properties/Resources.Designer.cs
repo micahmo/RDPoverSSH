@@ -106,6 +106,33 @@ namespace RDPoverSSH.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Delete connection.
+        /// </summary>
+        public static string DeleteConnectionCommanDescription {
+            get {
+                return ResourceManager.GetString("DeleteConnectionCommanDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Duplicate connection.
+        /// </summary>
+        public static string DuplicateConnection {
+            get {
+                return ResourceManager.GetString("DuplicateConnection", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Export connection (for importing on target machine).
+        /// </summary>
+        public static string ExportCommandDescription {
+            get {
+                return ResourceManager.GetString("ExportCommandDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Filter....
         /// </summary>
         public static string FilterHint {

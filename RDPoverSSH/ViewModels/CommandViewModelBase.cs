@@ -14,6 +14,11 @@ namespace RDPoverSSH.ViewModels
         public abstract string Name { get; }
 
         /// <summary>
+        /// A description about this command (shown in a tooltip)
+        /// </summary>
+        public virtual string Description { get; set; }
+
+        /// <summary>
         /// The command to execute
         /// </summary>
         public abstract ICommand Command { get; }
@@ -24,7 +29,7 @@ namespace RDPoverSSH.ViewModels
         /// <remarks>
         /// <see href="https://docs.microsoft.com/en-us/windows/apps/design/style/segoe-ui-symbol-font"/>
         /// </remarks>
-        public abstract string IconGlyph { get; set; }
+        public virtual string IconGlyph { get; set; }
 
         /// <summary>
         /// Whether or not this command has both name and glyph

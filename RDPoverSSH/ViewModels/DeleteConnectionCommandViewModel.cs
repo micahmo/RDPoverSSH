@@ -17,11 +17,14 @@ namespace RDPoverSSH.ViewModels
         public override string Name => string.Empty;
 
         /// <inheritdoc/>
+        public override string Description => Resources.DeleteConnectionCommanDescription;
+
+        /// <inheritdoc/>
         public override ICommand Command => _command ??= new RelayCommand<object>(DeleteConnectionItem);
         private ICommand _command;
 
         /// <inheritdoc/>
-        public override string IconGlyph { get; set; } = "\xE74D";
+        public override string IconGlyph => "\xE74D";
 
         #endregion
 

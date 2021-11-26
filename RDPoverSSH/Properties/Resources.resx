@@ -137,4 +137,13 @@
     <data name="LocalComputerName" xml:space="preserve">
         <value>{0} (Local Computer)</value>
     </data>
+    <data name="ExportCommandDescription" xml:space="preserve">
+        <value>Export connection (for importing on target machine)</value>
+    </data>
+    <data name="DuplicateConnection" xml:space="preserve">
+        <value>Duplicate connection</value>
+    </data>
+    <data name="DeleteConnectionCommanDescription" xml:space="preserve">
+        <value>Delete connection</value>
+    </data>
 </root>

@@ -41,10 +41,12 @@ namespace RDPoverSSH.ViewModels
             if (e.PropertyName.Equals(nameof(Model.ConnectionDirection)))
             {
                 ToggleConnectionDirectionCommand.IconGlyph = ConnectionDirectionGlyph;
+                ToggleConnectionDirectionCommand.Description = ConnectionDirectionDescription;
             }
             else if (e.PropertyName.Equals(nameof(Model.TunnelDirection)))
             {
                 ToggleTunnelDirectionCommand.IconGlyph = TunnelDirectionGlyph;
+                ToggleConnectionDirectionCommand.Description = TunnelDirectionDescription;
             }
         }
 
@@ -58,26 +60,42 @@ namespace RDPoverSSH.ViewModels
 
         public DuplicateConnectionCommandViewModel DuplicateConnectionCommand { get; } = new DuplicateConnectionCommandViewModel();
 
+        public ExportConnectionCommandViewModel ExportConnectionCommand { get; } = new ExportConnectionCommandViewModel();
+
         public GenericCommandViewModel ToggleConnectionDirectionCommand => _toggleConnectionDirectionCommand ??=
-            new GenericCommandViewModel(string.Empty, new RelayCommand(ToggleConnectionDirection), ConnectionDirectionGlyph);
+            new GenericCommandViewModel(string.Empty, new RelayCommand(ToggleConnectionDirection), ConnectionDirectionGlyph, ConnectionDirectionDescription);
         private GenericCommandViewModel _toggleConnectionDirectionCommand;
 
-        public string ConnectionDirectionGlyph => Model.ConnectionDirection switch
+        private string ConnectionDirectionGlyph => Model.ConnectionDirection switch
         {
             Direction.Outgoing => "\xF0AF",
             Direction.Incoming => "\xF0B0",
             _ => "\xF0AF"
         };
 
+        private string ConnectionDirectionDescription => Model.ConnectionDirection switch
+        {
+            Direction.Outgoing => "This computer will connect to port X on the remote computer. Click to reverse.",
+            Direction.Incoming => "The remote computer will connect to port X on this computer. Click to reverse.",
+            _ => default
+        };
+
         public GenericCommandViewModel ToggleTunnelDirectionCommand => _toggleTunnelDirectionCommand ??=
-            new GenericCommandViewModel(string.Empty, new RelayCommand(ToggleTunnelDirection), TunnelDirectionGlyph);
+            new GenericCommandViewModel(string.Empty, new RelayCommand(ToggleTunnelDirection), TunnelDirectionGlyph, TunnelDirectionDescription);
         private GenericCommandViewModel _toggleTunnelDirectionCommand;
 
-        public string TunnelDirectionGlyph => Model.TunnelDirection switch
+        private string TunnelDirectionGlyph => Model.TunnelDirection switch
         {
             Direction.Outgoing => "\xF0AF",
             Direction.Incoming => "\xF0B0",
             _ => "\xF0AF"
+        };
+
+        private string TunnelDirectionDescription => Model.TunnelDirection switch
+        {
+            Direction.Outgoing => "This computer will establish an SSH tunnel to the remote computer. Click to reverse.",
+            Direction.Incoming => "The remote computer will establish an SSH tunnel to this computer. Click to reverse.",
+            _ => default
         };
 
         public string MachineName => string.Format(Resources.LocalComputerName, Environment.MachineName);

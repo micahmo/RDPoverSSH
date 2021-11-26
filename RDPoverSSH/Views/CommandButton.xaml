@@ -8,7 +8,8 @@
              xmlns:c="clr-namespace:CalcBinding;assembly=CalcBinding"
              mc:Ignorable="d" 
              d:DataContext="{d:DesignInstance Type={x:Type viewModels:CommandViewModelBase}}"
-             x:Name="This">
+             x:Name="This"
+             ToolTip="{Binding Description}">
     <UserControl.Resources>
         <Style TargetType="TextBlock">
             <Style.Triggers>
