@@ -20,15 +20,15 @@ namespace RDPoverSSH.ViewModels
             Model.PropertyChanged += Model_PropertyChanged;
 
             // TODO: Make this converter?
-            if (Model.RemoteConnectionPort != default)
+            if (Model.ConnectionPort != default)
             {
-                if (DefaultConnectionPorts.FirstOrDefault(p => p.Value == Model.RemoteConnectionPort) is PortViewModel selectedPortViewModel)
+                if (DefaultConnectionPorts.FirstOrDefault(p => p.Value == Model.ConnectionPort) is PortViewModel selectedPortViewModel)
                 {
-                    SelectedRemoteConnectionPort = selectedPortViewModel;
+                    SelectedConnectionPort = selectedPortViewModel;
                 }
                 else
                 {
-                    SelectedRemoteConnectionPort = PortViewModel.Custom;
+                    SelectedConnectionPort = PortViewModel.Custom;
                 }
             }
         }
@@ -81,8 +81,8 @@ namespace RDPoverSSH.ViewModels
 
         private string ConnectionDirectionDescription => Model.ConnectionDirection switch
         {
-            Direction.Outgoing => string.Format(Resources.OutgoingConnectionDescription, Model.RemoteConnectionPort),
-            Direction.Incoming => string.Format(Resources.IncomingConnectionDescription, Model.RemoteConnectionPort),
+            Direction.Outgoing => string.Format(Resources.OutgoingConnectionDescription, Model.ConnectionPort),
+            Direction.Incoming => string.Format(Resources.IncomingConnectionDescription, Model.ConnectionPort),
             _ => default
         };
 
@@ -115,21 +115,21 @@ namespace RDPoverSSH.ViewModels
             PortViewModel.Custom
         };
 
-        public PortViewModel SelectedRemoteConnectionPort
+        public PortViewModel SelectedConnectionPort
         {
-            get => _selectedRemoteConnectionPort;
+            get => _selectedConnectionPort;
             set
             {
-                SetProperty(ref _selectedRemoteConnectionPort, value);
-                Model.RemoteConnectionPort = IsRemoteConnectionPortCustom
-                    ? Model.RemoteConnectionPort // Don't change it
-                    : _selectedRemoteConnectionPort.Value; // Change it to the predefined value
-                OnPropertyChanged(nameof(IsRemoteConnectionPortCustom));
+                SetProperty(ref _selectedConnectionPort, value);
+                Model.ConnectionPort = IsConnectionPortCustom
+                    ? Model.ConnectionPort // Don't change it
+                    : _selectedConnectionPort.Value; // Change it to the predefined value
+                OnPropertyChanged(nameof(IsConnectionPortCustom));
             }
         }
-        private PortViewModel _selectedRemoteConnectionPort;
+        private PortViewModel _selectedConnectionPort;
 
-        public bool IsRemoteConnectionPortCustom => SelectedRemoteConnectionPort == PortViewModel.Custom;
+        public bool IsConnectionPortCustom => SelectedConnectionPort == PortViewModel.Custom;
 
         #endregion
 
