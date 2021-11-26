@@ -111,14 +111,17 @@
                     <TextBlock Grid.Column="0" Grid.Row="3" HorizontalAlignment="Left" FontWeight="Bold" Margin="5" VerticalAlignment="Center" Text="Tunnel"/>
 
                     <!-- Tunnel local settings -->
-                    <Grid Grid.Column="1" Grid.Row="3" VerticalAlignment="Center" HorizontalAlignment="Center">
-                        <TextBlock Text="tunnel local"/>
+                    <Grid Grid.Column="{c:Binding 'Model.TunnelDirection == models:Direction.Incoming ? 1 : 3'}" Grid.Row="3" VerticalAlignment="Center" HorizontalAlignment="Center">
+                        <StackPanel Orientation="Horizontal">
+                            <ComboBox ui:ControlHelper.PlaceholderText="Tunnel Port" ItemsSource="{Binding DefaultTunnelPorts}" DisplayMemberPath="DisplayName"
+                                  SelectedItem="{Binding SelectedTunnelPort}"/>
+                            <ui:NumberBox Margin="5" SpinButtonPlacementMode="Inline" Value="{Binding Model.TunnelPort}" SmallChange="1" LargeChange="1"
+                                      Visibility="{c:Binding 'IsTunnelPortCustom', FalseToVisibility=Collapsed}"/>
+                            <views:CommandButton DataContext="{Binding TestTunnelCommand}"
+                                                 IsEnabled="{c:Binding 'DataContext.SelectedTunnelPort != null', RelativeSource={RelativeSource AncestorType=views:ConnectionItem}}"/>
+                        </StackPanel>
                     </Grid>
 
-                    <!-- Tunnel remote settings -->
-                    <Grid Grid.Column="3" Grid.Row="3" VerticalAlignment="Center" HorizontalAlignment="Center">
-                        <TextBlock Text="tunnel remote"/>
-                    </Grid>
                 </Grid>
             </Grid>
         </Border>

@@ -42,6 +42,13 @@ namespace RDPoverSSH.Models
         }
         private int _connectionPort;
 
+        public int TunnelPort
+        {
+            get => _tunnelPort;
+            set => SetProperty(ref _tunnelPort, value);
+        }
+        private int _tunnelPort;
+
         [BsonIgnore]
         public bool IsReverseTunnel => ConnectionDirection != TunnelDirection;
     }

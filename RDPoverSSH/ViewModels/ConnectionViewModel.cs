@@ -133,9 +133,41 @@ namespace RDPoverSSH.ViewModels
 
         #endregion
 
+        #region Tunnel ports
+
+        public List<PortViewModel> DefaultTunnelPorts { get; } = new List<PortViewModel>
+        {
+            new PortViewModel {Value = 22, Name = "SSH"},
+            new PortViewModel {Value = 80, Name = "HTTP"},
+            new PortViewModel {Value = 443, Name = "HTTPS"},
+            PortViewModel.Custom
+        };
+
+        public PortViewModel SelectedTunnelPort
+        {
+            get => _selectedTunnelPort;
+            set
+            {
+                SetProperty(ref _selectedTunnelPort, value);
+                Model.TunnelPort = IsTunnelPortCustom
+                    ? Model.TunnelPort // Don't change it
+                    : _selectedTunnelPort.Value; // Change it to the predefined value
+                OnPropertyChanged(nameof(IsTunnelPortCustom));
+            }
+        }
+        private PortViewModel _selectedTunnelPort;
+
+        public bool IsTunnelPortCustom => SelectedTunnelPort == PortViewModel.Custom;
+
+        #endregion
+
         public GenericCommandViewModel ConnectionCommand => _connectionCommand ??=
-            new GenericCommandViewModel("Connect", new RelayCommand(delegate { }), string.Empty);
+            new GenericCommandViewModel(Resources.Connect, new RelayCommand(delegate { }), string.Empty);
         private GenericCommandViewModel _connectionCommand;
+
+        public GenericCommandViewModel TestTunnelCommand => _testTunnelCommand ??=
+            new GenericCommandViewModel(Resources.Test, new RelayCommand(delegate { }), string.Empty);
+        private GenericCommandViewModel _testTunnelCommand;
 
         #endregion
 

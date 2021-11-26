@@ -164,4 +164,10 @@
     <data name="IncomingTunnelDescription" xml:space="preserve">
         <value>The remote computer will establish an SSH tunnel to this computer. Click to change direction.</value>
     </data>
+    <data name="Connect" xml:space="preserve">
+        <value>Connect</value>
+    </data>
+    <data name="Test" xml:space="preserve">
+        <value>Test</value>
+    </data>
 </root>
