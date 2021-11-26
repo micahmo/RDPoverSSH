@@ -3,12 +3,23 @@ using Microsoft.Toolkit.Mvvm.ComponentModel;
 
 namespace RDPoverSSH.Models
 {
+    /// <summary>
+    /// Model representing the connection
+    /// </summary>
+    /// <remarks>
+    /// Models get persisted on property changes, so all properties should be observable
+    /// </remarks>
     public class ConnectionModel : ObservableObject
     {
         [BsonId]
         public int ObjectId { get; set; }
 
-        public string Name { get; set; }
+        public string Name
+        {
+            get => _name;
+            set => SetProperty(ref _name, value);
+        } 
+        private string _name;
 
         public Direction ConnectionDirection
         {

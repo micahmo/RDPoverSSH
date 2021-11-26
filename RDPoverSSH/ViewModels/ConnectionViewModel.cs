@@ -1,5 +1,7 @@
 ﻿using System;
+using System.ComponentModel;
 using Microsoft.Toolkit.Mvvm.Input;
+using RDPoverSSH.DataStore;
 using RDPoverSSH.Models;
 
 namespace RDPoverSSH.ViewModels
@@ -11,18 +13,22 @@ namespace RDPoverSSH.ViewModels
         public ConnectionViewModel(ConnectionModel model)
         {
             Model = model;
+            Model.PropertyChanged += Model_PropertyChanged;
+        }
 
-            Model.PropertyChanged += (_, args) =>
+        private void Model_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            // Any time the model changes, persist it
+            DatabaseEngine.ConnectionCollection.Update(Model);
+
+            if (e.PropertyName.Equals(nameof(Model.ConnectionDirection)))
             {
-                if (args.PropertyName.Equals(nameof(Model.ConnectionDirection)))
-                {
-                    ToggleConnectionDirectionCommand.IconGlyph = ConnectionDirectionGlyph;
-                }
-                else if (args.PropertyName.Equals(nameof(Model.TunnelDirection)))
-                {
-                    ToggleTunnelDirectionCommand.IconGlyph = TunnelDirectionGlyph;
-                }
-            };
+                ToggleConnectionDirectionCommand.IconGlyph = ConnectionDirectionGlyph;
+            }
+            else if (e.PropertyName.Equals(nameof(Model.TunnelDirection)))
+            {
+                ToggleTunnelDirectionCommand.IconGlyph = TunnelDirectionGlyph;
+            }
         }
 
         #endregion
@@ -31,7 +37,7 @@ namespace RDPoverSSH.ViewModels
 
         public ConnectionModel Model { get; }
 
-        public DeleteConnectionItemViewModel DeleteConnectionCommand { get; } = new DeleteConnectionItemViewModel();
+        public DeleteConnectionCommandViewModel DeleteConnectionCommand { get; } = new DeleteConnectionCommandViewModel();
 
         public GenericCommandViewModel ToggleConnectionDirectionCommand => _toggleConnectionDirectionCommand ??=
             new GenericCommandViewModel(string.Empty, new RelayCommand(ToggleConnectionDirection), ConnectionDirectionGlyph);

@@ -24,11 +24,6 @@ namespace RDPoverSSH.Models
         /// </summary>
         public ObservableCollection<ConnectionModel> Connections { get; } = new ObservableCollection<ConnectionModel>();
 
-        public void Save()
-        {
-            Connections.ToList().ForEach(c => DatabaseEngine.ConnectionCollection.Upsert(c));
-        }
-
         public void Load(ExpressionStarter<ConnectionModel> connectionPredicate)
         {
             Connections.Clear();

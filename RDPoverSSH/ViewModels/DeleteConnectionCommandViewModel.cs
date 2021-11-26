@@ -9,7 +9,7 @@ using RDPoverSSH.Properties;
 
 namespace RDPoverSSH.ViewModels
 {
-    public class DeleteConnectionItemViewModel : CommandViewModelBase
+    public class DeleteConnectionCommandViewModel : CommandViewModelBase
     {
         #region CommandViewModelBase
 

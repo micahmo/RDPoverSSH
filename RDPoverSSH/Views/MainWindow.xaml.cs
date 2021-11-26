@@ -31,10 +31,6 @@ namespace RDPoverSSH.Views
                 throw;
             }
 
-            Timer autoSaveTimer = new Timer { Interval = TimeSpan.FromSeconds(5).TotalMilliseconds };
-            autoSaveTimer.Elapsed += AutoSaveTimer_Elapsed;
-            autoSaveTimer.Start();
-
             // TODO: These go in Windows services?
             SshServerWorker.Instance.Start();
             SshClientWorker.Instance.Start();
@@ -55,17 +51,11 @@ namespace RDPoverSSH.Views
             };
         }
 
-        private void AutoSaveTimer_Elapsed(object sender, ElapsedEventArgs e)
-        {
-            RootModel.Instance.Save();
-        }
-
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
             SshServerWorker.Instance.Stop();
             SshClientWorker.Instance.Stop();
 
-            RootModel.Instance.Save();
             DatabaseEngine.Shutdown();
         }
     }
