@@ -22,7 +22,7 @@ namespace RDPoverSSH.ViewModels
         /// The icon associated with the command
         /// </summary>
         /// <remarks>
-        /// https://docs.microsoft.com/en-us/windows/apps/design/style/segoe-ui-symbol-font
+        /// <see href="https://docs.microsoft.com/en-us/windows/apps/design/style/segoe-ui-symbol-font"/>
         /// </remarks>
         public abstract string IconGlyph { get; set; }
 

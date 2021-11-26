@@ -61,7 +61,7 @@ namespace RDPoverSSH.ViewModels
             _ => "\xF0AF"
         };
 
-        public string MachineName => $"{Environment.MachineName} (local machine)";
+        public string MachineName => $"{Environment.MachineName} (Local Computer)";
 
         #endregion
 

@@ -28,6 +28,7 @@ namespace RDPoverSSH.ViewModels
         public List<CommandViewModelBase> Commands => new List<CommandViewModelBase>
         {
             new SettingsCommandViewModel(),
+            new ImportConnectionCommandViewModel(),
             new NewConnectionCommandViewModel()
         };
 

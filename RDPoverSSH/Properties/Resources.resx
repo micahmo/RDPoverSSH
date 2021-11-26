@@ -111,7 +111,7 @@
         <value>No</value>
     </data>
     <data name="ConfirmDeleteConnection" xml:space="preserve">
-        <value>Are you sure you want to delete connection '{0}'?</value>
+        <value>Are you sure you want to delete connection{0}?</value>
     </data>
     <data name="Confirm" xml:space="preserve">
         <value>Confirm</value>
@@ -127,5 +127,8 @@
     </data>
     <data name="FilterHint" xml:space="preserve">
         <value>Filter...</value>
+    </data>
+    <data name="ImportConnection" xml:space="preserve">
+        <value>Import Connection</value>
     </data>
 </root>

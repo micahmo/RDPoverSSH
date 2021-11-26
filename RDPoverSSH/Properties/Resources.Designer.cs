@@ -79,7 +79,7 @@ namespace RDPoverSSH.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Are you sure you want to delete connection &apos;{0}&apos;?.
+        ///   Looks up a localized string similar to Are you sure you want to delete connection{0}?.
         /// </summary>
         public static string ConfirmDeleteConnection {
             get {
@@ -102,6 +102,15 @@ namespace RDPoverSSH.Properties {
         public static string FilterHint {
             get {
                 return ResourceManager.GetString("FilterHint", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Import Connection.
+        /// </summary>
+        public static string ImportConnection {
+            get {
+                return ResourceManager.GetString("ImportConnection", resourceCulture);
             }
         }
         

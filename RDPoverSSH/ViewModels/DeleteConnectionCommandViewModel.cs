@@ -31,7 +31,11 @@ namespace RDPoverSSH.ViewModels
         {
             if (param is ConnectionViewModel connectionViewModel)
             {
-                var res = await MessageBoxHelper.Show(string.Format(Resources.ConfirmDeleteConnection, connectionViewModel.Model.Name), Resources.Confirm, MessageBoxButton.YesNo);
+                string connectionNameFormat = string.IsNullOrWhiteSpace(connectionViewModel.Model.Name)
+                    ? string.Empty
+                    : $" '{connectionViewModel.Model.Name}'";
+
+                var res = await MessageBoxHelper.Show(string.Format(Resources.ConfirmDeleteConnection, connectionNameFormat), Resources.Confirm, MessageBoxButton.YesNo);
                 if (res == ContentDialogResult.Primary)
                 {
                     RootModel.Instance.Connections.Remove(connectionViewModel.Model);
