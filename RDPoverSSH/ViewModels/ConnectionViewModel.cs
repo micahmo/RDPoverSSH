@@ -22,13 +22,25 @@ namespace RDPoverSSH.ViewModels
             // TODO: Make this converter?
             if (Model.ConnectionPort != default)
             {
-                if (DefaultConnectionPorts.FirstOrDefault(p => p.Value == Model.ConnectionPort) is PortViewModel selectedPortViewModel)
+                if (DefaultConnectionPorts.FirstOrDefault(p => p.Value == Model.ConnectionPort) is { } selectedPortViewModel)
                 {
                     SelectedConnectionPort = selectedPortViewModel;
                 }
                 else
                 {
                     SelectedConnectionPort = PortViewModel.Custom;
+                }
+            }
+
+            if (Model.TunnelPort != default)
+            {
+                if (DefaultTunnelPorts.FirstOrDefault(p => p.Value == Model.TunnelPort) is { } selectedPortViewModel)
+                {
+                    SelectedTunnelPort = selectedPortViewModel;
+                }
+                else
+                {
+                    SelectedTunnelPort = PortViewModel.Custom;
                 }
             }
         }

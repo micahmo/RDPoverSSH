@@ -35,6 +35,13 @@ namespace RDPoverSSH.Models
         }
         private Direction _tunnelDirection;
 
+        public string TunnelEndpoint
+        {
+            get => _tunnelEndpoint;
+            set => SetProperty(ref _tunnelEndpoint, value);
+        }
+        private string _tunnelEndpoint;
+
         public int ConnectionPort
         {
             get => _connectionPort;
