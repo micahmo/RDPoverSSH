@@ -5,7 +5,10 @@ namespace RDPoverSSH.ViewModels
     /// <summary>
     /// This class allows constructing a command rather than defining it in code
     /// </summary>
-    public class GenericCommandViewModel : CommandViewModelBase
+    /// <remarks>
+    /// This class is sealed so that it is safe for us to set virtual members in the constructor
+    /// </remarks>
+    public sealed class GenericCommandViewModel : CommandViewModelBase
     {
         #region Constructor
 
@@ -42,7 +45,6 @@ namespace RDPoverSSH.ViewModels
             get => _iconGlyph;
             set => SetProperty(ref _iconGlyph, value);
         }
-
         private string _iconGlyph;
     }
 }

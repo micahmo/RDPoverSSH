@@ -41,12 +41,18 @@ namespace RDPoverSSH.ViewModels
             if (e.PropertyName.Equals(nameof(Model.ConnectionDirection)))
             {
                 ToggleConnectionDirectionCommand.IconGlyph = ConnectionDirectionGlyph;
+                
+                // Update both descriptions, no matter which direction changed
                 ToggleConnectionDirectionCommand.Description = ConnectionDirectionDescription;
+                ToggleTunnelDirectionCommand.Description = TunnelDirectionDescription;
             }
             else if (e.PropertyName.Equals(nameof(Model.TunnelDirection)))
             {
                 ToggleTunnelDirectionCommand.IconGlyph = TunnelDirectionGlyph;
-                ToggleConnectionDirectionCommand.Description = TunnelDirectionDescription;
+
+                // Update both descriptions, no matter which direction changed
+                ToggleConnectionDirectionCommand.Description = ConnectionDirectionDescription;
+                ToggleTunnelDirectionCommand.Description = TunnelDirectionDescription;
             }
         }
 
@@ -75,8 +81,8 @@ namespace RDPoverSSH.ViewModels
 
         private string ConnectionDirectionDescription => Model.ConnectionDirection switch
         {
-            Direction.Outgoing => "This computer will connect to port X on the remote computer. Click to reverse.",
-            Direction.Incoming => "The remote computer will connect to port X on this computer. Click to reverse.",
+            Direction.Outgoing => string.Format(Resources.OutgoingConnectionDescription, Model.RemoteConnectionPort),
+            Direction.Incoming => string.Format(Resources.IncomingConnectionDescription, Model.RemoteConnectionPort),
             _ => default
         };
 
@@ -93,8 +99,8 @@ namespace RDPoverSSH.ViewModels
 
         private string TunnelDirectionDescription => Model.TunnelDirection switch
         {
-            Direction.Outgoing => "This computer will establish an SSH tunnel to the remote computer. Click to reverse.",
-            Direction.Incoming => "The remote computer will establish an SSH tunnel to this computer. Click to reverse.",
+            Direction.Outgoing => Model.IsReverseTunnel ? Resources.OutgoingReverseTunnelDescription : Resources.OutgoingTunnelDescription,
+            Direction.Incoming => Model.IsReverseTunnel ? Resources.IncomingReverseTunnelDescription : Resources.IncomingTunnelDescription,
             _ => default
         };
 

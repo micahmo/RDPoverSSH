@@ -41,6 +41,9 @@ namespace RDPoverSSH.Models
             set => SetProperty(ref _remoteConnectionPort, value);
         }
         private int _remoteConnectionPort;
+
+        [BsonIgnore]
+        public bool IsReverseTunnel => ConnectionDirection != TunnelDirection;
     }
 
     /// <summary>

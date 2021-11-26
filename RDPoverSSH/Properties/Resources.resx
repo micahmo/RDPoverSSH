@@ -146,4 +146,22 @@
     <data name="DeleteConnectionCommanDescription" xml:space="preserve">
         <value>Delete connection</value>
     </data>
+    <data name="OutgoingConnectionDescription" xml:space="preserve">
+        <value>This computer will connect to port {0} on the remote computer. Click to change direction.</value>
+    </data>
+    <data name="IncomingConnectionDescription" xml:space="preserve">
+        <value>The remote computer will connect to port {0} on this computer. Click to change direction.</value>
+    </data>
+    <data name="OutgoingReverseTunnelDescription" xml:space="preserve">
+        <value>This computer will establish a reverse SSH tunnel to the remote computer. Click to change direction.</value>
+    </data>
+    <data name="OutgoingTunnelDescription" xml:space="preserve">
+        <value>This computer will establish an SSH tunnel to the remote computer. Click to change direction.</value>
+    </data>
+    <data name="IncomingReverseTunnelDescription" xml:space="preserve">
+        <value>The remote computer will establish a reverse SSH tunnel to this computer. Click to change direction.</value>
+    </data>
+    <data name="IncomingTunnelDescription" xml:space="preserve">
+        <value>The remote computer will establish an SSH tunnel to this computer. Click to change direction.</value>
+    </data>
 </root>

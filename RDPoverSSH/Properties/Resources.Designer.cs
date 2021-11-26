@@ -151,6 +151,33 @@ namespace RDPoverSSH.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The remote computer will connect to port {0} on this computer. Click to change direction..
+        /// </summary>
+        public static string IncomingConnectionDescription {
+            get {
+                return ResourceManager.GetString("IncomingConnectionDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The remote computer will establish a reverse SSH tunnel to this computer. Click to change direction..
+        /// </summary>
+        public static string IncomingReverseTunnelDescription {
+            get {
+                return ResourceManager.GetString("IncomingReverseTunnelDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The remote computer will establish an SSH tunnel to this computer. Click to change direction..
+        /// </summary>
+        public static string IncomingTunnelDescription {
+            get {
+                return ResourceManager.GetString("IncomingTunnelDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to {0} (Local Computer).
         /// </summary>
         public static string LocalComputerName {
@@ -183,6 +210,33 @@ namespace RDPoverSSH.Properties {
         public static string OK {
             get {
                 return ResourceManager.GetString("OK", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This computer will connect to port {0} on the remote computer. Click to change direction..
+        /// </summary>
+        public static string OutgoingConnectionDescription {
+            get {
+                return ResourceManager.GetString("OutgoingConnectionDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This computer will establish a reverse SSH tunnel to the remote computer. Click to change direction..
+        /// </summary>
+        public static string OutgoingReverseTunnelDescription {
+            get {
+                return ResourceManager.GetString("OutgoingReverseTunnelDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This computer will establish an SSH tunnel to the remote computer. Click to change direction..
+        /// </summary>
+        public static string OutgoingTunnelDescription {
+            get {
+                return ResourceManager.GetString("OutgoingTunnelDescription", resourceCulture);
             }
         }
         
