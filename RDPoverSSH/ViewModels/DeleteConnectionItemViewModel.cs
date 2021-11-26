@@ -5,6 +5,7 @@ using ModernWpf.Controls;
 using RDPoverSSH.Controls;
 using RDPoverSSH.DataStore;
 using RDPoverSSH.Models;
+using RDPoverSSH.Properties;
 
 namespace RDPoverSSH.ViewModels
 {
@@ -13,7 +14,6 @@ namespace RDPoverSSH.ViewModels
         #region CommandViewModelBase
 
         /// <inheritdoc/>
-        //public override string Name => "Delete";
         public override string Name => string.Empty;
 
         /// <inheritdoc/>
@@ -31,7 +31,7 @@ namespace RDPoverSSH.ViewModels
         {
             if (param is ConnectionViewModel connectionViewModel)
             {
-                var res = await MessageBoxHelper.Show($"Are you sure you want to delete connection '{connectionViewModel.Model.Name}'?", "Confirm", MessageBoxButton.YesNo);
+                var res = await MessageBoxHelper.Show(string.Format(Resources.ConfirmDeleteConnection, connectionViewModel.Model.Name), Resources.Confirm, MessageBoxButton.YesNo);
                 if (res == ContentDialogResult.Primary)
                 {
                     RootModel.Instance.Connections.Remove(connectionViewModel.Model);

@@ -1,5 +1,6 @@
 ﻿using System.Windows.Input;
 using Microsoft.Toolkit.Mvvm.Input;
+using RDPoverSSH.Properties;
 
 namespace RDPoverSSH.ViewModels
 {
@@ -11,7 +12,7 @@ namespace RDPoverSSH.ViewModels
         #region CommandViewModelBase members
 
         /// <inheritdoc/>
-        public override string Name => "Settings";
+        public override string Name => Resources.Settings;
 
         /// <inheritdoc/>
         public override ICommand Command => _command ??= new RelayCommand(SettingsCommand);

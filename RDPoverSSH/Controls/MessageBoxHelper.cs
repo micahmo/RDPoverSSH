@@ -2,6 +2,7 @@
 using System.Windows;
 using System.Windows.Controls;
 using ModernWpf.Controls;
+using RDPoverSSH.Properties;
 
 namespace RDPoverSSH.Controls
 {
@@ -30,20 +31,20 @@ namespace RDPoverSSH.Controls
             switch (buttons)
             {
                 case MessageBoxButton.OK:
-                    contentDialog.PrimaryButtonText = "OK";
+                    contentDialog.PrimaryButtonText = Resources.OK;
                     break;
                 case MessageBoxButton.OKCancel:
-                    contentDialog.PrimaryButtonText = "OK";
-                    contentDialog.SecondaryButtonText = "Cancel";
+                    contentDialog.PrimaryButtonText = Resources.OK;
+                    contentDialog.SecondaryButtonText = Resources.Cancel;
                     break;
                 case MessageBoxButton.YesNo:
-                    contentDialog.PrimaryButtonText = "Yes";
-                    contentDialog.SecondaryButtonText = "No";
+                    contentDialog.PrimaryButtonText = Resources.Yes;
+                    contentDialog.SecondaryButtonText = Resources.No;
                     break;
                 case MessageBoxButton.YesNoCancel:
-                    contentDialog.PrimaryButtonText = "Yes";
-                    contentDialog.SecondaryButtonText = "No";
-                    contentDialog.CloseButtonText = "Cancel";
+                    contentDialog.PrimaryButtonText = Resources.Yes;
+                    contentDialog.SecondaryButtonText = Resources.No;
+                    contentDialog.CloseButtonText = Resources.Cancel;
                     break;
             }
 
