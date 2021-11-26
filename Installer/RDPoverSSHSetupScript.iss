@@ -43,6 +43,58 @@ begin
   Result := not RegValueExists(HKEY_LOCAL_MACHINE, 'SOFTWARE\WOW6432Node\dotnet\Setup\InstalledVersions\x64\sharedfx\Microsoft.NETCore.App', '{#NetCoreRuntimeVersion}');
 end;
 
+function OpenSSHClientInstalled: Boolean;
+var
+  ResultCode: Integer;
+begin
+  Exec(ExpandConstant('{sys}\WindowsPowerShell\v1.0\powershell.exe'), '-Command "if ((Get-WindowsCapability -Online -Name ''OpenSSH.Client~~~~0.0.1.0'').State -ne ''Installed'') { exit 1 }', '', SW_HIDE, ewWaitUntilTerminated, ResultCode);
+  Result := ResultCode = 0
+end;
+
+procedure InstallOpenSSHClient;
+var
+  // Not used
+  ResultCode: Integer;
+begin
+  Exec(ExpandConstant('{sys}\WindowsPowerShell\v1.0\powershell.exe'), '-Command "Clear-Host; Write-Output ''Installing OpenSSH Client. This window will automatically close when done.''; Add-WindowsCapability -Online -Name ''OpenSSH.Client~~~~0.0.1.0''', '', SW_SHOW, ewWaitUntilTerminated, ResultCode);
+end;
+
+function OpenSSHServerInstalled: Boolean;
+var
+  ResultCode: Integer;
+begin
+  Exec(ExpandConstant('{sys}\WindowsPowerShell\v1.0\powershell.exe'), '-Command "if ((Get-WindowsCapability -Online -Name ''OpenSSH.Server~~~~0.0.1.0'').State -ne ''Installed'') { exit 1 }', '', SW_HIDE, ewWaitUntilTerminated, ResultCode);
+  Result := ResultCode = 0
+end;
+
+procedure InstallOpenSSHServer;
+var
+  // Not used
+  ResultCode: Integer;
+begin
+  Exec(ExpandConstant('{sys}\WindowsPowerShell\v1.0\powershell.exe'), '-Command "Clear-Host; Write-Output ''Installing OpenSSH Server. This window will automatically close when done.''; Add-WindowsCapability -Online -Name ''OpenSSH.Server~~~~0.0.1.0''', '', SW_SHOW, ewWaitUntilTerminated, ResultCode);
+end;
+
+function InitializeSetup(): Boolean;
+begin
+  // Comment this line to test startup tasks without running the installer.
+  Result := True
+end;
+
+
+// This is a built-in function that executes when the current step changes.
+// We'll use it to install OpenSSH.
+procedure CurStepChanged(CurStep: TSetupStep);
+begin
+  if CurStep = ssPostInstall then
+  begin
+    if not OpenSSHServerInstalled then
+      InstallOpenSSHServer;
+    if not OpenSSHClientInstalled then
+      InstallOpenSSHClient;
+  end;
+end;
+
 [Languages]
 Name: "english"; MessagesFile: "compiler:Default.isl"
 
@@ -62,6 +114,6 @@ Name: "{autodesktop}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; Tasks: de
 ; .NET Core Desktop Runtime
 Filename: "{tmp}\{#NetCoreRuntime}"; Flags: runascurrentuser; Check: NetCoreRuntimeNotInstalled
 
-; runascurrentuser is needed to launch as admin
-Filename: "{app}\{#MyAppExeName}"; Description: "{cm:LaunchProgram,{#StringChange(MyAppName, '&', '&&')}}"; Flags: nowait postinstall skipifsilent
+; runascurrentuser is needed to launch as admin -- we can remove this once admin operators (starting services) are in a Windows server
+Filename: "{app}\{#MyAppExeName}"; Description: "{cm:LaunchProgram,{#StringChange(MyAppName, '&', '&&')}}"; Flags: nowait postinstall skipifsilent runascurrentuser
 
