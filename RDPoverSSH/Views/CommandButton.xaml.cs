@@ -8,17 +8,29 @@ namespace RDPoverSSH.Views
     /// </summary>
     public partial class CommandButton : UserControl
     {
+        #region Dependency properties
+
+        public static readonly DependencyProperty CommandParameterProperty = DependencyProperty.Register(nameof(CommandParameter), typeof(object), typeof(CommandButton));
+
+        #endregion
+
+        #region Constructor
+
         public CommandButton()
         {
             InitializeComponent();
         }
 
-        public static readonly DependencyProperty CommandParameterProperty = DependencyProperty.Register(nameof(CommandParameter), typeof(object), typeof(CommandButton));
+        #endregion
+
+        #region Bindable properties
 
         public object CommandParameter
         {
             get => GetValue(CommandParameterProperty);
             set => SetValue(CommandParameterProperty, value);
         }
+
+        #endregion
     }
 }

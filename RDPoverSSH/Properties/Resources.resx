@@ -131,4 +131,10 @@
     <data name="ImportConnection" xml:space="preserve">
         <value>Import Connection</value>
     </data>
+    <data name="Custom" xml:space="preserve">
+        <value>Custom</value>
+    </data>
+    <data name="LocalComputerName" xml:space="preserve">
+        <value>{0} (Local Computer)</value>
+    </data>
 </root>

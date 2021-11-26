@@ -27,11 +27,11 @@ namespace RDPoverSSH.ViewModels
         public abstract string IconGlyph { get; set; }
 
         /// <summary>
-        /// Whether or not this command has a user-friendly name
+        /// Whether or not this command has both name and glyph
         /// </summary>
         /// <remarks>
         /// Useful for binding
         /// </remarks>
-        public bool HasName => !string.IsNullOrWhiteSpace(Name);
+        public bool HasParts => !string.IsNullOrWhiteSpace(Name) && !string.IsNullOrEmpty(IconGlyph);
     }
 }

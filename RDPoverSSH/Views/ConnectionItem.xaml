@@ -7,6 +7,7 @@
              xmlns:views="clr-namespace:RDPoverSSH.Views"
              xmlns:ui="http://schemas.modernwpf.com/2019"
              xmlns:properties="clr-namespace:RDPoverSSH.Properties"
+             xmlns:c="clr-namespace:CalcBinding;assembly=CalcBinding"
              mc:Ignorable="d" d:DesignWidth="600"
              d:DataContext="{d:DesignInstance Type={x:Type viewModels:ConnectionViewModel}}">
     <Grid>
@@ -42,7 +43,11 @@
 
                 <TextBox Grid.Column="1" Grid.Row="1" ui:ControlHelper.PlaceholderText="{x:Static properties:Resources.ConnectionNameHint}" 
                          Text="{Binding Model.Name, UpdateSourceTrigger=PropertyChanged, Delay=100}"/>
-                <views:CommandButton Grid.Column="3" Grid.Row="1" DataContext="{Binding DeleteConnectionCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=views:ConnectionItem}, Path=DataContext}"/>
+                
+                <StackPanel Grid.Column="3" Grid.Row="1" Orientation="Horizontal">
+                    <views:CommandButton DataContext="{Binding DuplicateConnectionCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=views:ConnectionItem}, Path=DataContext}"/>
+                    <views:CommandButton DataContext="{Binding DeleteConnectionCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=views:ConnectionItem}, Path=DataContext}"/>
+                </StackPanel>
 
                 <!--<Canvas Grid.Column="1" Grid.ColumnSpan="3" Grid.Row="2" Background="{StaticResource SystemControlBackgroundBaseLowRevealBorderBrush}" Margin="10"/>-->
                 <Border Grid.Column="1" Grid.ColumnSpan="3" Grid.Row="2" Margin="10"
@@ -80,6 +85,24 @@
                     <views:CommandButton Grid.Column="2" Grid.Row="1" DataContext="{Binding ToggleConnectionDirectionCommand}" />
                     <TextBlock Grid.Column="0" Grid.Row="1" HorizontalAlignment="Left" FontWeight="Bold" Margin="5" VerticalAlignment="Center" Text="Connection"/>
 
+                    <!-- Connection local settings -->
+                    <Grid Grid.Column="1" Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Center">
+                        <TextBlock Text="connection local"/>
+                    </Grid>
+
+                    <!-- Connection remote settings -->
+                    <Grid Grid.Column="3" Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Center">
+                        <StackPanel Orientation="Horizontal">
+                            <ComboBox ui:ControlHelper.PlaceholderText="Destination Port" ItemsSource="{Binding DefaultConnectionPorts}" DisplayMemberPath="DisplayName"
+                                      SelectedItem="{Binding SelectedRemoteConnectionPort}"/>
+                            <ui:NumberBox Margin="5" SpinButtonPlacementMode="Inline" Value="{Binding Model.RemoteConnectionPort}" SmallChange="1" LargeChange="1"
+                                          Visibility="{c:Binding 'IsRemoteConnectionPortCustom', FalseToVisibility=Collapsed}"/>
+                            <views:CommandButton DataContext="{Binding ConnectionCommand}"
+                                                 Visibility="{c:Binding '!DataContext.IsRemoteConnectionPortCustom', RelativeSource={RelativeSource AncestorType=views:ConnectionItem}, FalseToVisibility=Collapsed}"
+                                                 IsEnabled="{c:Binding 'DataContext.SelectedRemoteConnectionPort != null', RelativeSource={RelativeSource AncestorType=views:ConnectionItem}}"/>
+                        </StackPanel>
+                    </Grid>
+
                     <!-- Tunnel -->
                     <Border Grid.Column="0" Grid.Row="3" Grid.ColumnSpan="4" CornerRadius="3" BorderThickness="1">
                         <Border.BorderBrush>
@@ -90,6 +113,15 @@
                     <views:CommandButton Grid.Column="2" Grid.Row="3" DataContext="{Binding ToggleTunnelDirectionCommand}" />
                     <TextBlock Grid.Column="0" Grid.Row="3" HorizontalAlignment="Left" FontWeight="Bold" Margin="5" VerticalAlignment="Center" Text="Tunnel"/>
 
+                    <!-- Tunnel local settings -->
+                    <Grid Grid.Column="1" Grid.Row="3" VerticalAlignment="Center" HorizontalAlignment="Center">
+                        <TextBlock Text="tunnel local"/>
+                    </Grid>
+
+                    <!-- Tunnel remote settings -->
+                    <Grid Grid.Column="3" Grid.Row="3" VerticalAlignment="Center" HorizontalAlignment="Center">
+                        <TextBlock Text="tunnel remote"/>
+                    </Grid>
                 </Grid>
             </Grid>
         </Border>

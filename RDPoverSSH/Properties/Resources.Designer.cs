@@ -97,6 +97,15 @@ namespace RDPoverSSH.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Custom.
+        /// </summary>
+        public static string Custom {
+            get {
+                return ResourceManager.GetString("Custom", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Filter....
         /// </summary>
         public static string FilterHint {
@@ -111,6 +120,15 @@ namespace RDPoverSSH.Properties {
         public static string ImportConnection {
             get {
                 return ResourceManager.GetString("ImportConnection", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} (Local Computer).
+        /// </summary>
+        public static string LocalComputerName {
+            get {
+                return ResourceManager.GetString("LocalComputerName", resourceCulture);
             }
         }
         

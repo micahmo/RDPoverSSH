@@ -9,12 +9,22 @@
              mc:Ignorable="d" 
              d:DataContext="{d:DesignInstance Type={x:Type viewModels:CommandViewModelBase}}"
              x:Name="This">
+    <UserControl.Resources>
+        <Style TargetType="TextBlock">
+            <Style.Triggers>
+                <Trigger Property="IsEnabled" Value="False">
+                    <Setter Property="Foreground" Value="{DynamicResource TextControlForegroundDisabled}"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+    </UserControl.Resources>
+
     <Grid>
         <Button Command="{Binding Command}" CommandParameter="{Binding ElementName=This, Path=CommandParameter}">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="{c:Binding 'HasName ? 5 : 0'}"/>
+                    <ColumnDefinition Width="{c:Binding 'HasParts ? 5 : 0'}"/>
                     <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
 

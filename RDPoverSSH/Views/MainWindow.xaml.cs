@@ -1,7 +1,8 @@
 ﻿using System;
+using System.ComponentModel;
 using System.IO;
-using System.Timers;
 using System.Windows;
+using System.Windows.Input;
 using LinqKit;
 using RDPoverSSH.BusinessLogic;
 using RDPoverSSH.DataStore;
@@ -51,12 +52,17 @@ namespace RDPoverSSH.Views
             };
         }
 
-        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        private void Window_Closing(object sender, CancelEventArgs e)
         {
             SshServerWorker.Instance.Stop();
             SshClientWorker.Instance.Stop();
 
             DatabaseEngine.Shutdown();
+        }
+
+        private void Window_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            Keyboard.ClearFocus();
         }
     }
 }

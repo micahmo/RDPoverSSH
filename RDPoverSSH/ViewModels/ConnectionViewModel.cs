@@ -1,12 +1,16 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
+using Microsoft.Toolkit.Mvvm.ComponentModel;
 using Microsoft.Toolkit.Mvvm.Input;
 using RDPoverSSH.DataStore;
 using RDPoverSSH.Models;
+using RDPoverSSH.Properties;
 
 namespace RDPoverSSH.ViewModels
 {
-    public class ConnectionViewModel
+    public class ConnectionViewModel : ObservableObject
     {
         #region Constructor
 
@@ -14,6 +18,19 @@ namespace RDPoverSSH.ViewModels
         {
             Model = model;
             Model.PropertyChanged += Model_PropertyChanged;
+
+            // TODO: Make this converter?
+            if (Model.RemoteConnectionPort != default)
+            {
+                if (DefaultConnectionPorts.FirstOrDefault(p => p.Value == Model.RemoteConnectionPort) is PortViewModel selectedPortViewModel)
+                {
+                    SelectedRemoteConnectionPort = selectedPortViewModel;
+                }
+                else
+                {
+                    SelectedRemoteConnectionPort = PortViewModel.Custom;
+                }
+            }
         }
 
         private void Model_PropertyChanged(object sender, PropertyChangedEventArgs e)
@@ -39,6 +56,8 @@ namespace RDPoverSSH.ViewModels
 
         public DeleteConnectionCommandViewModel DeleteConnectionCommand { get; } = new DeleteConnectionCommandViewModel();
 
+        public DuplicateConnectionCommandViewModel DuplicateConnectionCommand { get; } = new DuplicateConnectionCommandViewModel();
+
         public GenericCommandViewModel ToggleConnectionDirectionCommand => _toggleConnectionDirectionCommand ??=
             new GenericCommandViewModel(string.Empty, new RelayCommand(ToggleConnectionDirection), ConnectionDirectionGlyph);
         private GenericCommandViewModel _toggleConnectionDirectionCommand;
@@ -61,7 +80,38 @@ namespace RDPoverSSH.ViewModels
             _ => "\xF0AF"
         };
 
-        public string MachineName => $"{Environment.MachineName} (Local Computer)";
+        public string MachineName => string.Format(Resources.LocalComputerName, Environment.MachineName);
+
+        #region Connection ports
+
+        public List<PortViewModel> DefaultConnectionPorts { get; } = new List<PortViewModel>
+        {
+            new PortViewModel {Value = 3389, Name = "RDP"},
+            new PortViewModel {Value = 445, Name = "SMB"},
+            PortViewModel.Custom
+        };
+
+        public PortViewModel SelectedRemoteConnectionPort
+        {
+            get => _selectedRemoteConnectionPort;
+            set
+            {
+                SetProperty(ref _selectedRemoteConnectionPort, value);
+                Model.RemoteConnectionPort = IsRemoteConnectionPortCustom
+                    ? Model.RemoteConnectionPort // Don't change it
+                    : _selectedRemoteConnectionPort.Value; // Change it to the predefined value
+                OnPropertyChanged(nameof(IsRemoteConnectionPortCustom));
+            }
+        }
+        private PortViewModel _selectedRemoteConnectionPort;
+
+        public bool IsRemoteConnectionPortCustom => SelectedRemoteConnectionPort == PortViewModel.Custom;
+
+        #endregion
+
+        public GenericCommandViewModel ConnectionCommand => _connectionCommand ??=
+            new GenericCommandViewModel("Connect", new RelayCommand(delegate { }), string.Empty);
+        private GenericCommandViewModel _connectionCommand;
 
         #endregion
 

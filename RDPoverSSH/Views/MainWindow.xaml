@@ -9,12 +9,13 @@
         xmlns:properties="clr-namespace:RDPoverSSH.Properties"
         mc:Ignorable="d"
         d:DataContext="{d:DesignInstance Type={x:Type viewModels:MainWindowViewModel}}"
-        Title="RDPoverSSH" Height="600" Width="800"
+        Title="RDPoverSSH" Height="600" Width="1000"
         
         Background="{DynamicResource SystemControlPageBackgroundAltHighBrush}"
         Foreground="{DynamicResource SystemControlPageTextBaseHighBrush}"
         ui:ThemeManager.IsThemeAware="True"
-        Closing="Window_Closing">
+        Closing="Window_Closing"
+        MouseDown="Window_MouseDown">
     
     <Grid>
         <Grid>

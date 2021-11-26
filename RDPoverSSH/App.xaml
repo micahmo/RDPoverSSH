@@ -21,6 +21,20 @@
                 <Setter Property="Height" Value="10"/>
                 <Setter Property="VerticalContentAlignment" Value="Center"/>
             </Style>
+
+            <Style TargetType="{x:Type ComboBox}" BasedOn="{StaticResource DefaultComboBoxStyle}">
+                <Setter Property="VerticalAlignment" Value="Center"/>
+                <Setter Property="HorizontalAlignment" Value="Center"/>
+            </Style>
+
+            <Style TargetType="{x:Type ui:NumberBox}">
+                <Setter Property="VerticalAlignment" Value="Center"/>
+                <Setter Property="HorizontalAlignment" Value="Center"/>
+                <Style.Resources>
+                    <!-- So that the previous TextBox style doesn't apply to TextBoxes embedded in NumberBoxes -->
+                    <Style TargetType="{x:Type TextBox}" BasedOn="{StaticResource DefaultTextBoxStyle}"/>
+                </Style.Resources>
+            </Style>
         </ResourceDictionary>
     </Application.Resources>
 </Application>

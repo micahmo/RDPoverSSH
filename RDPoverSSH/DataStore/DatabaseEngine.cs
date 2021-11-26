@@ -18,7 +18,11 @@ namespace RDPoverSSH.DataStore
                         Directory.CreateDirectory(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonDocuments), ProgramDataFolderName));
                     }
 
-                    return new LiteDatabase(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonDocuments), ProgramDataFolderName, DbName));
+                    return new LiteDatabase(new ConnectionString(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonDocuments), ProgramDataFolderName, DbName))
+                    {
+                        // Don't lock it from other processes
+                        Connection = ConnectionType.Shared
+                    });
                 })();
             }
         }
