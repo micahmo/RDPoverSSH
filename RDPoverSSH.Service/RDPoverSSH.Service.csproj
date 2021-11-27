@@ -8,8 +8,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="PeterKottas.DotNetCore.WindowsService" Version="1.0.20" />
+    <PackageReference Include="PeterKottas.DotNetCore.WindowsService" Version="2.0.12" />
+    <PackageReference Include="SshKeyGenerator" Version="1.1.40" />
     <PackageReference Include="System.Diagnostics.EventLog" Version="6.0.0" />
+    <PackageReference Include="System.IO.FileSystem.AccessControl" Version="5.0.0" />
   </ItemGroup>
 
   <ItemGroup>
@@ -23,6 +25,7 @@
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
       <Exec Command="$(OutDir)RDPoverSSH.Service.exe action:uninstall" />
       <Exec Command="$(OutDir)RDPoverSSH.Service.exe action:install" />
+      <Exec Command="$(OutDir)RDPoverSSH.Service.exe action:start" />
   </Target>
 
 </Project>
