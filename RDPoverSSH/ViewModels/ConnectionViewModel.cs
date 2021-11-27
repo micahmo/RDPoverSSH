@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using Microsoft.Toolkit.Mvvm.ComponentModel;
 using Microsoft.Toolkit.Mvvm.Input;
@@ -204,8 +206,41 @@ namespace RDPoverSSH.ViewModels
 
         private async void ShowServerKeys()
         {
-            await MessageBoxHelper.ShowCopyableText(Resources.SshPrivateKeyDescription, Resources.SshServerKeyHeading, "TODO", monospace: true);
+            string privateKeyText;
+
+            var getPrivateKeyProcess = new Process
+            {
+                StartInfo = new ProcessStartInfo
+                {
+                    FileName = "powershell.exe",
+                    Arguments = $"-noprofile -Command \"Get-Content \"{_ourPrivateKeyFilePath}\"\"",
+                    RedirectStandardOutput = true,
+                    // Need admin privs to read the key file
+                    Verb = "runas",
+                    CreateNoWindow = true
+                }
+            };
+
+            if (File.Exists(_ourPrivateKeyFilePath))
+            {
+                getPrivateKeyProcess.Start();
+                getPrivateKeyProcess.WaitForExit();
+                privateKeyText = await getPrivateKeyProcess.StandardOutput.ReadToEndAsync();
+            }
+            else
+            {
+                privateKeyText = Resources.SshServerKeyNotFound;
+            }
+
+            await MessageBoxHelper.ShowCopyableText(Resources.SshPrivateKeyDescription, Resources.SshServerKeyHeading, privateKeyText, monospace: true);
         }
+
+        #endregion
+
+        #region Private fields
+
+        private static readonly string SshProgramDataPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData));
+        private readonly string _ourPrivateKeyFilePath = Path.Combine(SshProgramDataPath, "ssh", "ssh_rdp_over_ssh_key");
 
         #endregion
     }

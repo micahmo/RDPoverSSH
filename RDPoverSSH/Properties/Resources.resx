@@ -194,4 +194,8 @@
   <data name="ShowSshServerKey" xml:space="preserve">
     <value>Show SSH Server Key</value>
   </data>
+  <data name="SshServerKeyNotFound" xml:space="preserve">
+    <value>SSH Server private key not found. Please try again.
+</value>
+  </data>
 </root>

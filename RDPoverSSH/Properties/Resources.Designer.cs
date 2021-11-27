@@ -331,6 +331,16 @@ namespace RDPoverSSH.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to SSH Server private key not found. Please try again.
+        ///.
+        /// </summary>
+        public static string SshServerKeyNotFound {
+            get {
+                return ResourceManager.GetString("SshServerKeyNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Test.
         /// </summary>
         public static string Test {
