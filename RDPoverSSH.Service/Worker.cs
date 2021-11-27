@@ -32,7 +32,7 @@ namespace RDPoverSSH.Service
                     EventLog.WriteEntry($"RDPoverSSH.Service.SshServerPoller encountered an error: {e}", EventLogEntryType.Error);
                 });
 
-            Timers.Start("SshClientPoller", (int)TimeSpan.FromSeconds(5).TotalMilliseconds, () => { },
+            Timers.Start("SshClientPoller", (int)TimeSpan.FromSeconds(5).TotalMilliseconds, DoSshClientPoll,
                 e =>
                 {
                     EventLog.WriteEntry($"RDPoverSSH.Service.SshClientPoller encountered an error: {e}", EventLogEntryType.Error);
@@ -109,6 +109,14 @@ namespace RDPoverSSH.Service
                     File.AppendAllText(_administratorsAuthorizedKeysFilePath, $"{publicKey}\n");
                     EventLog.WriteEntry("Added public key to authorized keys.");
                 }
+            }
+        }
+
+        private void DoSshClientPoll()
+        {
+            if (DatabaseEngine.ConnectionCollection.Count(c => c.TunnelDirection == Direction.Outgoing) > 0)
+            {
+                // First make sure we have keys
             }
         }
 
