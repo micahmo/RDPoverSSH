@@ -5,9 +5,9 @@
 #define MyAppExeName "RDPoverSSH.exe"
 #define NetCoreRuntimeVersion "3.1.21"
 #define NetCoreRuntime "windowsdesktop-runtime-" + NetCoreRuntimeVersion + "-win-x64.exe"
-
-; This is relative to SourceDir
-#define RepoRoot "..\..\..\.."
+;#define BuildConfig "Release"
+#define BuildConfig "Debug"
+#define ServicePath "{app}\Service\RDPoverSSH.Service.exe"
 
 [Setup]
 ;PrivilegesRequired=admin
@@ -23,11 +23,10 @@ DefaultDirName={autopf}\RDPoverSSH
 DefaultGroupName=RDPoverSSH
 AllowNoIcons=yes
 ; This is relative to the .iss file location
-;SourceDir=..\RDPoverSSH\bin\Release\netcoreapp3.1\
-SourceDir=..\RDPoverSSH\bin\Debug\netcoreapp3.1\
-; These are relative to SourceDir (see RepoRoot)
-OutputDir={#RepoRoot}\Installer
-SetupIconFile={#RepoRoot}\RDPoverSSH\Images\logo.ico
+SourceDir=..\
+; This is relative to SourceDir
+OutputDir=Installer
+SetupIconFile=RDPoverSSH\Images\logo.ico
 ; This is an install-time path, so it must refer to something on the installed machine, like the main exe
 UninstallDisplayIcon={app}\RDPoverSSH.exe
 OutputBaseFilename=RDPoverSSHSetup-{#MyAppVersion}
@@ -81,7 +80,6 @@ begin
   Result := True
 end;
 
-
 // This is a built-in function that executes when the current step changes.
 // We'll use it to install OpenSSH.
 procedure CurStepChanged(CurStep: TSetupStep);
@@ -95,6 +93,24 @@ begin
   end;
 end;
 
+// This is a built-in function that runs once the user has chosen all the option, but before anything actually gets installed.
+// We'll use it to shut down the service.
+function PrepareToInstall(var NeedsRestart: Boolean): String;
+var
+  // Not used
+  ResultCode: Integer;
+  ServicePath: string;
+begin
+  // Note: ExpandConstant is not needed for the preprocessor, but for the embedded constant.
+  ServicePath := ExpandConstant('{#ServicePath}');
+  if FileExists(ServicePath) then
+    Exec(ServicePath, 'action:uninstall', '', SW_HIDE, ewWaitUntilTerminated, ResultCode);
+  
+  // Set result to an empty string to indicate success.
+  // Set to a non-empty string to display as a prerequisite failure.
+  Result := ''  
+end;
+
 [Languages]
 Name: "english"; MessagesFile: "compiler:Default.isl"
 
@@ -103,8 +119,9 @@ Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{
 
 [Files]
 ; These are relative to SourceDir
-Source: "*"; DestDir: "{app}"; Flags: recursesubdirs;
-Source: "..\..\..\..\Installer\{#NetCoreRuntime}"; DestDir: "{tmp}"; Flags: deleteafterinstall; Check: NetCoreRuntimeNotInstalled
+Source: "RDPoverSSH\bin\{#BuildConfig}\netcoreapp3.1\*"; DestDir: "{app}"; Flags: recursesubdirs;
+Source: "RDPoverSSH.Service\bin\{#BuildConfig}\netcoreapp3.1\*"; DestDir: "{app}\Service"; Flags: recursesubdirs;
+Source: "Installer\{#NetCoreRuntime}"; DestDir: "{tmp}"; Flags: deleteafterinstall; Check: NetCoreRuntimeNotInstalled
 
 [Icons]
 Name: "{group}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"
@@ -112,8 +129,14 @@ Name: "{autodesktop}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; Tasks: de
 
 [Run]
 ; .NET Core Desktop Runtime
-Filename: "{tmp}\{#NetCoreRuntime}"; Flags: runascurrentuser; Check: NetCoreRuntimeNotInstalled
+Filename: "{tmp}\{#NetCoreRuntime}"; Flags: runascurrentuser; StatusMsg: "Installing .NET Core Desktop Runtime..."; Check: NetCoreRuntimeNotInstalled
 
 ; runascurrentuser is needed to launch as admin -- we can remove this once admin operators (starting services) are in a Windows server
 Filename: "{app}\{#MyAppExeName}"; Description: "{cm:LaunchProgram,{#StringChange(MyAppName, '&', '&&')}}"; Flags: nowait postinstall skipifsilent runascurrentuser
 
+; Uninstall the service (if there was a previous instance), then install/start the service. This one definitely needs to be done as admin
+Filename: "{#ServicePath}"; Parameters: "action:uninstall"; StatusMsg: "Stopping RDPoverSSH Service..."; Flags: runascurrentuser;
+Filename: "{#ServicePath}"; Parameters: "action:install"; StatusMsg: "Starting RDPoverSSH Service..."; Flags: runascurrentuser;
+
+[UninstallRun]
+Filename: "{#ServicePath}"; Parameters: "action:uninstall"; Flags: runascurrentuser; RunOnceId: "DelService"
