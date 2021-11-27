@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Linq;
 using Microsoft.Toolkit.Mvvm.ComponentModel;
 using Microsoft.Toolkit.Mvvm.Input;
+using RDPoverSSH.Controls;
 using RDPoverSSH.DataStore;
 using RDPoverSSH.Models;
 using RDPoverSSH.Properties;
@@ -181,6 +182,10 @@ namespace RDPoverSSH.ViewModels
             new GenericCommandViewModel(Resources.Test, new RelayCommand(delegate { }), string.Empty);
         private GenericCommandViewModel _testTunnelCommand;
 
+        public GenericCommandViewModel ServerKeysCommand => _serverKeysCommand ??= 
+            new GenericCommandViewModel(string.Empty, new RelayCommand(ShowServerKeys), "\xE875", Resources.ShowSshServerKey);
+        private GenericCommandViewModel _serverKeysCommand;
+
         #endregion
 
         #region Private methods
@@ -195,6 +200,11 @@ namespace RDPoverSSH.ViewModels
         {
             var tunnelDirection = Model.TunnelDirection;
             Model.TunnelDirection = tunnelDirection.Toggle();
+        }
+
+        private async void ShowServerKeys()
+        {
+            await MessageBoxHelper.ShowCopyableText(Resources.SshPrivateKeyDescription, Resources.SshServerKeyHeading, "TODO", monospace: true);
         }
 
         #endregion

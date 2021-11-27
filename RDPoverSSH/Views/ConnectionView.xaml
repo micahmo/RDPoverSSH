@@ -122,6 +122,8 @@
                                       Visibility="{c:Binding 'IsTunnelPortCustom', FalseToVisibility=Collapsed}"/>
                             <views:CommandButton DataContext="{Binding TestTunnelCommand}"
                                                  IsEnabled="{c:Binding 'DataContext.SelectedTunnelPort != null', RelativeSource={RelativeSource AncestorType=views:ConnectionItem}}"/>
+                            <views:CommandButton DataContext="{Binding ServerKeysCommand}"
+                                                 Visibility="{c:Binding 'DataContext.Model.TunnelDirection == sharedModels:Direction.Incoming', RelativeSource={RelativeSource AncestorType=views:ConnectionItem}, FalseToVisibility=Collapsed}"/>
                         </StackPanel>
                     </Grid>
 
