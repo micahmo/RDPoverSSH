@@ -13,7 +13,6 @@ namespace RDPoverSSH.Service
                 config.SetDisplayName("RDPoverSSH Worker Service");
                 config.SetDescription("Manages OpenSSH Server and Client for RDPoverSSH.");
 
-                var name = config.GetDefaultName();
                 config.Service(serviceConfig =>
                 {
                     serviceConfig.ServiceFactory((extraArguments, controller) => new Worker(controller));
