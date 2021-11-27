@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <PackageReference Include="PeterKottas.DotNetCore.WindowsService" Version="1.0.20" />
+    <PackageReference Include="System.Diagnostics.EventLog" Version="6.0.0" />
   </ItemGroup>
 
   <ItemGroup>

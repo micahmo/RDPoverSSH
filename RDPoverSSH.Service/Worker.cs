@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.ServiceProcess;
 using PeterKottas.DotNetCore.WindowsService.Base;
 using PeterKottas.DotNetCore.WindowsService.Interfaces;
@@ -26,13 +27,13 @@ namespace RDPoverSSH.Service
             Timers.Start("SshServerPoller", (int)TimeSpan.FromSeconds(5).TotalMilliseconds, DoSshServerPoll,
                 e =>
                 {
-                    // TODO: Add error logging
+                    EventLog.WriteEntry($"RDPoverSSH.Service.SshServerPoller encountered an error: {e}", EventLogEntryType.Error);
                 });
 
             Timers.Start("SshClientPoller", (int)TimeSpan.FromSeconds(5).TotalMilliseconds, () => { },
                 e =>
                 {
-                    // TODO: Add error logging
+                    EventLog.WriteEntry($"RDPoverSSH.Service.SshClientPoller encountered an error: {e}", EventLogEntryType.Error);
                 });
         }
 
@@ -51,21 +52,20 @@ namespace RDPoverSSH.Service
                 // If we have at least one connection whose tunnel is incoming, we need to make sure ssh server is running.
                 _sshServiceController.Refresh();
 
-                try
+                if (_sshServiceController.Status != ServiceControllerStatus.Running)
                 {
-                    if (_sshServiceController.Status != ServiceControllerStatus.Running)
-                    {
-                        _sshServiceController.Start();
-                    }
-                }
-                catch
-                {
-                    // Swallow exceptions, we'll try again shortly
+                    _sshServiceController.Start();
                 }
             }
         }
 
         private readonly ServiceController _sshServiceController = new ServiceController("sshd");
+
+        #endregion
+
+        #region Public static
+
+        public static EventLog EventLog = new EventLog("Application") {Source = "RDPoverSSH"};
 
         #endregion
     }
