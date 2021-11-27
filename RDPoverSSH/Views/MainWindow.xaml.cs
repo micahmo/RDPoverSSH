@@ -1,10 +1,12 @@
 ﻿using System;
 using System.ComponentModel;
 using System.IO;
+using System.ServiceProcess;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using LinqKit;
-using RDPoverSSH.BusinessLogic;
+using RDPoverSSH.Controls;
 using RDPoverSSH.DataStore;
 using RDPoverSSH.Models;
 using RDPoverSSH.ViewModels;
@@ -32,10 +34,6 @@ namespace RDPoverSSH.Views
                 throw;
             }
 
-            // TODO: These go in Windows services?
-            SshServerWorker.Instance.Start();
-            SshClientWorker.Instance.Start();
-
             viewModel.PropertyChanged += (_, args) =>
             {
                 if (args.PropertyName.Equals(nameof(MainWindowViewModel.Filter)))
@@ -50,13 +48,35 @@ namespace RDPoverSSH.Views
                     RootModel.Instance.Load(predicate);
                 }
             };
+
+            // Make sure the worker service is installed and running.
+            Task.Run(async () =>
+            {
+                ServiceControllerStatus? status = null;
+
+                try
+                {
+                    ServiceController rdpOverSshWorkerService = new ServiceController {ServiceName = "RDPoverSSH.Service.Worker" };
+                    status = rdpOverSshWorkerService.Status;
+                }
+                catch
+                {
+                    // Swallow the exception
+                }
+
+                if (status is null)
+                {
+                    await Dispatcher.Invoke(() => MessageBoxHelper.Show(Properties.Resources.ServiceNotInstalled, Properties.Resources.Error, MessageBoxButton.OK));
+                }
+                else if (status != ServiceControllerStatus.Running)
+                {
+                    await Dispatcher.Invoke(() => MessageBoxHelper.Show(Properties.Resources.ServiceNotRunning, Properties.Resources.Error, MessageBoxButton.OK));
+                }
+            });
         }
 
         private void Window_Closing(object sender, CancelEventArgs e)
         {
-            SshServerWorker.Instance.Stop();
-            SshClientWorker.Instance.Stop();
-
             DatabaseEngine.Shutdown();
         }
 

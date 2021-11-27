@@ -170,4 +170,13 @@
     <data name="Test" xml:space="preserve">
         <value>Test</value>
     </data>
+    <data name="Error" xml:space="preserve">
+        <value>Error</value>
+    </data>
+    <data name="ServiceNotInstalled" xml:space="preserve">
+        <value>The RDPoverSSH worker service is not installed. The application may not function as expected.</value>
+    </data>
+    <data name="ServiceNotRunning" xml:space="preserve">
+        <value>The RDPoverSSH worker service is not running. The application may not function as expected.</value>
+    </data>
 </root>

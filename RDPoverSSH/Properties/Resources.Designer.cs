@@ -133,6 +133,15 @@ namespace RDPoverSSH.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Error.
+        /// </summary>
+        public static string Error {
+            get {
+                return ResourceManager.GetString("Error", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Export connection (for importing on target machine).
         /// </summary>
         public static string ExportCommandDescription {
@@ -246,6 +255,24 @@ namespace RDPoverSSH.Properties {
         public static string OutgoingTunnelDescription {
             get {
                 return ResourceManager.GetString("OutgoingTunnelDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The RDPoverSSH worker service is not installed. The application may not function as expected..
+        /// </summary>
+        public static string ServiceNotInstalled {
+            get {
+                return ResourceManager.GetString("ServiceNotInstalled", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The RDPoverSSH worker service is not running. The application may not function as expected..
+        /// </summary>
+        public static string ServiceNotRunning {
+            get {
+                return ResourceManager.GetString("ServiceNotRunning", resourceCulture);
             }
         }
         

@@ -1,0 +1,26 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <LangVersion>8</LangVersion>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="PeterKottas.DotNetCore.WindowsService" Version="1.0.20" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\RDPoverSSH.DataModel\RDPoverSSH.DataModel.csproj" />
+  </ItemGroup>
+
+  <Target Name="PreBuild" BeforeTargets="BeforeClean;BeforeRebuild;PreBuildEvent">
+    <Exec Command="$(OutDir)RDPoverSSH.Service.exe action:stop" ContinueOnError="true" />
+  </Target>
+
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+      <Exec Command="$(OutDir)RDPoverSSH.Service.exe action:uninstall" />
+      <Exec Command="$(OutDir)RDPoverSSH.Service.exe action:install" />
+  </Target>
+
+</Project>

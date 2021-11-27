@@ -58,6 +58,14 @@ namespace RDPoverSSH.Models
 
         [BsonIgnore]
         public bool IsReverseTunnel => ConnectionDirection != TunnelDirection;
+
+        /// <summary>
+        /// The connection string used by SSH to establish the connection
+        /// </summary>
+        /// <remarks>
+        /// The StrictHostKeyChecking should be re-enabled
+        /// </remarks>
+        public string TunnelConnectString => $"{TunnelEndpoint} -p {TunnelPort} -o StrictHostKeyChecking=no ServerAliveInterval=10";
     }
 
     /// <summary>
