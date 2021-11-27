@@ -179,4 +179,19 @@
     <data name="ServiceNotRunning" xml:space="preserve">
         <value>The RDPoverSSH worker service is not running. The application may not function as expected.</value>
     </data>
+  <data name="Copy" xml:space="preserve">
+    <value>Copy</value>
+  </data>
+  <data name="Close" xml:space="preserve">
+    <value>Close</value>
+  </data>
+  <data name="SshPrivateKeyDescription" xml:space="preserve">
+    <value>Below is the SSH private key for this server. This key allows SSH access to this machine, so share it with care!</value>
+  </data>
+  <data name="SshServerKeyHeading" xml:space="preserve">
+    <value>SSH Server Private Key</value>
+  </data>
+  <data name="ShowSshServerKey" xml:space="preserve">
+    <value>Show SSH Server Key</value>
+  </data>
 </root>

@@ -70,6 +70,15 @@ namespace RDPoverSSH.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Close.
+        /// </summary>
+        public static string Close {
+            get {
+                return ResourceManager.GetString("Close", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Confirm.
         /// </summary>
         public static string Confirm {
@@ -102,6 +111,15 @@ namespace RDPoverSSH.Properties {
         public static string ConnectionNameHint {
             get {
                 return ResourceManager.GetString("ConnectionNameHint", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Copy.
+        /// </summary>
+        public static string Copy {
+            get {
+                return ResourceManager.GetString("Copy", resourceCulture);
             }
         }
         
@@ -282,6 +300,33 @@ namespace RDPoverSSH.Properties {
         public static string Settings {
             get {
                 return ResourceManager.GetString("Settings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Show SSH Server Key.
+        /// </summary>
+        public static string ShowSshServerKey {
+            get {
+                return ResourceManager.GetString("ShowSshServerKey", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Below is the SSH private key for this server. This key allows SSH access to this machine, so share it with care!.
+        /// </summary>
+        public static string SshPrivateKeyDescription {
+            get {
+                return ResourceManager.GetString("SshPrivateKeyDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to SSH Server Private Key.
+        /// </summary>
+        public static string SshServerKeyHeading {
+            get {
+                return ResourceManager.GetString("SshServerKeyHeading", resourceCulture);
             }
         }
         
