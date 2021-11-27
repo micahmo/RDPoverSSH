@@ -6,6 +6,7 @@ using System.ServiceProcess;
 using PeterKottas.DotNetCore.WindowsService.Base;
 using PeterKottas.DotNetCore.WindowsService.Interfaces;
 using RDPoverSSH.DataStore;
+using RDPoverSSH.Models;
 
 namespace RDPoverSSH.Service
 {
@@ -49,7 +50,7 @@ namespace RDPoverSSH.Service
 
         private void DoSshServerPoll()
         {
-            if (DatabaseEngine.ConnectionCollection.Count(c => c.TunnelDirection == Models.Direction.Incoming) > 0)
+            if (DatabaseEngine.ConnectionCollection.Count(c => c.TunnelDirection == Direction.Incoming) > 0)
             {
                 // If we have at least one connection whose tunnel is incoming, we need to make sure ssh server is configured.
 
