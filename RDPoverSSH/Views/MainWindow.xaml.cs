@@ -5,7 +5,11 @@ using System.ServiceProcess;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
+using CommandLine;
+using CommandLine.Text;
 using LinqKit;
+using RDPoverSSH.Arguments;
+using RDPoverSSH.Common;
 using RDPoverSSH.Controls;
 using RDPoverSSH.DataStore;
 using RDPoverSSH.Models;
@@ -21,6 +25,24 @@ namespace RDPoverSSH.Views
         public MainWindow()
         {
             InitializeComponent();
+
+            if (App.HasArgs)
+            {
+                App.ParsedArgs
+                    .WithParsed<ShowMessageArgument>(ShowMessage)
+                    .WithNotParsed(_ =>
+                    {
+                        HelpText.AutoBuild(App.ParsedArgs);
+                        Environment.Exit(0);
+                    });
+
+                RootControl.Visibility = Visibility.Hidden;
+                WindowStyle = WindowStyle.None;
+                Width = 500;
+                Height = 500;
+                return;
+            }
+
             MainWindowViewModel viewModel = new MainWindowViewModel();
             DataContext = viewModel;
 
@@ -73,6 +95,32 @@ namespace RDPoverSSH.Views
                     await Dispatcher.Invoke(() => MessageBoxHelper.Show(Properties.Resources.ServiceNotRunning, Properties.Resources.Error, MessageBoxButton.OK));
                 }
             });
+        }
+
+        private void ShowMessage(ShowMessageArgument arg)
+        {
+            Loaded += async (_, __) =>
+            {
+                // Figure out which message to show
+                if (arg.Text.Equals(ShowMessageArgument.SshServerPrivateKey))
+                {
+                    try
+                    {
+                        string privateKeyText = await File.ReadAllTextAsync(Values.OurPrivateKeyFilePath);
+                        await MessageBoxHelper.ShowCopyableText(Properties.Resources.SshPrivateKeyDescription, Properties.Resources.SshServerKeyHeading, privateKeyText, monospace: true);
+                    }
+                    catch (Exception)
+                    {
+                        await MessageBoxHelper.Show(Properties.Resources.ErrorGettingPrivateKey, Properties.Resources.Error, MessageBoxButton.OK);
+                    }
+                }
+                else
+                {
+                    await MessageBoxHelper.Show(arg.Text, "RDPoverSSH", MessageBoxButton.OK);
+                }
+
+                Environment.Exit(0);
+            };
         }
 
         private void Window_Closing(object sender, CancelEventArgs e)

@@ -6,6 +6,7 @@ using System.ServiceProcess;
 using System.Threading;
 using System.Threading.Tasks;
 using PeterKottas.DotNetCore.WindowsService.Interfaces;
+using RDPoverSSH.Common;
 using RDPoverSSH.DataStore;
 using RDPoverSSH.Models;
 
@@ -77,38 +78,38 @@ namespace RDPoverSSH.Service
                 }
 
                 // Make sure we have the keys file.
-                if (!File.Exists(_administratorsAuthorizedKeysFilePath))
+                if (!File.Exists(Values.AdministratorsAuthorizedKeysFilePath))
                 {
                     // Create the file
 #pragma warning disable CS0642
-                    using (File.Create(_administratorsAuthorizedKeysFilePath));
+                    using (File.Create(Values.AdministratorsAuthorizedKeysFilePath));
 #pragma warning restore CS0642
-                    SetSshAcl(new FileInfo(_administratorsAuthorizedKeysFilePath));
-                    EventLog.WriteEntry($"Created keys file '{_administratorsAuthorizedKeysFilePath}', and set secure ACLs.");
+                    SetSshAcl(new FileInfo(Values.AdministratorsAuthorizedKeysFilePath));
+                    EventLog.WriteEntry($"Created keys file '{Values.AdministratorsAuthorizedKeysFilePath}', and set secure ACLs.");
                 }
 
                 string publicKey = null;
 
                 // Now check if our specific key files exist
-                if (!File.Exists(_ourPrivateKeyFilePath))
+                if (!File.Exists(Values.OurPrivateKeyFilePath))
                 {
 #pragma warning disable CS0642
-                    using (File.Create(_ourPrivateKeyFilePath));
+                    using (File.Create(Values.OurPrivateKeyFilePath));
 #pragma warning restore CS0642
-                    SetSshAcl(new FileInfo(_ourPrivateKeyFilePath));
-                    EventLog.WriteEntry($"Created keys file '{_ourPrivateKeyFilePath}', and set secure ACLs.");
+                    SetSshAcl(new FileInfo(Values.OurPrivateKeyFilePath));
+                    EventLog.WriteEntry($"Created keys file '{Values.OurPrivateKeyFilePath}', and set secure ACLs.");
 
 #pragma warning disable CS0642
-                    using (File.Create(_ourPublicKeyFilePath)) ;
+                    using (File.Create(Values.OurPublicKeyFilePath)) ;
 #pragma warning restore CS0642
-                    SetSshAcl(new FileInfo(_ourPublicKeyFilePath));
-                    EventLog.WriteEntry($"Created keys file '{_ourPublicKeyFilePath}', and set secure ACLs.");
+                    SetSshAcl(new FileInfo(Values.OurPublicKeyFilePath));
+                    EventLog.WriteEntry($"Created keys file '{Values.OurPublicKeyFilePath}', and set secure ACLs.");
 
                     // Now generate our keys
                     using var keygen = new SshKeyGenerator.SshKeyGenerator(2048);
 
-                    File.WriteAllText(_ourPrivateKeyFilePath, keygen.ToPrivateKey());
-                    File.WriteAllText(_ourPublicKeyFilePath, publicKey = keygen.ToRfcPublicKey());
+                    File.WriteAllText(Values.OurPrivateKeyFilePath, keygen.ToPrivateKey());
+                    File.WriteAllText(Values.OurPublicKeyFilePath, publicKey = keygen.ToRfcPublicKey());
 
                     EventLog.WriteEntry("Generated RSA public/private keys.");
                 }
@@ -116,13 +117,13 @@ namespace RDPoverSSH.Service
                 if (string.IsNullOrEmpty(publicKey))
                 {
                     // This handles the case where we previously created the key, but we still need to add it to the authorized list.
-                    publicKey = File.ReadAllText(_ourPublicKeyFilePath);
+                    publicKey = File.ReadAllText(Values.OurPublicKeyFilePath);
                 }
 
                 // Finally, put our private key in the authorized keys file
-                if (!File.ReadAllText(_administratorsAuthorizedKeysFilePath).Contains(publicKey))
+                if (!File.ReadAllText(Values.AdministratorsAuthorizedKeysFilePath).Contains(publicKey))
                 {
-                    File.AppendAllText(_administratorsAuthorizedKeysFilePath, $"{publicKey}\n");
+                    File.AppendAllText(Values.AdministratorsAuthorizedKeysFilePath, $"{publicKey}\n");
                     EventLog.WriteEntry("Added public key to authorized keys.");
                 }
             }
@@ -152,10 +153,6 @@ namespace RDPoverSSH.Service
         }
 
         private readonly ServiceController _sshServiceController = new ServiceController("sshd");
-        private static readonly string SshProgramDataPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData));
-        private readonly string _ourPrivateKeyFilePath = Path.Combine(SshProgramDataPath, "ssh", "ssh_rdp_over_ssh_key");
-        private readonly string _ourPublicKeyFilePath = Path.Combine(SshProgramDataPath, "ssh", "ssh_rdp_over_ssh_key.pub");
-        private readonly string _administratorsAuthorizedKeysFilePath = Path.Combine(SshProgramDataPath, "ssh", "administrators_authorized_keys");
 
         #endregion
 

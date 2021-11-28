@@ -4,8 +4,11 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Windows;
 using Microsoft.Toolkit.Mvvm.ComponentModel;
 using Microsoft.Toolkit.Mvvm.Input;
+using RDPoverSSH.Arguments;
+using RDPoverSSH.Common;
 using RDPoverSSH.Controls;
 using RDPoverSSH.DataStore;
 using RDPoverSSH.Models;
@@ -206,41 +209,49 @@ namespace RDPoverSSH.ViewModels
 
         private async void ShowServerKeys()
         {
-            string privateKeyText;
-
-            var getPrivateKeyProcess = new Process
+            if (File.Exists(Values.OurPrivateKeyFilePath))
             {
-                StartInfo = new ProcessStartInfo
+                string currentApplicationFilePath = new Uri(System.Reflection.Assembly.GetExecutingAssembly().CodeBase ?? string.Empty).LocalPath;
+                string currentApplicationFolderPath = Path.GetDirectoryName(currentApplicationFilePath) ?? string.Empty;
+                if (Path.GetExtension(currentApplicationFilePath).Equals(".dll", StringComparison.OrdinalIgnoreCase))
                 {
-                    FileName = "powershell.exe",
-                    Arguments = $"-noprofile -Command \"Get-Content \"{_ourPrivateKeyFilePath}\"\"",
-                    RedirectStandardOutput = true,
-                    // Need admin privs to read the key file
-                    Verb = "runas",
-                    CreateNoWindow = true
+                    currentApplicationFilePath = Path.Combine(currentApplicationFolderPath, $"{Path.GetFileNameWithoutExtension(currentApplicationFilePath)}.exe");
                 }
-            };
 
-            if (File.Exists(_ourPrivateKeyFilePath))
-            {
-                getPrivateKeyProcess.Start();
-                getPrivateKeyProcess.WaitForExit();
-                privateKeyText = await getPrivateKeyProcess.StandardOutput.ReadToEndAsync();
+                var getPrivateKeyProcess = new Process
+                {
+                    StartInfo = new ProcessStartInfo
+                    {
+                        FileName = currentApplicationFilePath,
+                        Arguments = $"showmessage {ShowMessageArgument.SshServerPrivateKey}",
+                        // Run as admin
+                        Verb = "runas",
+                        // Required for runas
+                        UseShellExecute = true
+                    }
+                };
+
+                try
+                {
+                    getPrivateKeyProcess.Start();
+                }
+                catch (Win32Exception ex)
+                {
+                    if (ex.NativeErrorCode == 1223) // ERROR_CANCELLED
+                    {
+                        await MessageBoxHelper.Show(Resources.AdminRequiredForPrivateKey, Resources.Error, MessageBoxButton.OK);
+                    }
+                    else
+                    {
+                        await MessageBoxHelper.Show(Resources.ErrorGettingPrivateKey, Resources.Error, MessageBoxButton.OK);
+                    }
+                }
             }
             else
             {
-                privateKeyText = Resources.SshServerKeyNotFound;
+                await MessageBoxHelper.Show(Resources.SshServerKeyNotGenerated, Resources.NotFound, MessageBoxButton.OK);
             }
-
-            await MessageBoxHelper.ShowCopyableText(Resources.SshPrivateKeyDescription, Resources.SshServerKeyHeading, privateKeyText, monospace: true);
         }
-
-        #endregion
-
-        #region Private fields
-
-        private static readonly string SshProgramDataPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData));
-        private readonly string _ourPrivateKeyFilePath = Path.Combine(SshProgramDataPath, "ssh", "ssh_rdp_over_ssh_key");
 
         #endregion
     }

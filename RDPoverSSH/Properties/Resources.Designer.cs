@@ -61,6 +61,15 @@ namespace RDPoverSSH.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Administrator privileges are required to view the SSH Server private key..
+        /// </summary>
+        public static string AdminRequiredForPrivateKey {
+            get {
+                return ResourceManager.GetString("AdminRequiredForPrivateKey", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Cancel.
         /// </summary>
         public static string Cancel {
@@ -160,6 +169,15 @@ namespace RDPoverSSH.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to There was an error retrieving the SSH Server private key..
+        /// </summary>
+        public static string ErrorGettingPrivateKey {
+            get {
+                return ResourceManager.GetString("ErrorGettingPrivateKey", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Export connection (for importing on target machine).
         /// </summary>
         public static string ExportCommandDescription {
@@ -237,6 +255,15 @@ namespace RDPoverSSH.Properties {
         public static string No {
             get {
                 return ResourceManager.GetString("No", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Not Found.
+        /// </summary>
+        public static string NotFound {
+            get {
+                return ResourceManager.GetString("NotFound", resourceCulture);
             }
         }
         
@@ -337,6 +364,15 @@ namespace RDPoverSSH.Properties {
         public static string SshServerKeyNotFound {
             get {
                 return ResourceManager.GetString("SshServerKeyNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The SSH Server private key has not yet been generated. Please try again shortly..
+        /// </summary>
+        public static string SshServerKeyNotGenerated {
+            get {
+                return ResourceManager.GetString("SshServerKeyNotGenerated", resourceCulture);
             }
         }
         

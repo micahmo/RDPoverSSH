@@ -16,8 +16,8 @@
         ui:ThemeManager.IsThemeAware="True"
         Closing="Window_Closing"
         MouseDown="Window_MouseDown">
-    
-    <Grid>
+
+    <Grid x:Name="RootControl">
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="50"/>

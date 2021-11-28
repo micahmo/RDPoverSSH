@@ -16,6 +16,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RDPoverSSH.Service", "RDPov
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RDPoverSSH.DataModel", "RDPoverSSH.DataModel\RDPoverSSH.DataModel.csproj", "{6CAA5426-BFCA-4E1B-A902-C3D173890560}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RDPoverSSH.Common", "RDPoverSSH.Common\RDPoverSSH.Common.csproj", "{24D9A280-729D-4C39-8EB9-5ED1191F12CE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -34,6 +36,10 @@ Global
 		{6CAA5426-BFCA-4E1B-A902-C3D173890560}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6CAA5426-BFCA-4E1B-A902-C3D173890560}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6CAA5426-BFCA-4E1B-A902-C3D173890560}.Release|Any CPU.Build.0 = Release|Any CPU
+		{24D9A280-729D-4C39-8EB9-5ED1191F12CE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{24D9A280-729D-4C39-8EB9-5ED1191F12CE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{24D9A280-729D-4C39-8EB9-5ED1191F12CE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{24D9A280-729D-4C39-8EB9-5ED1191F12CE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

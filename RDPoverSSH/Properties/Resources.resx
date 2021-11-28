@@ -198,4 +198,16 @@
     <value>SSH Server private key not found. Please try again.
 </value>
   </data>
+  <data name="SshServerKeyNotGenerated" xml:space="preserve">
+    <value>The SSH Server private key has not yet been generated. Please try again shortly.</value>
+  </data>
+  <data name="NotFound" xml:space="preserve">
+    <value>Not Found</value>
+  </data>
+  <data name="ErrorGettingPrivateKey" xml:space="preserve">
+    <value>There was an error retrieving the SSH Server private key.</value>
+  </data>
+  <data name="AdminRequiredForPrivateKey" xml:space="preserve">
+    <value>Administrator privileges are required to view the SSH Server private key.</value>
+  </data>
 </root>

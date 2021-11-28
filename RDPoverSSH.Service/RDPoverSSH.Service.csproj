@@ -15,6 +15,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\RDPoverSSH.Common\RDPoverSSH.Common.csproj" />
     <ProjectReference Include="..\RDPoverSSH.DataModel\RDPoverSSH.DataModel.csproj" />
   </ItemGroup>
 
