@@ -3,14 +3,15 @@ using System.Diagnostics;
 using System.IO;
 using System.Security.AccessControl;
 using System.ServiceProcess;
-using PeterKottas.DotNetCore.WindowsService.Base;
+using System.Threading;
+using System.Threading.Tasks;
 using PeterKottas.DotNetCore.WindowsService.Interfaces;
 using RDPoverSSH.DataStore;
 using RDPoverSSH.Models;
 
 namespace RDPoverSSH.Service
 {
-    public class Worker : MicroService, IMicroService
+    public class Worker : IMicroService
     {
         private readonly IMicroServiceController _controller;
 
@@ -25,28 +26,38 @@ namespace RDPoverSSH.Service
 
         public void Start()
         {
-            StartBase();
-
-            Timers.Start("SshServerPoller", (int)TimeSpan.FromSeconds(5).TotalMilliseconds, DoSshServerPoll,
-                e =>
-                {
-                    EventLog.WriteEntry($"RDPoverSSH.Service.SshServerPoller encountered an error: {e}", EventLogEntryType.Error);
-                });
-
-            Timers.Start("SshClientPoller", (int)TimeSpan.FromSeconds(5).TotalMilliseconds, DoSshClientPoll,
-                e =>
-                {
-                    EventLog.WriteEntry($"RDPoverSSH.Service.SshClientPoller encountered an error: {e}", EventLogEntryType.Error);
-                });
+            _workerThread = new Thread(WorkerThread);
+            _workerThread.Start();
         }
 
         public void Stop()
         {
-            StopBase();
+            // Stop can be called before start, so make it safe.
+            _cancellationToken?.Cancel();
+            _workerThread?.Join();
             DatabaseEngine.Shutdown();
         }
 
         #region Private methods
+
+        private async void WorkerThread()
+        {
+            while (!_cancellationToken.IsCancellationRequested)
+            {
+                try
+                {
+                    DoSshServerPoll();
+                    DoSshClientPoll();
+                }
+                catch (Exception ex)
+                {
+                    EventLog.WriteEntry($"RDPoverSSH encountered an error: {ex}", EventLogEntryType.Error);
+                }
+
+                // As opposed to Task.Delay, this doesn't throw an exception when the cancellation is set
+                await Task.Run(() => Thread.Sleep(TimeSpan.FromSeconds(5)), _cancellationToken.Token);
+            }
+        }
 
         private void DoSshServerPoll()
         {
@@ -141,6 +152,13 @@ namespace RDPoverSSH.Service
         private readonly string _ourPrivateKeyFilePath = Path.Combine(SshProgramDataPath, "ssh", "ssh_rdp_over_ssh_key");
         private readonly string _ourPublicKeyFilePath = Path.Combine(SshProgramDataPath, "ssh", "ssh_rdp_over_ssh_key.pub");
         private readonly string _administratorsAuthorizedKeysFilePath = Path.Combine(SshProgramDataPath, "ssh", "administrators_authorized_keys");
+
+        #endregion
+
+        #region Threading
+
+        private readonly CancellationTokenSource _cancellationToken = new CancellationTokenSource();
+        private Thread _workerThread;
 
         #endregion
 
