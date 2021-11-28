@@ -1,14 +1,17 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <!-- This project is a library, but needs to be Core for Harmony -->
+    <TargetFramework>netcoreapp3.1</TargetFramework>
     <RootNamespace>RDPoverSSH</RootNamespace>
      <LangVersion>8</LangVersion>
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Lib.Harmony" Version="2.1.1" />
     <PackageReference Include="LiteDB" Version="5.0.11" />
     <PackageReference Include="Microsoft.Toolkit.Mvvm" Version="7.1.2" />
+    <PackageReference Include="System.Threading.AccessControl" Version="6.0.0" />
   </ItemGroup>
 
 </Project>

@@ -13,6 +13,8 @@ namespace RDPoverSSH.Service
 {
     public class Worker : IMicroService
     {
+        #region IMicroService members
+
         private readonly IMicroServiceController _controller;
 
         public Worker()
@@ -37,6 +39,8 @@ namespace RDPoverSSH.Service
             _workerThread?.Join();
             DatabaseEngine.Shutdown();
         }
+
+        #endregion
 
         #region Private methods
 
