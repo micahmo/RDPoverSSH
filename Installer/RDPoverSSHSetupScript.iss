@@ -46,7 +46,7 @@ function OpenSSHClientInstalled: Boolean;
 var
   ResultCode: Integer;
 begin
-  Exec(ExpandConstant('{sys}\WindowsPowerShell\v1.0\powershell.exe'), '-Command "if ((Get-WindowsCapability -Online -Name ''OpenSSH.Client~~~~0.0.1.0'').State -ne ''Installed'') { exit 1 }', '', SW_HIDE, ewWaitUntilTerminated, ResultCode);
+  Exec(ExpandConstant('{sys}\WindowsPowerShell\v1.0\powershell.exe'), '-NoProfile -Command "if ((Get-WindowsCapability -Online -Name ''OpenSSH.Client~~~~0.0.1.0'').State -ne ''Installed'') { exit 1 }', '', SW_HIDE, ewWaitUntilTerminated, ResultCode);
   Result := ResultCode = 0
 end;
 
@@ -55,14 +55,14 @@ var
   // Not used
   ResultCode: Integer;
 begin
-  Exec(ExpandConstant('{sys}\WindowsPowerShell\v1.0\powershell.exe'), '-Command "Clear-Host; Write-Output ''Installing OpenSSH Client. This window will automatically close when done.''; Add-WindowsCapability -Online -Name ''OpenSSH.Client~~~~0.0.1.0''', '', SW_SHOW, ewWaitUntilTerminated, ResultCode);
+  Exec(ExpandConstant('{sys}\WindowsPowerShell\v1.0\powershell.exe'), '-NoProfile -Command "Write-Output ''Installing OpenSSH Client. This window will automatically close when done.''; Add-WindowsCapability -Online -Name ''OpenSSH.Client~~~~0.0.1.0''', '', SW_SHOW, ewWaitUntilTerminated, ResultCode);
 end;
 
 function OpenSSHServerInstalled: Boolean;
 var
   ResultCode: Integer;
 begin
-  Exec(ExpandConstant('{sys}\WindowsPowerShell\v1.0\powershell.exe'), '-Command "if ((Get-WindowsCapability -Online -Name ''OpenSSH.Server~~~~0.0.1.0'').State -ne ''Installed'') { exit 1 }', '', SW_HIDE, ewWaitUntilTerminated, ResultCode);
+  Exec(ExpandConstant('{sys}\WindowsPowerShell\v1.0\powershell.exe'), '-NoProfile -Command "if ((Get-WindowsCapability -Online -Name ''OpenSSH.Server~~~~0.0.1.0'').State -ne ''Installed'') { exit 1 }', '', SW_HIDE, ewWaitUntilTerminated, ResultCode);
   Result := ResultCode = 0
 end;
 
@@ -71,7 +71,7 @@ var
   // Not used
   ResultCode: Integer;
 begin
-  Exec(ExpandConstant('{sys}\WindowsPowerShell\v1.0\powershell.exe'), '-Command "Clear-Host; Write-Output ''Installing OpenSSH Server. This window will automatically close when done.''; Add-WindowsCapability -Online -Name ''OpenSSH.Server~~~~0.0.1.0''', '', SW_SHOW, ewWaitUntilTerminated, ResultCode);
+  Exec(ExpandConstant('{sys}\WindowsPowerShell\v1.0\powershell.exe'), '-NoProfile -Command "Write-Output ''Installing OpenSSH Server. This window will automatically close when done.''; Add-WindowsCapability -Online -Name ''OpenSSH.Server~~~~0.0.1.0''', '', SW_SHOW, ewWaitUntilTerminated, ResultCode);
 end;
 
 function InitializeSetup(): Boolean;
