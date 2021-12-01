@@ -31,7 +31,7 @@ namespace RDPoverSSH.ViewModels
         {
             ConnectionModel connectionModel = new ConnectionModel();
             RootModel.Instance.Connections.Add(connectionModel);
-            DatabaseEngine.ConnectionCollection.Insert(connectionModel);
+            DatabaseEngine.GetCollection<ConnectionModel>().Insert(connectionModel);
         }
 
         #endregion

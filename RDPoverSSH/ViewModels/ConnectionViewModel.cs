@@ -54,7 +54,7 @@ namespace RDPoverSSH.ViewModels
         private void Model_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             // Any time the model changes, persist it
-            DatabaseEngine.ConnectionCollection.Update(Model);
+            DatabaseEngine.GetCollection<ConnectionModel>().Update(Model);
 
             if (e.PropertyName.Equals(nameof(Model.ConnectionDirection)))
             {

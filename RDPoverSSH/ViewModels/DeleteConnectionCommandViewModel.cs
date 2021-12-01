@@ -42,7 +42,7 @@ namespace RDPoverSSH.ViewModels
                 if (res == ContentDialogResult.Primary)
                 {
                     RootModel.Instance.Connections.Remove(connectionViewModel.Model);
-                    DatabaseEngine.ConnectionCollection.Delete(connectionViewModel.Model.ObjectId);
+                    DatabaseEngine.GetCollection<ConnectionModel>().Delete(connectionViewModel.Model.ObjectId);
                 }
             }
         }

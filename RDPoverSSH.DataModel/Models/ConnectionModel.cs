@@ -1,5 +1,5 @@
-﻿using LiteDB;
-using Microsoft.Toolkit.Mvvm.ComponentModel;
+﻿using System;
+using LiteDB;
 
 namespace RDPoverSSH.Models
 {
@@ -9,8 +9,19 @@ namespace RDPoverSSH.Models
     /// <remarks>
     /// Models get persisted on property changes, so all properties should be observable
     /// </remarks>
-    public class ConnectionModel : ObservableObject
+    public class ConnectionModel : ModelBase<ConnectionModel>
     {
+        #region ModelBase members
+
+        /// <inheritdoc/>
+        public override Action<ILiteCollection<ConnectionModel>> Initialize { get; } = collection =>
+        {
+            // Our standing data for ConnectionModel is a single empty instance
+            collection.Insert(new ConnectionModel());
+        };
+
+        #endregion
+
         [BsonId]
         public int ObjectId { get; set; }
 

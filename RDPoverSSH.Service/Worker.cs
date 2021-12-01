@@ -66,7 +66,7 @@ namespace RDPoverSSH.Service
 
         private void DoSshServerPoll()
         {
-            if (DatabaseEngine.ConnectionCollection.Count(c => c.TunnelDirection == Direction.Incoming) > 0)
+            if (DatabaseEngine.GetCollection<ConnectionModel>().Count(c => c.TunnelDirection == Direction.Incoming) > 0)
             {
                 // If we have at least one connection whose tunnel is incoming, we need to make sure ssh server is configured.
 
@@ -131,7 +131,7 @@ namespace RDPoverSSH.Service
 
         private void DoSshClientPoll()
         {
-            if (DatabaseEngine.ConnectionCollection.Count(c => c.TunnelDirection == Direction.Outgoing) > 0)
+            if (DatabaseEngine.GetCollection<ConnectionModel>().Count(c => c.TunnelDirection == Direction.Outgoing) > 0)
             {
                 // First make sure we have keys
             }
