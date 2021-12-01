@@ -7,6 +7,7 @@
         xmlns:ui="http://schemas.modernwpf.com/2019"
         xmlns:views="clr-namespace:RDPoverSSH.Views"
         xmlns:properties="clr-namespace:RDPoverSSH.Properties"
+        xmlns:c="clr-namespace:CalcBinding;assembly=CalcBinding"
         mc:Ignorable="d"
         d:DataContext="{d:DesignInstance Type={x:Type viewModels:MainWindowViewModel}}"
         Title="RDPoverSSH" Height="600" Width="1000"
@@ -56,7 +57,8 @@
                 </Grid.ColumnDefinitions>
 
                 <TextBox Grid.Column="1" ui:ControlHelper.PlaceholderText="{x:Static properties:Resources.FilterHint}" VerticalContentAlignment="Center" 
-                         Text="{Binding Filter, UpdateSourceTrigger=PropertyChanged, Delay=500}" />
+                         Text="{Binding Filter, UpdateSourceTrigger=PropertyChanged, Delay=500}" 
+                         Visibility="{c:Binding 'Connections.Count > 0', FalseToVisibility=Collapsed}"/>
             </Grid>
 
             <ScrollViewer Grid.Row="2">
