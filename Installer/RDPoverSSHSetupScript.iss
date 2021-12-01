@@ -135,9 +135,9 @@ Filename: "{tmp}\{#NetCoreRuntime}"; Flags: runascurrentuser; StatusMsg: "Instal
 Filename: "{app}\{#MyAppExeName}"; Description: "{cm:LaunchProgram,{#StringChange(MyAppName, '&', '&&')}}"; Flags: nowait postinstall skipifsilent runascurrentuser
 
 ; Uninstall the service (if there was a previous instance), then install/start the service. This one definitely needs to be done as admin
-Filename: "{#ServicePath}"; Parameters: "action:uninstall"; StatusMsg: "Stopping RDPoverSSH Service..."; Flags: runascurrentuser;
-Filename: "{#ServicePath}"; Parameters: "action:install"; StatusMsg: "Updating RDPoverSSH Service..."; Flags: runascurrentuser;
-Filename: "{#ServicePath}"; Parameters: "action:start"; StatusMsg: "Starting RDPoverSSH Service..."; Flags: runascurrentuser;
+Filename: "{#ServicePath}"; Parameters: "action:uninstall"; StatusMsg: "Stopping RDPoverSSH Service..."; Flags: runascurrentuser runhidden;
+Filename: "{#ServicePath}"; Parameters: "action:install"; StatusMsg: "Updating RDPoverSSH Service..."; Flags: runascurrentuser runhidden;
+Filename: "{#ServicePath}"; Parameters: "action:start"; StatusMsg: "Starting RDPoverSSH Service..."; Flags: runascurrentuser runhidden;
 
 [UninstallRun]
-Filename: "{#ServicePath}"; Parameters: "action:uninstall"; Flags: runascurrentuser; RunOnceId: "DelService"
+Filename: "{#ServicePath}"; Parameters: "action:uninstall"; Flags: runascurrentuser runhidden; RunOnceId: "DelService"
