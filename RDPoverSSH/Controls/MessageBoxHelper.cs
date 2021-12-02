@@ -53,7 +53,7 @@ namespace RDPoverSSH.Controls
             return contentDialog.ShowAsync();
         }
 
-        public static async Task ShowCopyableText(string message, string title, string textBlock, bool monospace = false)
+        private static FrameworkElement GetTextBlockContent(string message, string textBlock, bool monospace, bool readOnly, out FlowDocument document)
         {
             StackPanel stackPanel = new StackPanel();
             stackPanel.Children.Add(new TextBlock
@@ -64,12 +64,12 @@ namespace RDPoverSSH.Controls
 
             RichTextBox richTextBox = new RichTextBox
             {
-                IsReadOnly = true, 
-                HorizontalScrollBarVisibility = ScrollBarVisibility.Auto, 
+                IsReadOnly = readOnly,
+                HorizontalScrollBarVisibility = ScrollBarVisibility.Auto,
                 VerticalScrollBarVisibility = ScrollBarVisibility.Auto,
                 // This is needed in order for the vertical scrollbar to appear
-                MaxHeight = 300,
-                Margin = new Thickness(0,5,0,5),
+                Height = 300,
+                Margin = new Thickness(0, 5, 0, 5),
             };
 
             if (monospace)
@@ -80,8 +80,17 @@ namespace RDPoverSSH.Controls
             richTextBox.Document.Blocks.Clear();
             richTextBox.Document.Blocks.Add(new Paragraph(new Run(textBlock)));
             // This is needed in order for the horizontal scrollbar to appear
+            richTextBox.Document.Blocks.FirstBlock.LineHeight = 1;
             richTextBox.Document.PageWidth = 1000;
             stackPanel.Children.Add(richTextBox);
+
+            document = richTextBox.Document;
+            return stackPanel;
+        }
+
+        public static async Task ShowCopyableText(string message, string title, string textBlock, bool monospace = false)
+        {
+            var stackPanel = GetTextBlockContent(message, textBlock, monospace, readOnly: true, out _);
 
             ContentDialog contentDialog = new ContentDialog
             {
@@ -96,6 +105,27 @@ namespace RDPoverSSH.Controls
             {
                 Clipboard.SetText(textBlock);
             }
+        }
+
+        public static async Task<string> ShowPastableText(string message, string title, bool monospace = false)
+        {
+            var stackPanel = GetTextBlockContent(message, string.Empty, monospace, readOnly: false, out var flowDocument);
+
+            ContentDialog contentDialog = new ContentDialog
+            {
+                Title = title,
+                Content = stackPanel,
+                DefaultButton = ContentDialogButton.Primary,
+                PrimaryButtonText = Resources.Save,
+                CloseButtonText = Resources.Cancel
+            };
+
+            if (await contentDialog.ShowAsync() == ContentDialogResult.Primary)
+            {
+                return new TextRange(flowDocument.ContentStart, flowDocument.ContentEnd).Text;
+            }
+
+            return default;
         }
     }
 }

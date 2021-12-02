@@ -14,4 +14,8 @@
     <PackageReference Include="System.Threading.AccessControl" Version="6.0.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\RDPoverSSH.Common\RDPoverSSH.Common.csproj" />
+  </ItemGroup>
+
 </Project>

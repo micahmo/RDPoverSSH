@@ -10,7 +10,7 @@
         xmlns:c="clr-namespace:CalcBinding;assembly=CalcBinding"
         mc:Ignorable="d"
         d:DataContext="{d:DesignInstance Type={x:Type viewModels:MainWindowViewModel}}"
-        Title="RDPoverSSH" Height="600" Width="1000"
+        Title="RDPoverSSH" Height="600" Width="1100"
         
         Background="{DynamicResource SystemControlPageBackgroundAltHighBrush}"
         Foreground="{DynamicResource SystemControlPageTextBaseHighBrush}"

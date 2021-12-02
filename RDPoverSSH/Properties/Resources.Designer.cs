@@ -61,11 +61,29 @@ namespace RDPoverSSH.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Add SSH Server Key.
+        /// </summary>
+        public static string AddSshServerKey {
+            get {
+                return ResourceManager.GetString("AddSshServerKey", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Administrator privileges are required to view the SSH Server private key..
         /// </summary>
         public static string AdminRequiredForPrivateKey {
             get {
                 return ResourceManager.GetString("AdminRequiredForPrivateKey", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Administrator privileges are required to save the SSH Server private key..
+        /// </summary>
+        public static string AdminRequiredToSavePrivateKey {
+            get {
+                return ResourceManager.GetString("AdminRequiredToSavePrivateKey", resourceCulture);
             }
         }
         
@@ -174,6 +192,15 @@ namespace RDPoverSSH.Properties {
         public static string ErrorGettingPrivateKey {
             get {
                 return ResourceManager.GetString("ErrorGettingPrivateKey", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to There was an error saving the SSH Server private key..
+        /// </summary>
+        public static string ErrorSavingPrivateKey {
+            get {
+                return ResourceManager.GetString("ErrorSavingPrivateKey", resourceCulture);
             }
         }
         
@@ -300,6 +327,24 @@ namespace RDPoverSSH.Properties {
         public static string OutgoingTunnelDescription {
             get {
                 return ResourceManager.GetString("OutgoingTunnelDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Paste the SSH Server&apos;s private key below..
+        /// </summary>
+        public static string PasteSshServerPrivateKey {
+            get {
+                return ResourceManager.GetString("PasteSshServerPrivateKey", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Save.
+        /// </summary>
+        public static string Save {
+            get {
+                return ResourceManager.GetString("Save", resourceCulture);
             }
         }
         

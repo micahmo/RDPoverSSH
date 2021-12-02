@@ -194,6 +194,9 @@
   <data name="ShowSshServerKey" xml:space="preserve">
     <value>Show SSH Server Key</value>
   </data>
+	<data name="AddSshServerKey" xml:space="preserve">
+    <value>Add SSH Server Key</value>
+  </data>
   <data name="SshServerKeyNotFound" xml:space="preserve">
     <value>SSH Server private key not found. Please try again.
 </value>
@@ -207,7 +210,19 @@
   <data name="ErrorGettingPrivateKey" xml:space="preserve">
     <value>There was an error retrieving the SSH Server private key.</value>
   </data>
+	<data name="ErrorSavingPrivateKey" xml:space="preserve">
+    <value>There was an error saving the SSH Server private key.</value>
+  </data>
   <data name="AdminRequiredForPrivateKey" xml:space="preserve">
     <value>Administrator privileges are required to view the SSH Server private key.</value>
+  </data>
+	<data name="AdminRequiredToSavePrivateKey" xml:space="preserve">
+    <value>Administrator privileges are required to save the SSH Server private key.</value>
+  </data>
+  <data name="Save" xml:space="preserve">
+    <value>Save</value>
+  </data>
+  <data name="PasteSshServerPrivateKey" xml:space="preserve">
+    <value>Paste the SSH Server's private key below.</value>
   </data>
 </root>

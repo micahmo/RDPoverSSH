@@ -30,6 +30,7 @@ namespace RDPoverSSH.Views
             {
                 App.ParsedArgs
                     .WithParsed<ShowMessageArgument>(ShowMessage)
+                    .WithParsed<SaveKeyArgument>(SaveKey)
                     .WithNotParsed(_ =>
                     {
                         HelpText.AutoBuild(App.ParsedArgs);
@@ -117,6 +118,35 @@ namespace RDPoverSSH.Views
                 else
                 {
                     await MessageBoxHelper.Show(arg.Text, "RDPoverSSH", MessageBoxButton.OK);
+                }
+
+                Environment.Exit(0);
+            };
+        }
+
+        private void SaveKey(SaveKeyArgument args)
+        {
+            Loaded += async (_, __) =>
+            {
+                // Figure out which key to save
+                if (args.KeyId.Equals(SaveKeyArgument.SshServerPrivateKey))
+                {
+                    try
+                    {
+                        string privateKey = await MessageBoxHelper.ShowPastableText(Properties.Resources.PasteSshServerPrivateKey, Properties.Resources.SshServerKeyHeading, monospace: true);
+                        if (!string.IsNullOrEmpty(privateKey))
+                        {
+                            FileUtils.CreateFileWithSecureAcl(Values.ClientServerPrivateKeyFilePath(args.ConnectionId));
+
+                            // Trim it and add a single trailing Linux newline
+                            privateKey = $"{privateKey.Trim()}\n";
+                            await File.WriteAllTextAsync(Values.ClientServerPrivateKeyFilePath(args.ConnectionId), privateKey);
+                        }
+                    }
+                    catch (Exception)
+                    {
+                        await MessageBoxHelper.Show(Properties.Resources.ErrorSavingPrivateKey, Properties.Resources.Error, MessageBoxButton.OK);
+                    }
                 }
 
                 Environment.Exit(0);

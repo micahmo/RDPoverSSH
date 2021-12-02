@@ -25,6 +25,7 @@
             <Style TargetType="{x:Type ComboBox}" BasedOn="{StaticResource DefaultComboBoxStyle}">
                 <Setter Property="VerticalAlignment" Value="Center"/>
                 <Setter Property="HorizontalAlignment" Value="Center"/>
+                <Setter Property="Margin" Value="5"/>
             </Style>
 
             <Style TargetType="{x:Type ui:NumberBox}">

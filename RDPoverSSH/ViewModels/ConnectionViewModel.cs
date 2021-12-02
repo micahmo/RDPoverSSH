@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows;
 using Microsoft.Toolkit.Mvvm.ComponentModel;
 using Microsoft.Toolkit.Mvvm.Input;
@@ -71,6 +72,9 @@ namespace RDPoverSSH.ViewModels
                 // Update both descriptions, no matter which direction changed
                 ToggleConnectionDirectionCommand.Description = ConnectionDirectionDescription;
                 ToggleTunnelDirectionCommand.Description = TunnelDirectionDescription;
+
+                // Update server keys tooltip
+                ServerKeysCommand.Description = ServerKeysDescription;
             }
         }
 
@@ -188,8 +192,15 @@ namespace RDPoverSSH.ViewModels
         private GenericCommandViewModel _testTunnelCommand;
 
         public GenericCommandViewModel ServerKeysCommand => _serverKeysCommand ??= 
-            new GenericCommandViewModel(string.Empty, new RelayCommand(ShowServerKeys), "\xE875", Resources.ShowSshServerKey);
+            new GenericCommandViewModel(string.Empty, new RelayCommand(HandleServerKeys), "\xE875", ServerKeysDescription);
         private GenericCommandViewModel _serverKeysCommand;
+
+        private string ServerKeysDescription => Model.TunnelDirection switch
+        {
+            Direction.Incoming => Resources.ShowSshServerKey,
+            Direction.Outgoing => Resources.AddSshServerKey,
+            _ => default
+        };
 
         #endregion
 
@@ -207,22 +218,27 @@ namespace RDPoverSSH.ViewModels
             Model.TunnelDirection = tunnelDirection.Toggle();
         }
 
-        private async void ShowServerKeys()
+        private async void HandleServerKeys()
+        {
+            if (Model.TunnelDirection == Direction.Incoming)
+            {
+                await ShowServerKeys();
+            }
+            else if (Model.TunnelDirection == Direction.Outgoing)
+            {
+                await AcceptServerKeys();
+            }
+        }
+
+        private async Task ShowServerKeys()
         {
             if (File.Exists(Values.OurPrivateKeyFilePath))
             {
-                string currentApplicationFilePath = new Uri(System.Reflection.Assembly.GetExecutingAssembly().CodeBase ?? string.Empty).LocalPath;
-                string currentApplicationFolderPath = Path.GetDirectoryName(currentApplicationFilePath) ?? string.Empty;
-                if (Path.GetExtension(currentApplicationFilePath).Equals(".dll", StringComparison.OrdinalIgnoreCase))
-                {
-                    currentApplicationFilePath = Path.Combine(currentApplicationFolderPath, $"{Path.GetFileNameWithoutExtension(currentApplicationFilePath)}.exe");
-                }
-
                 var getPrivateKeyProcess = new Process
                 {
                     StartInfo = new ProcessStartInfo
                     {
-                        FileName = currentApplicationFilePath,
+                        FileName = GetApplicationFilePath(),
                         Arguments = $"showmessage {ShowMessageArgument.SshServerPrivateKey}",
                         // Run as admin
                         Verb = "runas",
@@ -251,6 +267,50 @@ namespace RDPoverSSH.ViewModels
             {
                 await MessageBoxHelper.Show(Resources.SshServerKeyNotGenerated, Resources.NotFound, MessageBoxButton.OK);
             }
+        }
+
+        private async Task AcceptServerKeys()
+        {
+            var savePrivateKeyProcess = new Process
+            {
+                StartInfo = new ProcessStartInfo
+                {
+                    FileName = GetApplicationFilePath(),
+                    Arguments = $"savekey {SaveKeyArgument.SshServerPrivateKey} {Model.ObjectId}",
+                    // Run as admin
+                    Verb = "runas",
+                    // Required for runas
+                    UseShellExecute = true
+                }
+            };
+
+            try
+            {
+                savePrivateKeyProcess.Start();
+            }
+            catch (Win32Exception ex)
+            {
+                if (ex.NativeErrorCode == 1223) // ERROR_CANCELLED
+                {
+                    await MessageBoxHelper.Show(Resources.AdminRequiredToSavePrivateKey, Resources.Error, MessageBoxButton.OK);
+                }
+                else
+                {
+                    await MessageBoxHelper.Show(Resources.ErrorSavingPrivateKey, Resources.Error, MessageBoxButton.OK);
+                }
+            }
+        }
+
+        private static string GetApplicationFilePath()
+        {
+            string currentApplicationFilePath = new Uri(System.Reflection.Assembly.GetExecutingAssembly().CodeBase ?? string.Empty).LocalPath;
+            string currentApplicationFolderPath = Path.GetDirectoryName(currentApplicationFilePath) ?? string.Empty;
+            if (Path.GetExtension(currentApplicationFilePath).Equals(".dll", StringComparison.OrdinalIgnoreCase))
+            {
+                currentApplicationFilePath = Path.Combine(currentApplicationFolderPath, $"{Path.GetFileNameWithoutExtension(currentApplicationFilePath)}.exe");
+            }
+
+            return currentApplicationFilePath;
         }
 
         #endregion

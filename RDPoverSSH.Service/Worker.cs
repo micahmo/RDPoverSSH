@@ -78,31 +78,17 @@ namespace RDPoverSSH.Service
                 }
 
                 // Make sure we have the keys file.
-                if (!File.Exists(Values.AdministratorsAuthorizedKeysFilePath))
+                if (FileUtils.CreateFileWithSecureAcl(Values.AdministratorsAuthorizedKeysFilePath))
                 {
-                    // Create the file
-#pragma warning disable CS0642
-                    using (File.Create(Values.AdministratorsAuthorizedKeysFilePath));
-#pragma warning restore CS0642
-                    SetSshAcl(new FileInfo(Values.AdministratorsAuthorizedKeysFilePath));
                     EventLog.WriteEntry($"Created keys file '{Values.AdministratorsAuthorizedKeysFilePath}', and set secure ACLs.");
                 }
 
                 string publicKey = null;
 
                 // Now check if our specific key files exist
-                if (!File.Exists(Values.OurPrivateKeyFilePath))
+                if (FileUtils.CreateFileWithSecureAcl(Values.OurPrivateKeyFilePath) || FileUtils.CreateFileWithSecureAcl(Values.OurPublicKeyFilePath))
                 {
-#pragma warning disable CS0642
-                    using (File.Create(Values.OurPrivateKeyFilePath));
-#pragma warning restore CS0642
-                    SetSshAcl(new FileInfo(Values.OurPrivateKeyFilePath));
                     EventLog.WriteEntry($"Created keys file '{Values.OurPrivateKeyFilePath}', and set secure ACLs.");
-
-#pragma warning disable CS0642
-                    using (File.Create(Values.OurPublicKeyFilePath)) ;
-#pragma warning restore CS0642
-                    SetSshAcl(new FileInfo(Values.OurPublicKeyFilePath));
                     EventLog.WriteEntry($"Created keys file '{Values.OurPublicKeyFilePath}', and set secure ACLs.");
 
                     // Now generate our keys
@@ -135,21 +121,6 @@ namespace RDPoverSSH.Service
             {
                 // First make sure we have keys
             }
-        }
-
-        /// <summary>
-        /// Sets secure ACLs on the given file, according the SSH spec
-        /// </summary>
-        private void SetSshAcl(FileInfo fileInfo)
-        {
-            // Have to set the ACLs for security and for SSH to be happy.
-            // This follow the steps exactly from here: https://stackoverflow.com/a/64868357/4206279
-            // Setting ACL seems to work better on FileInfo than FileStream
-            FileSecurity keysFileAccessControl = fileInfo.GetAccessControl();
-            keysFileAccessControl.SetAccessRuleProtection(true, false);
-            keysFileAccessControl.SetAccessRule(new FileSystemAccessRule("Administrators", FileSystemRights.FullControl, AccessControlType.Allow));
-            keysFileAccessControl.SetAccessRule(new FileSystemAccessRule("SYSTEM", FileSystemRights.FullControl, AccessControlType.Allow));
-            fileInfo.SetAccessControl(keysFileAccessControl);
         }
 
         private readonly ServiceController _sshServiceController = new ServiceController("sshd");

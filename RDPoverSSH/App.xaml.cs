@@ -18,7 +18,7 @@ namespace RDPoverSSH
             if (e.Args.Any())
             {
                 HasArgs = true;
-                ParsedArgs = Parser.Default.ParseArguments<ShowMessageArgument, object>(e.Args);
+                ParsedArgs = Parser.Default.ParseArguments<ShowMessageArgument, SaveKeyArgument>(e.Args);
             }
         }
 

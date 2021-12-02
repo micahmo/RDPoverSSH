@@ -1,5 +1,6 @@
 ﻿using System;
 using LiteDB;
+using RDPoverSSH.Common;
 
 namespace RDPoverSSH.Models
 {
@@ -76,7 +77,7 @@ namespace RDPoverSSH.Models
         /// <remarks>
         /// The StrictHostKeyChecking should be re-enabled
         /// </remarks>
-        public string TunnelConnectString => $"{TunnelEndpoint} -p {TunnelPort} -o StrictHostKeyChecking=no ServerAliveInterval=10";
+        public string TunnelConnectString => $"{TunnelEndpoint} -p {TunnelPort} -o StrictHostKeyChecking=no ServerAliveInterval=10 -i {Values.ClientServerPrivateKeyFilePath(ObjectId)}";
     }
 
     /// <summary>
