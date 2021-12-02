@@ -17,6 +17,7 @@ namespace RDPoverSSH.ViewModels
             Model.Connections.CollectionChanged += (_, __) =>
             {
                 OnPropertyChanged(nameof(Connections));
+                OnPropertyChanged(nameof(ShowFilter));
             };
         }
 
@@ -39,8 +40,15 @@ namespace RDPoverSSH.ViewModels
         public string Filter
         {
             get => _filter;
-            set => SetProperty(ref _filter, value);
+            set
+            {
+                SetProperty(ref _filter, value);
+                OnPropertyChanged(nameof(ShowFilter));
+            }
         }
+
         private string _filter;
+
+        public bool ShowFilter => Connections.Count > 0 || !string.IsNullOrEmpty(_filter);
     }
 }
