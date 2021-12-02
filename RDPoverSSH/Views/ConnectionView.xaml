@@ -120,9 +120,8 @@
                                       SelectedItem="{Binding SelectedTunnelPort}"/>
                             <ui:NumberBox Margin="5" SpinButtonPlacementMode="Inline" Value="{Binding Model.TunnelPort}" SmallChange="1" LargeChange="1"
                                       Visibility="{c:Binding 'IsTunnelPortCustom', FalseToVisibility=Collapsed}"/>
-                            <views:CommandButton DataContext="{Binding TestTunnelCommand}"
-                                                 IsEnabled="{c:Binding 'DataContext.SelectedTunnelPort != null', RelativeSource={RelativeSource AncestorType=views:ConnectionItem}}"/>
                             <views:CommandButton DataContext="{Binding ServerKeysCommand}"/>
+                            <views:CommandButton DataContext="{Binding TunnelStatusButton}" IsReadOnly="True"/>
                         </StackPanel>
                     </Grid>
 

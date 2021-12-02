@@ -188,9 +188,9 @@ namespace RDPoverSSH.ViewModels
             new GenericCommandViewModel(Resources.Connect, new RelayCommand(delegate { }), string.Empty);
         private GenericCommandViewModel _connectionCommand;
 
-        public GenericCommandViewModel TestTunnelCommand => _testTunnelCommand ??=
-            new GenericCommandViewModel(Resources.Test, new RelayCommand(delegate { }), string.Empty);
-        private GenericCommandViewModel _testTunnelCommand;
+        public GenericCommandViewModel TunnelStatusButton => _tunnelStatusButton ??=
+            new GenericCommandViewModel(string.Empty, null, "\xE894", "This is the connection status description");
+        private GenericCommandViewModel _tunnelStatusButton;
 
         public GenericCommandViewModel ServerKeysCommand => _serverKeysCommand ??= 
             new GenericCommandViewModel(string.Empty, new RelayCommand(HandleServerKeys), "\xE875", ServerKeysDescription);
