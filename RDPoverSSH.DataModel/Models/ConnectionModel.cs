@@ -68,6 +68,20 @@ namespace RDPoverSSH.Models
         }
         private int _tunnelPort;
 
+        public TunnelStatus Status
+        {
+            get => _status;
+            set => SetProperty(ref _status, value);
+        }
+        private TunnelStatus _status;
+
+        public string Username
+        {
+            get => _username;
+            set => SetProperty(ref _username, value);
+        }
+        private string _username;
+
         [BsonIgnore]
         public bool IsReverseTunnel => ConnectionDirection != TunnelDirection;
 
@@ -78,6 +92,27 @@ namespace RDPoverSSH.Models
         /// The StrictHostKeyChecking should be re-enabled
         /// </remarks>
         public string TunnelConnectString => $"{TunnelEndpoint} -p {TunnelPort} -o StrictHostKeyChecking=no ServerAliveInterval=10 -i {Values.ClientServerPrivateKeyFilePath(ObjectId)}";
+    }
+
+    /// <summary>
+    /// Describes the possible status of a tunnel connection
+    /// </summary>
+    public enum TunnelStatus
+    {
+        /// <summary>
+        /// The connection status is not known, such as when it is first created
+        /// </summary>
+        Unknown,
+
+        /// <summary>
+        /// The tunnel is successfully connected
+        /// </summary>
+        Connected,
+
+        /// <summary>
+        /// The tunnel was unable to connect, or was connected and has become disconnected
+        /// </summary>
+        Disconnected
     }
 
     /// <summary>

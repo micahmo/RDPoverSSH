@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.IO;
-using System.Security.AccessControl;
+using System.Linq;
 using System.ServiceProcess;
 using System.Threading;
 using System.Threading.Tasks;
@@ -9,6 +9,7 @@ using PeterKottas.DotNetCore.WindowsService.Interfaces;
 using RDPoverSSH.Common;
 using RDPoverSSH.DataStore;
 using RDPoverSSH.Models;
+using Renci.SshNet;
 
 namespace RDPoverSSH.Service
 {
@@ -117,9 +118,35 @@ namespace RDPoverSSH.Service
 
         private void DoSshClientPoll()
         {
-            if (DatabaseEngine.GetCollection<ConnectionModel>().Count(c => c.TunnelDirection == Direction.Outgoing) > 0)
+            foreach (var connectionModel in DatabaseEngine.GetCollection<ConnectionModel>().Find(c => c.TunnelDirection == Direction.Outgoing).ToList())
             {
-                // First make sure we have keys
+                TunnelStatus status = TunnelStatus.Unknown;
+
+                // Check if we have keys
+                if (File.Exists(Values.ClientServerPrivateKeyFilePath(connectionModel.ObjectId)))
+                {
+                    try
+                    {
+                        var connectionInfo = new ConnectionInfo(connectionModel.TunnelEndpoint, connectionModel.TunnelPort, connectionModel.Username,
+                            new PrivateKeyAuthenticationMethod(connectionModel.Username, new PrivateKeyFile(Values.ClientServerPrivateKeyFilePath(connectionModel.ObjectId))));
+
+                        using SftpClient client = new SftpClient(connectionInfo);
+                        
+                        client.Connect();
+
+                        status = TunnelStatus.Connected;
+                    }
+                    catch (Exception ex)
+                    {
+                        // Log
+                        EventLog.WriteEntry($"There was an error creating the SSH client for connection {connectionModel.ObjectId}: {ex}", EventLogEntryType.Warning);
+
+                        status = TunnelStatus.Disconnected;
+                    }
+                }
+
+                // Update only the status column
+                DatabaseEngine.GetCollection<ConnectionModel>().UpdateMany(c => new ConnectionModel {Status = status}, c => c.ObjectId == connectionModel.ObjectId);
             }
         }
 
