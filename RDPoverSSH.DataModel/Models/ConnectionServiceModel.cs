@@ -13,6 +13,11 @@ namespace RDPoverSSH.Models
         public TunnelStatus Status { get; set; }
 
         public string LastError { get; set; }
+
+        /// <summary>
+        /// The port that we connect to locally to access the tunnel
+        /// </summary>
+        public int LocalTunnelPort { get; set; }
     }
 
     /// <summary>

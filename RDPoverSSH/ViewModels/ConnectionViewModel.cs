@@ -365,7 +365,9 @@ namespace RDPoverSSH.ViewModels
         {
             if (SelectedConnectionPort == PortViewModel.RdpPort)
             {
-                Process.Start(Environment.ExpandEnvironmentVariables(Path.Combine(Environment.SystemDirectory, "mstsc.exe")), $"/v:localhost:44547");
+                // Go get the service model
+                ConnectionServiceModel connectionServiceModel = DatabaseEngine.GetCollection<ConnectionServiceModel>().FindById(Model.ObjectId);
+                Process.Start(Environment.ExpandEnvironmentVariables(Path.Combine(Environment.SystemDirectory, "mstsc.exe")), $"/v:localhost:{connectionServiceModel.LocalTunnelPort}");
             }
             else if (SelectedConnectionPort == PortViewModel.SmbPort)
             {

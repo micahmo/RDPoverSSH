@@ -122,9 +122,14 @@ namespace RDPoverSSH.Service
         {
             foreach (var connectionModel in DatabaseEngine.GetCollection<ConnectionModel>().Find(c => c.TunnelDirection == Direction.Outgoing).ToList())
             {
-                string lastError = string.Empty;
-                TunnelStatus status = TunnelStatus.Unknown;
                 bool needNewTunnel = false;
+
+                // Create a server-side representation of our connection
+                ConnectionServiceModel connectionServiceModel = new ConnectionServiceModel
+                {
+                    ObjectId = connectionModel.ObjectId,
+                    LocalTunnelPort = DatabaseEngine.GetCollection<ConnectionServiceModel>().FindById(connectionModel.ObjectId)?.LocalTunnelPort ?? 0
+                };
 
                 if (_sshClients.TryGetValue(connectionModel.ObjectId, out var existingClient))
                 {
@@ -132,8 +137,8 @@ namespace RDPoverSSH.Service
                     {
                         if (AreEqual(existingClient, connectionModel) && existingClient.IsConnected && existingClient.ForwardedPorts.FirstOrDefault()?.IsStarted == true)
                         {
-                            lastError = string.Empty;
-                            status = TunnelStatus.Connected;
+                            connectionServiceModel.LastError = string.Empty;
+                            connectionServiceModel.Status = TunnelStatus.Connected;
                         }
                         else
                         {
@@ -172,14 +177,15 @@ namespace RDPoverSSH.Service
                             SshClient client = new SshClient(connectionInfo);
                             client.Connect();
 
-                            lastError = string.Empty;
-                            status = TunnelStatus.Connected;
+                            connectionServiceModel.LastError = string.Empty;
+                            connectionServiceModel.Status = TunnelStatus.Connected;
+                            connectionServiceModel.LocalTunnelPort = NetworkUtils.GetFreeTcpPort();
 
                             // We're connected, now make a long-running connection to keep open the tunnel
                             ForwardedPort forwardedPort = connectionModel.IsReverseTunnel switch
                             {
-                                true => new ForwardedPortRemote("localhost", 44547, string.Empty, (uint)connectionModel.ConnectionPort),
-                                false => new ForwardedPortLocal("localhost", 44547, string.Empty, (uint)connectionModel.ConnectionPort)
+                                true => new ForwardedPortRemote("localhost", (uint)connectionServiceModel.LocalTunnelPort, string.Empty, (uint)connectionModel.ConnectionPort),
+                                false => new ForwardedPortLocal("localhost", (uint)connectionServiceModel.LocalTunnelPort, string.Empty, (uint)connectionModel.ConnectionPort)
                             };
 
                             client.AddForwardedPort(forwardedPort);
@@ -202,24 +208,19 @@ namespace RDPoverSSH.Service
                             // Log
                             EventLog.WriteEntry($"There was an error creating the SSH client for connection \"{connectionModel}\": {ex}", EventLogEntryType.Warning);
 
-                            lastError = ex.Message;
-                            status = TunnelStatus.Disconnected;
+                            connectionServiceModel.LastError = ex.Message;
+                            connectionServiceModel.Status = TunnelStatus.Disconnected;
                         }
                     }
                     else
                     {
-                        lastError = "The server private key is missing.";
-                        status = TunnelStatus.Disconnected;
+                        connectionServiceModel.LastError = "The server private key is missing.";
+                        connectionServiceModel.Status = TunnelStatus.Disconnected;
                     }
                 }
 
                 // Update based on the changes we made
-                DatabaseEngine.GetCollection<ConnectionServiceModel>().Upsert(new ConnectionServiceModel
-                {
-                    ObjectId = connectionModel.ObjectId,
-                    Status = status,
-                    LastError = lastError
-                });
+                DatabaseEngine.GetCollection<ConnectionServiceModel>().Upsert(connectionServiceModel);
             }
         }
 
