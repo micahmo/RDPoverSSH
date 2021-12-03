@@ -232,7 +232,7 @@
 		<value>The tunnel has not successfully connected or was connected and became disconnected. Click for more details.</value>
 	</data>
 	<data name="ConnectedTunnelStatus" xml:space="preserve">
-		<value>The tunnel has connected successfully!</value>
+		<value>The tunnel is currently connected.</value>
 	</data>
 	<data name="ErrorConnectingToTunnel" xml:space="preserve">
 		<value>There was an error connecting to {0}:{1}. The details are below.</value>

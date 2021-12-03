@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -121,40 +122,98 @@ namespace RDPoverSSH.Service
         {
             foreach (var connectionModel in DatabaseEngine.GetCollection<ConnectionModel>().Find(c => c.TunnelDirection == Direction.Outgoing).ToList())
             {
-                TunnelStatus status;
-                string lastError;
+                string lastError = string.Empty;
+                TunnelStatus status = TunnelStatus.Unknown;
+                bool needNewTunnel = false;
 
-                // Check if we have keys
-                if (File.Exists(Values.ClientServerPrivateKeyFilePath(connectionModel.ObjectId)))
+                if (_sshClients.TryGetValue(connectionModel.ObjectId, out var existingClient))
                 {
                     try
                     {
-                        var connectionInfo = new ConnectionInfo(connectionModel.TunnelEndpoint, connectionModel.TunnelPort, connectionModel.Username,
-                            new PrivateKeyAuthenticationMethod(connectionModel.Username, new PrivateKeyFile(Values.ClientServerPrivateKeyFilePath(connectionModel.ObjectId))));
-
-                        using SftpClient client = new SftpClient(connectionInfo);
-                        
-                        client.Connect();
-
-                        lastError = string.Empty;
-                        status = TunnelStatus.Connected;
+                        if (AreEqual(existingClient, connectionModel) && existingClient.IsConnected && existingClient.ForwardedPorts.FirstOrDefault()?.IsStarted == true)
+                        {
+                            lastError = string.Empty;
+                            status = TunnelStatus.Connected;
+                        }
+                        else
+                        {
+                            existingClient.Dispose();
+                            _sshClients.Remove(connectionModel.ObjectId);
+                            needNewTunnel = true;
+                        }
                     }
-                    catch (Exception ex)
+                    catch
                     {
-                        // Log
-                        EventLog.WriteEntry($"There was an error creating the SSH client for connection {connectionModel.ObjectId}: {ex}", EventLogEntryType.Warning);
-
-                        lastError = ex.Message;
-                        status = TunnelStatus.Disconnected;
+                        // There may be some exception, such as the client is already disposed
+                        // (Unfortunately, there's no way to check for disposed)
+                        existingClient.Dispose();
+                        _sshClients.Remove(connectionModel.ObjectId);
+                        needNewTunnel = true;
                     }
                 }
                 else
                 {
-                    lastError = "The server private key is missing.";
-                    status = TunnelStatus.Disconnected;
+                    needNewTunnel = true;
                 }
 
-                // Update only the status column
+                if (needNewTunnel)
+                {
+                    // Check if we have keys
+                    if (File.Exists(Values.ClientServerPrivateKeyFilePath(connectionModel.ObjectId)))
+                    {
+                        try
+                        {
+                            var connectionInfo = new ConnectionInfo(connectionModel.TunnelEndpoint, connectionModel.TunnelPort, connectionModel.Username,
+                                new PrivateKeyAuthenticationMethod(connectionModel.Username, new PrivateKeyFile(Values.ClientServerPrivateKeyFilePath(connectionModel.ObjectId))))
+                            {
+                                Timeout = TimeSpan.FromSeconds(10)
+                            };
+
+                            SshClient client = new SshClient(connectionInfo);
+                            client.Connect();
+
+                            lastError = string.Empty;
+                            status = TunnelStatus.Connected;
+
+                            // We're connected, now make a long-running connection to keep open the tunnel
+                            ForwardedPort forwardedPort = connectionModel.IsReverseTunnel switch
+                            {
+                                true => new ForwardedPortRemote("localhost", 44547, string.Empty, (uint)connectionModel.ConnectionPort),
+                                false => new ForwardedPortLocal("localhost", 44547, string.Empty, (uint)connectionModel.ConnectionPort)
+                            };
+
+                            client.AddForwardedPort(forwardedPort);
+
+                            forwardedPort.Exception += (_, args) =>
+                            {
+                                EventLog.WriteEntry($"There was an exception with the from forwarded port for connection \"{connectionModel}\": {args.Exception}", EventLogEntryType.Warning);
+
+                                // A port exception essentially kills the tunnel, so dispose and remove it now.
+                                client.Dispose();
+                                _sshClients.Remove(connectionModel.ObjectId);
+                            };
+
+                            forwardedPort.Start();
+
+                            _sshClients[connectionModel.ObjectId] = client;
+                        }
+                        catch (Exception ex)
+                        {
+                            // Log
+                            EventLog.WriteEntry($"There was an error creating the SSH client for connection \"{connectionModel}\": {ex}", EventLogEntryType.Warning);
+
+                            lastError = ex.Message;
+                            status = TunnelStatus.Disconnected;
+                        }
+                    }
+                    else
+                    {
+                        lastError = "The server private key is missing.";
+                        status = TunnelStatus.Disconnected;
+                    }
+                }
+
+                // Update based on the changes we made
                 DatabaseEngine.GetCollection<ConnectionServiceModel>().Upsert(new ConnectionServiceModel
                 {
                     ObjectId = connectionModel.ObjectId,
@@ -174,6 +233,58 @@ namespace RDPoverSSH.Service
         }
 
         private readonly ServiceController _sshServiceController = new ServiceController("sshd");
+        private readonly Dictionary<int, SshClient> _sshClients = new Dictionary<int, SshClient>();
+
+        private bool AreEqual(SshClient client, ConnectionModel connection)
+        {
+            if (client.ConnectionInfo.Host != connection.TunnelEndpoint)
+            {
+                return false;
+            }
+
+            if (client.ConnectionInfo.Port != connection.TunnelPort)
+            {
+                return false;
+            }
+
+            if (client.ConnectionInfo.Username != connection.Username)
+            {
+                return false;
+            }
+
+            if (connection.IsReverseTunnel)
+            {
+                if (client.ForwardedPorts.FirstOrDefault() is ForwardedPortRemote forwardedPortRemote)
+                {
+                    if (forwardedPortRemote.Port != connection.ConnectionPort)
+                    {
+                        return false;
+                    }
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            else
+            {
+                if (client.ForwardedPorts.FirstOrDefault() is ForwardedPortLocal forwardedPortLocal)
+                {
+                    if (forwardedPortLocal.Port != connection.ConnectionPort)
+                    {
+                        return false;
+                    }
+                }
+                else
+                {
+                    return false;
+                }
+            }
+
+            // TODO: Something about keys
+            
+            return true;
+        }
 
         #endregion
 

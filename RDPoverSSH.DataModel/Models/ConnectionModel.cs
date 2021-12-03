@@ -77,6 +77,11 @@ namespace RDPoverSSH.Models
 
         [BsonIgnore]
         public bool IsReverseTunnel => ConnectionDirection != TunnelDirection;
+
+        /// <inheritdoc/>
+        public override string ToString() =>
+            $"SSH -> {(TunnelDirection == Direction.Incoming ? $"localhost:{TunnelPort}" : $"{TunnelEndpoint}:{TunnelPort}")}  -  " +
+            $"Connect -> {(ConnectionDirection == Direction.Incoming ? $"localhost:{ConnectionPort}" : $"{TunnelEndpoint}:{ConnectionPort}")}";
     }
 
     /// <summary>

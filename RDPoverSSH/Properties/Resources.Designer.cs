@@ -133,7 +133,7 @@ namespace RDPoverSSH.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The tunnel has connected successfully!.
+        ///   Looks up a localized string similar to The tunnel is currently connected..
         /// </summary>
         public static string ConnectedTunnelStatus {
             get {
