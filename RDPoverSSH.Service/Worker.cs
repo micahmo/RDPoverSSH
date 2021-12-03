@@ -54,6 +54,7 @@ namespace RDPoverSSH.Service
                 {
                     DoSshServerPoll();
                     DoSshClientPoll();
+                    DoClean();
                 }
                 catch (Exception ex)
                 {
@@ -165,7 +166,11 @@ namespace RDPoverSSH.Service
 
         private void DoClean()
         {
-            // TODO: For all ConnectionServiceModel not in ConnectionModel, delete
+            // Clean any ConnectionServiceModels that refer to non-existent ConnectionModels
+            var connectionServiceModelIds = DatabaseEngine.GetCollection<ConnectionServiceModel>().Query().Select(c => c.ObjectId).ToList();
+            var connectionModelIds = DatabaseEngine.GetCollection<ConnectionModel>().Query().Select(c => c.ObjectId).ToList();
+            var orphanedServiceModelIds = connectionServiceModelIds.Where(c => !connectionModelIds.Contains(c)).ToList();
+            orphanedServiceModelIds.ForEach(c => DatabaseEngine.GetCollection<ConnectionServiceModel>().Delete(c));
         }
 
         private readonly ServiceController _sshServiceController = new ServiceController("sshd");
