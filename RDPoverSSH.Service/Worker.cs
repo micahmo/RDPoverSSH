@@ -160,8 +160,7 @@ namespace RDPoverSSH.Service
                         }
                         else
                         {
-                            existingClient.Dispose();
-                            _sshClients.Remove(connectionModel.ObjectId);
+                            DeleteClient(connectionModel.ObjectId);
                             needNewTunnel = true;
                         }
                     }
@@ -169,8 +168,7 @@ namespace RDPoverSSH.Service
                     {
                         // There may be some exception, such as the client is already disposed
                         // (Unfortunately, there's no way to check for disposed)
-                        existingClient.Dispose();
-                        _sshClients.Remove(connectionModel.ObjectId);
+                        DeleteClient(connectionModel.ObjectId);
                         needNewTunnel = true;
                     }
                 }
@@ -213,8 +211,7 @@ namespace RDPoverSSH.Service
                                 EventLog.WriteEntry($"There was an exception with the from forwarded port for connection \"{connectionModel}\": {args.Exception}", EventLogEntryType.Warning);
 
                                 // A port exception essentially kills the tunnel, so dispose and remove it now.
-                                client.Dispose();
-                                _sshClients.Remove(connectionModel.ObjectId);
+                                DeleteClient(connectionModel.ObjectId);
                             };
 
                             forwardedPort.Start();
@@ -248,11 +245,21 @@ namespace RDPoverSSH.Service
             var connectionServiceModelIds = DatabaseEngine.GetCollection<ConnectionServiceModel>().Query().Select(c => c.ObjectId).ToList();
             var connectionModelIds = DatabaseEngine.GetCollection<ConnectionModel>().Query().Select(c => c.ObjectId).ToList();
             var orphanedServiceModelIds = connectionServiceModelIds.Where(c => !connectionModelIds.Contains(c)).ToList();
-            orphanedServiceModelIds.ForEach(c => DatabaseEngine.GetCollection<ConnectionServiceModel>().Delete(c));
+            orphanedServiceModelIds.ForEach(c =>
+            {
+                DeleteClient(c);
+                DatabaseEngine.GetCollection<ConnectionServiceModel>().Delete(c);
+            });
         }
 
-        private readonly ServiceController _sshServiceController = new ServiceController("sshd");
-        private readonly Dictionary<int, SshClient> _sshClients = new Dictionary<int, SshClient>();
+        private void DeleteClient(int connectionId)
+        {
+            _sshClients.Where(kvp => kvp.Key == connectionId).Select(kvp => kvp).ToList().ForEach(kvp =>
+            {
+                kvp.Value?.Dispose();
+                _sshClients.Remove(kvp.Key);
+            });
+        }
 
         private bool AreEqual(SshClient client, ConnectionModel connection)
         {
@@ -304,6 +311,13 @@ namespace RDPoverSSH.Service
             
             return true;
         }
+
+        #region Private fields
+
+        private readonly ServiceController _sshServiceController = new ServiceController("sshd");
+        private readonly Dictionary<int, SshClient> _sshClients = new Dictionary<int, SshClient>();
+
+        #endregion
 
         #endregion
 
