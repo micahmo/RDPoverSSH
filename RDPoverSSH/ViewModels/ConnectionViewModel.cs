@@ -25,6 +25,7 @@ namespace RDPoverSSH.ViewModels
         {
             Model = model;
             Model.PropertyChanged += Model_PropertyChanged;
+            PropertyChanged += ConnectionViewModel_PropertyChanged;
 
             // TODO: Make this converter?
             if (Model.ConnectionPort != default)
@@ -52,6 +53,16 @@ namespace RDPoverSSH.ViewModels
             }
         }
 
+        private void ConnectionViewModel_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName.Equals(nameof(Status)))
+            {
+                var tunnelStatusInfo = TunnelStatusInfo;
+                TunnelStatusButton.Description = tunnelStatusInfo.Description;
+                TunnelStatusButton.IconGlyph = tunnelStatusInfo.Glyph;
+            }
+        }
+
         private void Model_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             // Any time the model changes, persist it
@@ -76,6 +87,12 @@ namespace RDPoverSSH.ViewModels
 
                 // Update server keys tooltip
                 ServerKeysCommand.Description = ServerKeysDescription;
+            }
+            else if (e.PropertyName.Equals(nameof(Model.TunnelDirection))
+                     || e.PropertyName.Equals(nameof(Model.TunnelEndpoint))
+                     || e.PropertyName.Equals(nameof(Model.TunnelPort)))
+            {
+                Status = TunnelStatus.Unknown;
             }
         }
 
@@ -188,8 +205,11 @@ namespace RDPoverSSH.ViewModels
             new GenericCommandViewModel(Resources.Connect, new RelayCommand(delegate { }), string.Empty);
         private GenericCommandViewModel _connectionCommand;
 
-        public GenericCommandViewModel TunnelStatusButton => _tunnelStatusButton ??=
-            new GenericCommandViewModel(string.Empty, null, "\xE894", "This is the connection status description");
+        public GenericCommandViewModel TunnelStatusButton => _tunnelStatusButton ??= new Func<GenericCommandViewModel>(() =>
+        {
+            var tunnelStatusInfo = TunnelStatusInfo;
+            return new GenericCommandViewModel(string.Empty, null, tunnelStatusInfo.Glyph, tunnelStatusInfo.Description);
+        })();
         private GenericCommandViewModel _tunnelStatusButton;
 
         public GenericCommandViewModel ServerKeysCommand => _serverKeysCommand ??= 
@@ -202,6 +222,30 @@ namespace RDPoverSSH.ViewModels
             Direction.Outgoing => Resources.AddSshServerKey,
             _ => default
         };
+
+        public (string Description, string Glyph) TunnelStatusInfo
+        {
+            get
+            {
+                return Status switch
+                {
+                    TunnelStatus.Unknown => (Resources.UnknownTunnelStatus, "\xE897"),
+                    TunnelStatus.Disconnected => (Resources.DisconnectedTunnelStatus, "\xE894"),
+                    TunnelStatus.Connected => (Resources.ConnectedTunnelStatus, "\xE73E"),
+                    _ => default
+                };
+            }
+        }
+
+        /// <summary>
+        /// This is only a UI property
+        /// </summary>
+        public TunnelStatus Status
+        {
+            get => _status;
+            set => SetProperty(ref _status, value);
+        }
+        private TunnelStatus _status;
 
         #endregion
 

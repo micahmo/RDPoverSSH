@@ -16,6 +16,7 @@ namespace RDPoverSSH.ViewModels
         {
             Model.Connections.CollectionChanged += (_, __) =>
             {
+                Connections = Model.Connections.Select(c => new ConnectionViewModel(c)).ToList();
                 OnPropertyChanged(nameof(Connections));
                 OnPropertyChanged(nameof(ShowFilter));
             };
@@ -35,7 +36,7 @@ namespace RDPoverSSH.ViewModels
 
         public RootModel Model => RootModel.Instance;
 
-        public List<ConnectionViewModel> Connections => Model.Connections.Select(c => new ConnectionViewModel(c)).ToList();
+        public List<ConnectionViewModel> Connections { get; private set; } = new List<ConnectionViewModel>();
 
         public string Filter
         {

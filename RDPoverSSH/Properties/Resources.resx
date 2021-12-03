@@ -225,4 +225,13 @@
   <data name="PasteSshServerPrivateKey" xml:space="preserve">
     <value>Paste the SSH Server's private key below.</value>
   </data>
+	<data name="UnknownTunnelStatus" xml:space="preserve">
+		<value>The tunnel status is unknown. If the tunnel configuration was recently changed, a new connection attempt will occur shortly.</value>
+	</data>
+	<data name="DisconnectedTunnelStatus" xml:space="preserve">
+		<value>The tunnel has not successfully connected or was connected and became disconnected.</value>
+	</data>
+	<data name="ConnectedTunnelStatus" xml:space="preserve">
+		<value>The tunnel has connected successfully!</value>
+	</data>
 </root>

@@ -1,6 +1,8 @@
 ﻿using System;
 using System.ComponentModel;
 using System.IO;
+using System.Linq;
+using System.Reactive.Linq;
 using System.ServiceProcess;
 using System.Threading.Tasks;
 using System.Windows;
@@ -95,6 +97,23 @@ namespace RDPoverSSH.Views
                 {
                     await Dispatcher.Invoke(() => MessageBoxHelper.Show(Properties.Resources.ServiceNotRunning, Properties.Resources.Error, MessageBoxButton.OK));
                 }
+            });
+
+            // Hook up some object updates
+            Observable.Timer(TimeSpan.Zero, TimeSpan.FromSeconds(5)).Subscribe(_ =>
+            {
+                // Database access should be made on the UI thread
+                Dispatcher.Invoke(() =>
+                {
+                    foreach (ConnectionViewModel connectionViewModel in viewModel.Connections.ToList())
+                    {
+                        if (DatabaseEngine.GetCollection<ConnectionServiceModel>().FindById(connectionViewModel.Model.ObjectId)?.Status is { } status
+                            && connectionViewModel.Status != status)
+                        {
+                            Dispatcher.Invoke(() => connectionViewModel.Status = status);
+                        }
+                    }
+                });
             });
         }
 

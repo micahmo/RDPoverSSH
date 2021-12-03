@@ -12,6 +12,7 @@
     <PackageReference Include="CommandLineParser" Version="2.8.0" />
     <PackageReference Include="LinqKit.Core" Version="1.1.27" />
     <PackageReference Include="ModernWpfUI" Version="0.9.4" />
+    <PackageReference Include="System.Reactive" Version="5.0.0" />
     <PackageReference Include="System.ServiceProcess.ServiceController" Version="6.0.0" />
   </ItemGroup>
 

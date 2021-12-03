@@ -146,8 +146,17 @@ namespace RDPoverSSH.Service
                 }
 
                 // Update only the status column
-                DatabaseEngine.GetCollection<ConnectionModel>().UpdateMany(c => new ConnectionModel {Status = status}, c => c.ObjectId == connectionModel.ObjectId);
+                DatabaseEngine.GetCollection<ConnectionServiceModel>().Upsert(new ConnectionServiceModel
+                {
+                    ObjectId = connectionModel.ObjectId,
+                    Status = status
+                });
             }
+        }
+
+        private void DoClean()
+        {
+            // TODO: For all ConnectionServiceModel not in ConnectionModel, delete
         }
 
         private readonly ServiceController _sshServiceController = new ServiceController("sshd");

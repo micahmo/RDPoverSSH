@@ -133,6 +133,15 @@ namespace RDPoverSSH.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The tunnel has connected successfully!.
+        /// </summary>
+        public static string ConnectedTunnelStatus {
+            get {
+                return ResourceManager.GetString("ConnectedTunnelStatus", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Enter connection name....
         /// </summary>
         public static string ConnectionNameHint {
@@ -165,6 +174,15 @@ namespace RDPoverSSH.Properties {
         public static string DeleteConnectionCommanDescription {
             get {
                 return ResourceManager.GetString("DeleteConnectionCommanDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The tunnel has not successfully connected or was connected and became disconnected..
+        /// </summary>
+        public static string DisconnectedTunnelStatus {
+            get {
+                return ResourceManager.GetString("DisconnectedTunnelStatus", resourceCulture);
             }
         }
         
@@ -427,6 +445,15 @@ namespace RDPoverSSH.Properties {
         public static string Test {
             get {
                 return ResourceManager.GetString("Test", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The tunnel status is unknown. If the tunnel configuration was recently changed, a new connection attempt will occur shortly..
+        /// </summary>
+        public static string UnknownTunnelStatus {
+            get {
+                return ResourceManager.GetString("UnknownTunnelStatus", resourceCulture);
             }
         }
         
