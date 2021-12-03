@@ -1,5 +1,6 @@
 ﻿using System.Windows.Input;
 using Microsoft.Toolkit.Mvvm.Input;
+using RDPoverSSH.Common;
 using RDPoverSSH.DataStore;
 using RDPoverSSH.Models;
 using RDPoverSSH.Properties;
@@ -21,7 +22,7 @@ namespace RDPoverSSH.ViewModels
         private RelayCommand _command;
 
         /// <inheritdoc/>
-        public override string IconGlyph => "\xECC8";
+        public override string IconGlyph => Icons.Add;
 
         #endregion
 

@@ -114,9 +114,9 @@ namespace RDPoverSSH.ViewModels
 
         private string ConnectionDirectionGlyph => Model.ConnectionDirection switch
         {
-            Direction.Outgoing => "\xF0AF",
-            Direction.Incoming => "\xF0B0",
-            _ => "\xF0AF"
+            Direction.Outgoing => Icons.RightArrow,
+            Direction.Incoming => Icons.LeftArrow,
+            _ => default
         };
 
         private string ConnectionDirectionDescription => Model.ConnectionDirection switch
@@ -132,9 +132,9 @@ namespace RDPoverSSH.ViewModels
 
         private string TunnelDirectionGlyph => Model.TunnelDirection switch
         {
-            Direction.Outgoing => "\xF0AF",
-            Direction.Incoming => "\xF0B0",
-            _ => "\xF0AF"
+            Direction.Outgoing => Icons.RightArrow,
+            Direction.Incoming => Icons.LeftArrow,
+            _ => default
         };
 
         private string TunnelDirectionDescription => Model.TunnelDirection switch
@@ -213,7 +213,7 @@ namespace RDPoverSSH.ViewModels
         private GenericCommandViewModel _tunnelStatusButton;
 
         public GenericCommandViewModel ServerKeysCommand => _serverKeysCommand ??= 
-            new GenericCommandViewModel(string.Empty, new RelayCommand(HandleServerKeys), "\xE875", ServerKeysDescription);
+            new GenericCommandViewModel(string.Empty, new RelayCommand(HandleServerKeys), Icons.Lock, ServerKeysDescription);
         private GenericCommandViewModel _serverKeysCommand;
 
         private string ServerKeysDescription => Model.TunnelDirection switch
@@ -229,9 +229,9 @@ namespace RDPoverSSH.ViewModels
             {
                 return Status switch
                 {
-                    TunnelStatus.Unknown => (Resources.UnknownTunnelStatus, "\xE897"),
-                    TunnelStatus.Disconnected => (Resources.DisconnectedTunnelStatus, "\xE894"),
-                    TunnelStatus.Connected => (Resources.ConnectedTunnelStatus, "\xE73E"),
+                    TunnelStatus.Unknown => (Resources.UnknownTunnelStatus, Icons.Question),
+                    TunnelStatus.Disconnected => (Resources.DisconnectedTunnelStatus, Icons.X),
+                    TunnelStatus.Connected => (Resources.ConnectedTunnelStatus, Icons.Check),
                     _ => default
                 };
             }

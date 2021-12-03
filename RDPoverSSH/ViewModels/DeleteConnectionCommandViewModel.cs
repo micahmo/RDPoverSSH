@@ -2,6 +2,7 @@
 using System.Windows.Input;
 using Microsoft.Toolkit.Mvvm.Input;
 using ModernWpf.Controls;
+using RDPoverSSH.Common;
 using RDPoverSSH.Controls;
 using RDPoverSSH.DataStore;
 using RDPoverSSH.Models;
@@ -24,7 +25,7 @@ namespace RDPoverSSH.ViewModels
         private ICommand _command;
 
         /// <inheritdoc/>
-        public override string IconGlyph => "\xE74D";
+        public override string IconGlyph => Icons.Trash;
 
         #endregion
 

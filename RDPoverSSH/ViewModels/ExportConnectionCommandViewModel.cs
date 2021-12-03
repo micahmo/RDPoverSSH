@@ -1,6 +1,7 @@
 ﻿using System.Windows;
 using System.Windows.Input;
 using Microsoft.Toolkit.Mvvm.Input;
+using RDPoverSSH.Common;
 using RDPoverSSH.Controls;
 using RDPoverSSH.Properties;
 
@@ -21,7 +22,7 @@ namespace RDPoverSSH.ViewModels
         private ICommand _command;
 
         /// <inheritdoc/>
-        public override string IconGlyph => "\xE898";
+        public override string IconGlyph => Icons.UpArrow;
 
         #endregion
 
