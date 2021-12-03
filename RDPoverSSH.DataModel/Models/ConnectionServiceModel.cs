@@ -18,6 +18,8 @@ namespace RDPoverSSH.Models
         /// The port that we connect to locally to access the tunnel
         /// </summary>
         public int LocalTunnelPort { get; set; }
+
+        public Direction Direction { get; set; }
     }
 
     /// <summary>

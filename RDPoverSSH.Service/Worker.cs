@@ -116,6 +116,23 @@ namespace RDPoverSSH.Service
                     EventLog.WriteEntry("Added public key to authorized keys.");
                 }
             }
+
+            // Now update some statues for each incoming connection
+            foreach (var connectionModel in DatabaseEngine.GetCollection<ConnectionModel>().Find(c => c.TunnelDirection == Direction.Incoming).ToList())
+            {
+                // Create a server-side representation of our connection
+                ConnectionServiceModel connectionServiceModel = new ConnectionServiceModel
+                {
+                    ObjectId = connectionModel.ObjectId,
+                    //LocalTunnelPort = DatabaseEngine.GetCollection<ConnectionServiceModel>().FindById(connectionModel.ObjectId)?.LocalTunnelPort ?? 0,
+                    Direction = Direction.Incoming
+                };
+
+                connectionServiceModel.Status = _sshServiceController.Status == ServiceControllerStatus.Running ? TunnelStatus.Connected : TunnelStatus.Disconnected;
+
+                // Update based on the changes we made
+                DatabaseEngine.GetCollection<ConnectionServiceModel>().Upsert(connectionServiceModel);
+            }
         }
 
         private void DoSshClientPoll()
@@ -128,7 +145,8 @@ namespace RDPoverSSH.Service
                 ConnectionServiceModel connectionServiceModel = new ConnectionServiceModel
                 {
                     ObjectId = connectionModel.ObjectId,
-                    LocalTunnelPort = DatabaseEngine.GetCollection<ConnectionServiceModel>().FindById(connectionModel.ObjectId)?.LocalTunnelPort ?? 0
+                    LocalTunnelPort = DatabaseEngine.GetCollection<ConnectionServiceModel>().FindById(connectionModel.ObjectId)?.LocalTunnelPort ?? 0,
+                    Direction = Direction.Outgoing
                 };
 
                 if (_sshClients.TryGetValue(connectionModel.ObjectId, out var existingClient))

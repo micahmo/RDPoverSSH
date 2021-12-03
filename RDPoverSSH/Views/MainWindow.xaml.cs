@@ -107,7 +107,8 @@ namespace RDPoverSSH.Views
                 {
                     foreach (ConnectionViewModel connectionViewModel in viewModel.Connections.ToList())
                     {
-                        if (DatabaseEngine.GetCollection<ConnectionServiceModel>().FindById(connectionViewModel.Model.ObjectId) is { } connection)
+                        if (DatabaseEngine.GetCollection<ConnectionServiceModel>().FindById(connectionViewModel.Model.ObjectId) is { } connection
+                            && connection.Direction == connectionViewModel.Model.TunnelDirection)
                         {
                             if (connectionViewModel.Status != connection.Status)
                             {

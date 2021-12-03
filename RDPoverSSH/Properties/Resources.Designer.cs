@@ -458,6 +458,33 @@ namespace RDPoverSSH.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The SSH server is not running. It will be started shortly..
+        /// </summary>
+        public static string SshServerNotRunning {
+            get {
+                return ResourceManager.GetString("SshServerNotRunning", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The SSH server is running..
+        /// </summary>
+        public static string SshServerRunning {
+            get {
+                return ResourceManager.GetString("SshServerRunning", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The state of the SSH server is currently unknown..
+        /// </summary>
+        public static string SshStateUnknown {
+            get {
+                return ResourceManager.GetString("SshStateUnknown", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Test.
         /// </summary>
         public static string Test {

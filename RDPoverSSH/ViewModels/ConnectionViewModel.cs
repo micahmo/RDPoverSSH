@@ -57,9 +57,7 @@ namespace RDPoverSSH.ViewModels
         {
             if (e.PropertyName.Equals(nameof(Status)))
             {
-                var tunnelStatusInfo = TunnelStatusInfo;
-                TunnelStatusButton.Description = tunnelStatusInfo.Description;
-                TunnelStatusButton.IconGlyph = tunnelStatusInfo.Glyph;
+                UpdateTunnelStatusInfo();
             }
         }
 
@@ -77,7 +75,8 @@ namespace RDPoverSSH.ViewModels
                 ToggleConnectionDirectionCommand.Description = ConnectionDirectionDescription;
                 ToggleTunnelDirectionCommand.Description = TunnelDirectionDescription;
             }
-            else if (e.PropertyName.Equals(nameof(Model.TunnelDirection)))
+            
+            if (e.PropertyName.Equals(nameof(Model.TunnelDirection)))
             {
                 ToggleTunnelDirectionCommand.IconGlyph = TunnelDirectionGlyph;
 
@@ -87,13 +86,23 @@ namespace RDPoverSSH.ViewModels
 
                 // Update server keys tooltip
                 ServerKeysCommand.Description = ServerKeysDescription;
+
+                UpdateTunnelStatusInfo();
             }
-            else if (e.PropertyName.Equals(nameof(Model.TunnelDirection))
-                     || e.PropertyName.Equals(nameof(Model.TunnelEndpoint))
-                     || e.PropertyName.Equals(nameof(Model.TunnelPort)))
+
+            if (e.PropertyName.Equals(nameof(Model.TunnelDirection))
+                || e.PropertyName.Equals(nameof(Model.TunnelEndpoint))
+                || e.PropertyName.Equals(nameof(Model.TunnelPort)))
             {
                 Status = TunnelStatus.Unknown;
             }
+        }
+
+        private void UpdateTunnelStatusInfo()
+        {
+            var tunnelStatusInfo = TunnelStatusInfo;
+            TunnelStatusButton.Description = tunnelStatusInfo.Description;
+            TunnelStatusButton.IconGlyph = tunnelStatusInfo.Glyph;
         }
 
         #endregion
@@ -227,11 +236,22 @@ namespace RDPoverSSH.ViewModels
         {
             get
             {
-                return Status switch
+                return Model.TunnelDirection switch
                 {
-                    TunnelStatus.Unknown => (Resources.UnknownTunnelStatus, Icons.Question),
-                    TunnelStatus.Disconnected => (Resources.DisconnectedTunnelStatus, Icons.X),
-                    TunnelStatus.Connected => (Resources.ConnectedTunnelStatus, Icons.Check),
+                    Direction.Outgoing => Status switch
+                    {
+                        TunnelStatus.Unknown => (Resources.UnknownTunnelStatus, Icons.Question),
+                        TunnelStatus.Disconnected => (Resources.DisconnectedTunnelStatus, Icons.X),
+                        TunnelStatus.Connected => (Resources.ConnectedTunnelStatus, Icons.Check),
+                        _ => default
+                    },
+                    Direction.Incoming => Status switch
+                    {
+                        TunnelStatus.Disconnected => (Resources.SshServerNotRunning, Icons.X),
+                        TunnelStatus.Connected => (Resources.SshServerRunning, Icons.Check),
+                        TunnelStatus.Unknown => (Resources.SshStateUnknown, Icons.Question),
+                        _ => default
+                    },
                     _ => default
                 };
             }

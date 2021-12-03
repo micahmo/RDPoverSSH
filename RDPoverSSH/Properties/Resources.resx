@@ -240,4 +240,13 @@
 	<data name="ConnectionError" xml:space="preserve">
 		<value>Connection Error</value>
 	</data>
+	<data name="SshServerNotRunning" xml:space="preserve">
+		<value>The SSH server is not running. It will be started shortly.</value>
+	</data>
+	<data name="SshServerRunning" xml:space="preserve">
+		<value>The SSH server is running.</value>
+	</data>
+	<data name="SshStateUnknown" xml:space="preserve">
+		<value>The state of the SSH server is currently unknown.</value>
+	</data>
 </root>
