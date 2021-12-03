@@ -142,6 +142,15 @@ namespace RDPoverSSH.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Connection Error.
+        /// </summary>
+        public static string ConnectionError {
+            get {
+                return ResourceManager.GetString("ConnectionError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Enter connection name....
         /// </summary>
         public static string ConnectionNameHint {
@@ -178,7 +187,7 @@ namespace RDPoverSSH.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The tunnel has not successfully connected or was connected and became disconnected..
+        ///   Looks up a localized string similar to The tunnel has not successfully connected or was connected and became disconnected. Click for more details..
         /// </summary>
         public static string DisconnectedTunnelStatus {
             get {
@@ -201,6 +210,15 @@ namespace RDPoverSSH.Properties {
         public static string Error {
             get {
                 return ResourceManager.GetString("Error", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to There was an error connecting to {0}:{1}. The details are below..
+        /// </summary>
+        public static string ErrorConnectingToTunnel {
+            get {
+                return ResourceManager.GetString("ErrorConnectingToTunnel", resourceCulture);
             }
         }
         

@@ -11,6 +11,8 @@ namespace RDPoverSSH.Models
         public int ObjectId { get; set; }
 
         public TunnelStatus Status { get; set; }
+
+        public string LastError { get; set; }
     }
 
     /// <summary>

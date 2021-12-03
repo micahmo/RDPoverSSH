@@ -208,7 +208,7 @@ namespace RDPoverSSH.ViewModels
         public GenericCommandViewModel TunnelStatusButton => _tunnelStatusButton ??= new Func<GenericCommandViewModel>(() =>
         {
             var tunnelStatusInfo = TunnelStatusInfo;
-            return new GenericCommandViewModel(string.Empty, null, tunnelStatusInfo.Glyph, tunnelStatusInfo.Description);
+            return new GenericCommandViewModel(string.Empty, new RelayCommand(ShowLastError), tunnelStatusInfo.Glyph, tunnelStatusInfo.Description);
         })();
         private GenericCommandViewModel _tunnelStatusButton;
 
@@ -246,6 +246,13 @@ namespace RDPoverSSH.ViewModels
             set => SetProperty(ref _status, value);
         }
         private TunnelStatus _status;
+
+        public string LastError
+        {
+            get => _lastError;
+            set => SetProperty(ref _lastError, value);
+        }
+        private string _lastError;
 
         #endregion
 
@@ -343,6 +350,14 @@ namespace RDPoverSSH.ViewModels
                 {
                     await MessageBoxHelper.Show(Resources.ErrorSavingPrivateKey, Resources.Error, MessageBoxButton.OK);
                 }
+            }
+        }
+
+        private async void ShowLastError()
+        {
+            if (Status == TunnelStatus.Disconnected)
+            {
+                await MessageBoxHelper.ShowCopyableText(string.Format(Resources.ErrorConnectingToTunnel, Model.TunnelEndpoint, Model.TunnelPort), Resources.ConnectionError, LastError);
             }
         }
 

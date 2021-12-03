@@ -107,10 +107,17 @@ namespace RDPoverSSH.Views
                 {
                     foreach (ConnectionViewModel connectionViewModel in viewModel.Connections.ToList())
                     {
-                        if (DatabaseEngine.GetCollection<ConnectionServiceModel>().FindById(connectionViewModel.Model.ObjectId)?.Status is { } status
-                            && connectionViewModel.Status != status)
+                        if (DatabaseEngine.GetCollection<ConnectionServiceModel>().FindById(connectionViewModel.Model.ObjectId) is { } connection)
                         {
-                            Dispatcher.Invoke(() => connectionViewModel.Status = status);
+                            if (connectionViewModel.Status != connection.Status)
+                            {
+                                connectionViewModel.Status = connection.Status;
+                            }
+
+                            if (connectionViewModel.LastError != connection.LastError)
+                            {
+                                connectionViewModel.LastError = connection.LastError;
+                            }
                         }
                     }
                 });

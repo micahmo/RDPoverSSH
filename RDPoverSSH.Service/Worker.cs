@@ -120,7 +120,8 @@ namespace RDPoverSSH.Service
         {
             foreach (var connectionModel in DatabaseEngine.GetCollection<ConnectionModel>().Find(c => c.TunnelDirection == Direction.Outgoing).ToList())
             {
-                TunnelStatus status = TunnelStatus.Unknown;
+                TunnelStatus status;
+                string lastError;
 
                 // Check if we have keys
                 if (File.Exists(Values.ClientServerPrivateKeyFilePath(connectionModel.ObjectId)))
@@ -134,6 +135,7 @@ namespace RDPoverSSH.Service
                         
                         client.Connect();
 
+                        lastError = string.Empty;
                         status = TunnelStatus.Connected;
                     }
                     catch (Exception ex)
@@ -141,15 +143,22 @@ namespace RDPoverSSH.Service
                         // Log
                         EventLog.WriteEntry($"There was an error creating the SSH client for connection {connectionModel.ObjectId}: {ex}", EventLogEntryType.Warning);
 
+                        lastError = ex.Message;
                         status = TunnelStatus.Disconnected;
                     }
+                }
+                else
+                {
+                    lastError = "The server private key is missing.";
+                    status = TunnelStatus.Disconnected;
                 }
 
                 // Update only the status column
                 DatabaseEngine.GetCollection<ConnectionServiceModel>().Upsert(new ConnectionServiceModel
                 {
                     ObjectId = connectionModel.ObjectId,
-                    Status = status
+                    Status = status,
+                    LastError = lastError
                 });
             }
         }
