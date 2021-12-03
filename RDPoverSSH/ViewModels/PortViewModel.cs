@@ -11,6 +11,12 @@ namespace RDPoverSSH.ViewModels
         public string Name { get; set; }
 
         public virtual string DisplayName => $"{Value} ({Name})";
+
+        #region Public static (default ports)
+        public static PortViewModel RdpPort { get; } = new PortViewModel {Value = 3389, Name = "RDP"};
+        public static PortViewModel SmbPort { get; } = new PortViewModel {Value = 445, Name = "SMB"};
+
+        #endregion
     }
 
     internal class CustomPortViewModel : PortViewModel

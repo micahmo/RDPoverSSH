@@ -94,7 +94,7 @@
                                       SelectedItem="{Binding SelectedConnectionPort}"/>
                             <ui:NumberBox Margin="5" SpinButtonPlacementMode="Inline" Value="{Binding Model.ConnectionPort}" SmallChange="1" LargeChange="1"
                                           Visibility="{c:Binding 'IsConnectionPortCustom', FalseToVisibility=Collapsed}"/>
-                            <views:CommandButton DataContext="{Binding ConnectionCommand}"
+                            <views:CommandButton DataContext="{Binding ConnectCommand}"
                                                  Visibility="{c:Binding '!DataContext.IsConnectionPortCustom and DataContext.Model.ConnectionDirection == sharedModels:Direction.Outgoing', RelativeSource={RelativeSource AncestorType=views:ConnectionItem}, FalseToVisibility=Collapsed}"
                                                  IsEnabled="{c:Binding 'DataContext.SelectedConnectionPort != null', RelativeSource={RelativeSource AncestorType=views:ConnectionItem}}"/>
                         </StackPanel>

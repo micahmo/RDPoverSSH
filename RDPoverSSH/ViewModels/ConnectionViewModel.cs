@@ -150,8 +150,8 @@ namespace RDPoverSSH.ViewModels
 
         public List<PortViewModel> DefaultConnectionPorts { get; } = new List<PortViewModel>
         {
-            new PortViewModel {Value = 3389, Name = "RDP"},
-            new PortViewModel {Value = 445, Name = "SMB"},
+            PortViewModel.RdpPort,
+            PortViewModel.SmbPort,
             PortViewModel.Custom
         };
 
@@ -201,9 +201,9 @@ namespace RDPoverSSH.ViewModels
 
         #endregion
 
-        public GenericCommandViewModel ConnectionCommand => _connectionCommand ??=
-            new GenericCommandViewModel(Resources.Connect, new RelayCommand(delegate { }), string.Empty);
-        private GenericCommandViewModel _connectionCommand;
+        public GenericCommandViewModel ConnectCommand => _connectCommand ??=
+            new GenericCommandViewModel(Resources.Connect, new RelayCommand(Connect), string.Empty);
+        private GenericCommandViewModel _connectCommand;
 
         public GenericCommandViewModel TunnelStatusButton => _tunnelStatusButton ??= new Func<GenericCommandViewModel>(() =>
         {
@@ -358,6 +358,18 @@ namespace RDPoverSSH.ViewModels
             if (Status == TunnelStatus.Disconnected)
             {
                 await MessageBoxHelper.ShowCopyableText(string.Format(Resources.ErrorConnectingToTunnel, Model.TunnelEndpoint, Model.TunnelPort), Resources.ConnectionError, LastError);
+            }
+        }
+
+        private void Connect()
+        {
+            if (SelectedConnectionPort == PortViewModel.RdpPort)
+            {
+                Process.Start(Environment.ExpandEnvironmentVariables(Path.Combine(Environment.SystemDirectory, "mstsc.exe")), $"/v:localhost:44547");
+            }
+            else if (SelectedConnectionPort == PortViewModel.SmbPort)
+            {
+                // TODO
             }
         }
 
