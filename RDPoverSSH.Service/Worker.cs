@@ -145,7 +145,6 @@ namespace RDPoverSSH.Service
                 ConnectionServiceModel connectionServiceModel = new ConnectionServiceModel
                 {
                     ObjectId = connectionModel.ObjectId,
-                    LocalTunnelPort = DatabaseEngine.GetCollection<ConnectionServiceModel>().FindById(connectionModel.ObjectId)?.LocalTunnelPort ?? 0,
                     Direction = Direction.Outgoing
                 };
 
@@ -195,13 +194,12 @@ namespace RDPoverSSH.Service
 
                             connectionServiceModel.LastError = string.Empty;
                             connectionServiceModel.Status = TunnelStatus.Connected;
-                            connectionServiceModel.LocalTunnelPort = NetworkUtils.GetFreeTcpPort();
 
                             // We're connected, now make a long-running connection to keep open the tunnel
                             ForwardedPort forwardedPort = connectionModel.IsReverseTunnel switch
                             {
-                                true => new ForwardedPortRemote("localhost", (uint)connectionServiceModel.LocalTunnelPort, string.Empty, (uint)connectionModel.ConnectionPort),
-                                false => new ForwardedPortLocal("localhost", (uint)connectionServiceModel.LocalTunnelPort, string.Empty, (uint)connectionModel.ConnectionPort)
+                                true => new ForwardedPortRemote("localhost", (uint)connectionModel.LocalTunnelPort, string.Empty, (uint)connectionModel.ConnectionPort),
+                                false => new ForwardedPortLocal("localhost", (uint)connectionModel.LocalTunnelPort, string.Empty, (uint)connectionModel.ConnectionPort)
                             };
 
                             client.AddForwardedPort(forwardedPort);
@@ -286,6 +284,11 @@ namespace RDPoverSSH.Service
                     {
                         return false;
                     }
+
+                    if (forwardedPortRemote.BoundPort != connection.LocalTunnelPort)
+                    {
+                        return false;
+                    }
                 }
                 else
                 {
@@ -297,6 +300,11 @@ namespace RDPoverSSH.Service
                 if (client.ForwardedPorts.FirstOrDefault() is ForwardedPortLocal forwardedPortLocal)
                 {
                     if (forwardedPortLocal.Port != connection.ConnectionPort)
+                    {
+                        return false;
+                    }
+
+                    if (forwardedPortLocal.BoundPort != connection.LocalTunnelPort)
                     {
                         return false;
                     }

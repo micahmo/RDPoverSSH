@@ -75,7 +75,7 @@
                     </Grid.RowDefinitions>
 
                     <TextBlock Grid.Column="1" Grid.Row="0" HorizontalAlignment="Center" FontWeight="Bold" Margin="5" Text="{Binding MachineName}"/>
-                    <TextBlock Grid.Column="3" Grid.Row="0" HorizontalAlignment="Center" FontWeight="Bold" Margin="5" Text="Remote Computer"/>
+                    <TextBlock Grid.Column="3" Grid.Row="0" HorizontalAlignment="Center" FontWeight="Bold" Margin="5" Text="{x:Static properties:Resources.Remote_Computer}"/>
 
                     <!-- Connection -->
                     <Border Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="4" CornerRadius="3" BorderThickness="1">
@@ -117,9 +117,13 @@
                                      Text="{Binding Model.TunnelEndpoint, UpdateSourceTrigger=PropertyChanged, Delay=100}" 
                                      Visibility="{c:Binding 'Model.TunnelDirection == sharedModels:Direction.Outgoing', FalseToVisibility=Collapsed}"/>
                             <ComboBox ui:ControlHelper.PlaceholderText="Tunnel Port" ItemsSource="{Binding DefaultTunnelPorts}" DisplayMemberPath="DisplayName"
-                                      SelectedItem="{Binding SelectedTunnelPort}"/>
+                                      SelectedItem="{Binding SelectedTunnelPort}"
+                                      Visibility="{c:Binding 'Model.TunnelDirection == sharedModels:Direction.Outgoing', FalseToVisibility=Collapsed}"/>
                             <ui:NumberBox Margin="5" SpinButtonPlacementMode="Inline" Value="{Binding Model.TunnelPort}" SmallChange="1" LargeChange="1"
-                                      Visibility="{c:Binding 'IsTunnelPortCustom', FalseToVisibility=Collapsed}"/>
+                                      Visibility="{c:Binding 'IsTunnelPortCustom and Model.TunnelDirection == sharedModels:Direction.Outgoing', FalseToVisibility=Collapsed}"/>
+                            <ui:NumberBox Margin="5" SpinButtonPlacementMode="Inline" Value="{Binding Model.LocalTunnelPort}" SmallChange="1" LargeChange="1"
+                                          ToolTip="{Binding LocalTunnelPortDescription}" ToolTipService.ShowDuration="30000"
+                                          Visibility="{c:Binding 'Model.IsReverseTunnel', FalseToVisibility=Collapsed}"/>
                             <views:CommandButton DataContext="{Binding ServerKeysCommand}"/>
                             <views:CommandButton DataContext="{Binding TunnelStatusButton}" IsReadOnly="True"/>
                         </StackPanel>

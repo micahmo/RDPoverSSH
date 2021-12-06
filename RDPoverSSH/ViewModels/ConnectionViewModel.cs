@@ -88,6 +88,28 @@ namespace RDPoverSSH.ViewModels
                 ServerKeysCommand.Description = ServerKeysDescription;
 
                 UpdateTunnelStatusInfo();
+
+                Model.LocalTunnelPort = Model.TunnelDirection switch
+                {
+                    Direction.Outgoing => Model.IsReverseTunnel switch
+                    {
+                        true => 0,
+                        false => NetworkUtils.GetFreeTcpPort()
+                    },
+                    Direction.Incoming => Model.IsReverseTunnel switch
+                    {
+                        true => NetworkUtils.GetFreeTcpPort(),
+                        false => 0
+                    },
+                    _ => default
+                };
+            }
+
+            if (e.PropertyName.Equals(nameof(Model.TunnelDirection))
+                || e.PropertyName.Equals(nameof(Model.LocalTunnelPort))
+                || e.PropertyName.Equals(nameof(Model.ConnectionPort)))
+            {
+                OnPropertyChanged(nameof(LocalTunnelPortDescription));
             }
 
             if (e.PropertyName.Equals(nameof(Model.TunnelDirection))
@@ -274,6 +296,13 @@ namespace RDPoverSSH.ViewModels
         }
         private string _lastError;
 
+        public string LocalTunnelPortDescription => Model.TunnelDirection switch
+        {
+            Direction.Outgoing => string.Join(' ', string.Format(Resources.OutgoingTunnelLocalTunnelPortDescription, Model.LocalTunnelPort, Model.ConnectionPort), Resources.ChangeOutgoingLocalTunnelPortWarning),
+            Direction.Incoming => string.Join(' ', string.Format(Resources.IncomingTunnelLocalTunnelPortDescription, Model.LocalTunnelPort, Model.ConnectionPort), Resources.ChangeIncomingLocalTunnelPortWarning),
+            _ => default
+        };
+
         #endregion
 
         #region Private methods
@@ -386,8 +415,7 @@ namespace RDPoverSSH.ViewModels
             if (SelectedConnectionPort == PortViewModel.RdpPort)
             {
                 // Go get the service model
-                ConnectionServiceModel connectionServiceModel = DatabaseEngine.GetCollection<ConnectionServiceModel>().FindById(Model.ObjectId);
-                Process.Start(Environment.ExpandEnvironmentVariables(Path.Combine(Environment.SystemDirectory, "mstsc.exe")), $"/v:localhost:{connectionServiceModel.LocalTunnelPort}");
+                Process.Start(Environment.ExpandEnvironmentVariables(Path.Combine(Environment.SystemDirectory, "mstsc.exe")), $"/v:localhost:{Model.LocalTunnelPort}");
             }
             else if (SelectedConnectionPort == PortViewModel.SmbPort)
             {

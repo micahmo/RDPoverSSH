@@ -97,6 +97,24 @@ namespace RDPoverSSH.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Change this with care as it has been automatically selected as a currently available port..
+        /// </summary>
+        public static string ChangeIncomingLocalTunnelPortWarning {
+            get {
+                return ResourceManager.GetString("ChangeIncomingLocalTunnelPortWarning", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Obtain this value from the remote computer..
+        /// </summary>
+        public static string ChangeOutgoingLocalTunnelPortWarning {
+            get {
+                return ResourceManager.GetString("ChangeOutgoingLocalTunnelPortWarning", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Close.
         /// </summary>
         public static string Close {
@@ -295,6 +313,15 @@ namespace RDPoverSSH.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The reverse tunnel will route this port on the local machine (localhost:{0}) to the connection port on the remote machine ({1})..
+        /// </summary>
+        public static string IncomingTunnelLocalTunnelPortDescription {
+            get {
+                return ResourceManager.GetString("IncomingTunnelLocalTunnelPortDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to {0} (Local Computer).
         /// </summary>
         public static string LocalComputerName {
@@ -367,11 +394,29 @@ namespace RDPoverSSH.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The reverse tunnel will route this port on the remote machine ({0}) to the connection port on the this machine (localhost:{1})..
+        /// </summary>
+        public static string OutgoingTunnelLocalTunnelPortDescription {
+            get {
+                return ResourceManager.GetString("OutgoingTunnelLocalTunnelPortDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Paste the SSH Server&apos;s private key below..
         /// </summary>
         public static string PasteSshServerPrivateKey {
             get {
                 return ResourceManager.GetString("PasteSshServerPrivateKey", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remote Computer.
+        /// </summary>
+        public static string Remote_Computer {
+            get {
+                return ResourceManager.GetString("Remote Computer", resourceCulture);
             }
         }
         

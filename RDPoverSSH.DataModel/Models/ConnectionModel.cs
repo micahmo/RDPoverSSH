@@ -12,6 +12,25 @@ namespace RDPoverSSH.Models
     /// </remarks>
     public class ConnectionModel : ModelBase<ConnectionModel>
     {
+        #region Constructor
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        public ConnectionModel()
+        {
+            PropertyChanged += (_, args) =>
+            {
+                if (args.PropertyName.Equals(nameof(ConnectionDirection)) 
+                    || args.PropertyName.Equals(nameof(TunnelDirection)))
+                {
+                    OnPropertyChanged(nameof(IsReverseTunnel));
+                }
+            };
+        }
+
+        #endregion
+
         #region ModelBase members
 
         /// <inheritdoc/>
@@ -67,6 +86,16 @@ namespace RDPoverSSH.Models
             set => SetProperty(ref _tunnelPort, value);
         }
         private int _tunnelPort;
+
+        /// <summary>
+        /// The port that we connect to locally to access the tunnel
+        /// </summary>
+        public int LocalTunnelPort
+        {
+            get => _localTunnelPort;
+            set => SetProperty(ref _localTunnelPort, value);
+        }
+        private int _localTunnelPort = NetworkUtils.GetFreeTcpPort();
 
         public string Username
         {

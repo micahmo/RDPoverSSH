@@ -249,4 +249,19 @@
 	<data name="SshStateUnknown" xml:space="preserve">
 		<value>The state of the SSH server is currently unknown.</value>
 	</data>
+	<data name="IncomingTunnelLocalTunnelPortDescription" xml:space="preserve">
+		<value>The reverse tunnel will route this port on the local machine (localhost:{0}) to the connection port on the remote machine ({1}).</value>
+	</data>
+	<data name="OutgoingTunnelLocalTunnelPortDescription" xml:space="preserve">
+		<value>The reverse tunnel will route this port on the remote machine ({0}) to the connection port on the this machine (localhost:{1}).</value>
+	</data>
+	<data name="ChangeIncomingLocalTunnelPortWarning" xml:space="preserve">
+		<value>Change this with care as it has been automatically selected as a currently available port.</value>
+	</data>
+	<data name="ChangeOutgoingLocalTunnelPortWarning" xml:space="preserve">
+		<value>Obtain this value from the remote computer.</value>
+	</data>
+	<data name="Remote Computer" xml:space="preserve">
+		<value>Remote Computer</value>
+	</data>
 </root>
