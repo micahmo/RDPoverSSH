@@ -411,7 +411,7 @@ namespace RDPoverSSH.ViewModels
 
         private async void ShowLastError()
         {
-            if (Status == TunnelStatus.Disconnected)
+            if (Status == TunnelStatus.Disconnected && Model.TunnelDirection == Direction.Outgoing)
             {
                 await MessageBoxHelper.ShowCopyableText(string.Format(Resources.ErrorConnectingToTunnel, Model.TunnelEndpoint, Model.TunnelPort), Resources.ConnectionError, LastError);
             }
