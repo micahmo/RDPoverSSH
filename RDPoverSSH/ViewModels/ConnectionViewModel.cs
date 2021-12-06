@@ -379,6 +379,8 @@ namespace RDPoverSSH.ViewModels
 
         private async Task AcceptServerKeys()
         {
+            DateTime previousClientServerKeyFileLastModifiedTime = new FileInfo(Values.ClientServerPrivateKeyFilePath(Model.ObjectId)).LastWriteTimeUtc;
+
             var savePrivateKeyProcess = new Process
             {
                 StartInfo = new ProcessStartInfo
@@ -389,11 +391,23 @@ namespace RDPoverSSH.ViewModels
                     Verb = "runas",
                     // Required for runas
                     UseShellExecute = true
-                }
+                },
+                // For Exited event
+                EnableRaisingEvents = true
             };
 
             try
             {
+                savePrivateKeyProcess.Exited += (_, __) =>
+                {
+                    // The process has exited. Did the user update the key? If so, go into Unknown state.
+                    DateTime newClientServerKeyFileLastModifiedTime = new FileInfo(Values.ClientServerPrivateKeyFilePath(Model.ObjectId)).LastWriteTimeUtc;
+                    if (newClientServerKeyFileLastModifiedTime > previousClientServerKeyFileLastModifiedTime)
+                    {
+                        Status = TunnelStatus.Unknown;
+                    }
+                };
+
                 savePrivateKeyProcess.Start();
             }
             catch (Win32Exception ex)

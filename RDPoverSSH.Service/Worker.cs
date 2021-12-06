@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -315,8 +316,23 @@ namespace RDPoverSSH.Service
                 }
             }
 
-            // TODO: Something about keys
-            
+            try
+            {
+                byte[] existingClientServerPrivateKey = (client.ConnectionInfo.AuthenticationMethods.FirstOrDefault() as PrivateKeyAuthenticationMethod)?.KeyFiles.FirstOrDefault()?.HostKey.Data;
+                byte[] currentClientServerPrivateKey = new PrivateKeyFile(Values.ClientServerPrivateKeyFilePath(connection.ObjectId)).HostKey.Data;
+
+                if (!(((IStructuralEquatable)existingClientServerPrivateKey)?.Equals(currentClientServerPrivateKey, StructuralComparisons.StructuralEqualityComparer) ?? false))
+                {
+                    // The key we were using to connect does not match the key in the current file. Invalidate.
+                    return false;
+                }
+            }
+            catch
+            {
+                // Any exception constructing our current private key (not found, invalid format), means it changed and we need to invalidate.
+                return false;
+            }
+
             return true;
         }
 
