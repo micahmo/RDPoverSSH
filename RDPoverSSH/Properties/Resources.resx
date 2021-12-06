@@ -264,4 +264,7 @@
 	<data name="Remote Computer" xml:space="preserve">
 		<value>Remote Computer</value>
 	</data>
+	<data name="NoConnectionsMatchFilter" xml:space="preserve">
+		<value>No connections match filter '{0}'...</value>
+	</data>
 </root>

@@ -61,6 +61,14 @@
                          Visibility="{c:Binding ShowFilter, FalseToVisibility=Collapsed}"/>
             </Grid>
 
+            <TextBlock Grid.Row="2" Margin="25,10,0,0" FontStyle="Oblique" FontSize="15" 
+                       Text="{Binding Filter, StringFormat={x:Static properties:Resources.NoConnectionsMatchFilter}}"
+                       Visibility="{c:Binding ShowNoResultsHint, FalseToVisibility=Collapsed}">
+                <TextBlock.Foreground>
+                    <SolidColorBrush Color="{ui:StaticColor SystemBaseMediumColor}"/>
+                </TextBlock.Foreground>
+            </TextBlock>
+
             <ScrollViewer Grid.Row="2">
                 <ItemsControl ItemsSource="{Binding Connections}">
                     <ItemsControl.ItemTemplate>

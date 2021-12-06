@@ -19,6 +19,7 @@ namespace RDPoverSSH.ViewModels
                 Connections = Model.Connections.Select(c => new ConnectionViewModel(c)).ToList();
                 OnPropertyChanged(nameof(Connections));
                 OnPropertyChanged(nameof(ShowFilter));
+                OnPropertyChanged(nameof(ShowNoResultsHint));
             };
         }
 
@@ -51,5 +52,7 @@ namespace RDPoverSSH.ViewModels
         private string _filter;
 
         public bool ShowFilter => Connections.Count > 0 || !string.IsNullOrEmpty(_filter);
+
+        public bool ShowNoResultsHint => Connections.Count == 0 && !string.IsNullOrEmpty(_filter);
     }
 }

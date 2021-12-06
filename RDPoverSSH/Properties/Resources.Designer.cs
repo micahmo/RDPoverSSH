@@ -349,6 +349,15 @@ namespace RDPoverSSH.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to No connections match filter &apos;{0}&apos;....
+        /// </summary>
+        public static string NoConnectionsMatchFilter {
+            get {
+                return ResourceManager.GetString("NoConnectionsMatchFilter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Not Found.
         /// </summary>
         public static string NotFound {
