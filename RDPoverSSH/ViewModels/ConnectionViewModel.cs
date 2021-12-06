@@ -285,9 +285,16 @@ namespace RDPoverSSH.ViewModels
         public TunnelStatus Status
         {
             get => _status;
-            set => SetProperty(ref _status, value);
+            set
+            {
+                SetProperty(ref _status, value);
+                LastStatusUpdateDateTime = DateTimeOffset.Now;
+            }
         }
+
         private TunnelStatus _status;
+
+        public DateTimeOffset LastStatusUpdateDateTime { get; private set; }
 
         public string LastError
         {

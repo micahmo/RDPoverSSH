@@ -1,4 +1,5 @@
-﻿using LiteDB;
+﻿using System;
+using LiteDB;
 
 namespace RDPoverSSH.Models
 {
@@ -10,11 +11,36 @@ namespace RDPoverSSH.Models
         [BsonId]
         public int ObjectId { get; set; }
 
-        public TunnelStatus Status { get; set; }
+        public TunnelStatus Status
+        {
+            get => _status;
+            set
+            {
+                _status = value;
+                LastStatusUpdateDateTime = DateTimeOffset.Now;
+            }
+        }
+        private TunnelStatus _status;
 
-        public string LastError { get; set; }
+        public string LastError
+        {
+            get => _lastError;
+            set
+            {
+                _lastError = value;
+                LastStatusUpdateDateTime = DateTimeOffset.Now;
+            }
+        }
+        private string _lastError;
+
+        [BsonIgnore]
+        public string TimestampedLastError => 
+            $"[{(LastStatusUpdateDateTime.Date == DateTimeOffset.Now.Date ? $"{LastStatusUpdateDateTime.ToLocalTime():T}" : $"{LastStatusUpdateDateTime.ToLocalTime():G}")}] " +
+            $"{LastError}";
 
         public Direction Direction { get; set; }
+
+        public DateTimeOffset LastStatusUpdateDateTime { get; private set; }
     }
 
     /// <summary>

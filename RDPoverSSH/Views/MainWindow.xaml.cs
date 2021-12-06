@@ -108,16 +108,17 @@ namespace RDPoverSSH.Views
                     foreach (ConnectionViewModel connectionViewModel in viewModel.Connections.ToList())
                     {
                         if (DatabaseEngine.GetCollection<ConnectionServiceModel>().FindById(connectionViewModel.Model.ObjectId) is { } connection
-                            && connection.Direction == connectionViewModel.Model.TunnelDirection)
+                            && connection.Direction == connectionViewModel.Model.TunnelDirection 
+                            && connection.LastStatusUpdateDateTime > connectionViewModel.LastStatusUpdateDateTime) // Make sure we don't get stale updates
                         {
                             if (connectionViewModel.Status != connection.Status)
                             {
                                 connectionViewModel.Status = connection.Status;
                             }
 
-                            if (connectionViewModel.LastError != connection.LastError)
+                            if (connectionViewModel.LastError != connection.TimestampedLastError)
                             {
-                                connectionViewModel.LastError = connection.LastError;
+                                connectionViewModel.LastError = connection.TimestampedLastError;
                             }
                         }
                     }
