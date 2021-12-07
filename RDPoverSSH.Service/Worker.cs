@@ -86,9 +86,9 @@ namespace RDPoverSSH.Service
                 }
 
                 // Check if we have our user
-                if (!WindowsUserExists(Values.RdpOverSshWindowsUsername))
+                if (!UserUtils.WindowsUserExists(Values.RdpOverSshWindowsUsername))
                 {
-                    CreateWindowsUser(Values.RdpOverSshWindowsUsername);
+                    UserUtils.CreateWindowsUser(Values.RdpOverSshWindowsUsername);
                     EventLog.WriteEntry($"Created Windows user '{Values.RdpOverSshWindowsUsername}'.");
                 }
 
@@ -381,46 +381,6 @@ namespace RDPoverSSH.Service
 
             return true;
         }
-
-        #region Windows user
-
-        private bool WindowsUserExists(string name)
-        {
-            DirectoryEntry ad = new DirectoryEntry($"WinNT://{Environment.MachineName},computer");
-            return ad.Children.OfType<DirectoryEntry>().FirstOrDefault(d => d.Properties["Name"].Value as string == name) != null;
-        }
-
-        private void CreateWindowsUser(string name)
-        {
-            DirectoryEntry ad = new DirectoryEntry($"WinNT://{Environment.MachineName},computer");
-            DirectoryEntry user = ad.Children.Add(name, "user");
-            user.CommitChanges();
-
-            DirectoryEntry administratorsGroup = ad.Children.Find("Administrators", "group");
-            administratorsGroup.Invoke("Add", user.Path);
-
-            // Add a special registry entry that causes this user to be hidden from most of the user-facing user management
-            var specialAccounts = Registry.LocalMachine.CreateSubKey(@"SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon\SpecialAccounts\UserList");
-            specialAccounts?.SetValue(name, 0);
-        }
-
-        private void DeleteWindowsUser(string name)
-        {
-            DirectoryEntry ad = new DirectoryEntry($"WinNT://{Environment.MachineName},computer");
-
-            if (ad.Children.OfType<DirectoryEntry>().FirstOrDefault(d => d.Properties["Name"].Value as string == name) is { } user)
-            {
-                ad.Children.Remove(user);
-            }
-
-            var specialAccounts = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon\SpecialAccounts\UserList", true);
-            if (specialAccounts?.GetValue(name) != null)
-            {
-                specialAccounts.DeleteValue(name);
-            }
-        }
-
-        #endregion
 
         #endregion
 

@@ -141,3 +141,4 @@ Filename: "{#ServicePath}"; Parameters: "action:start"; StatusMsg: "Starting RDP
 
 [UninstallRun]
 Filename: "{#ServicePath}"; Parameters: "action:uninstall"; Flags: runascurrentuser runhidden; RunOnceId: "DelService"
+Filename: "{app}\{#MyAppExeName}"; Parameters: "deleteuser RDPoverSSH"; Flags: runascurrentuser runhidden; RunOnceId: "DelUser"
