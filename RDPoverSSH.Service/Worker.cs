@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.DirectoryServices;
 using System.IO;
 using System.Linq;
 using System.ServiceProcess;
@@ -9,6 +10,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using CliWrap;
 using CliWrap.Buffered;
+using Microsoft.Win32;
 using PeterKottas.DotNetCore.WindowsService.Interfaces;
 using RDPoverSSH.Common;
 using RDPoverSSH.DataStore;
@@ -83,6 +85,13 @@ namespace RDPoverSSH.Service
                     _sshServiceController.Start();
                 }
 
+                // Check if we have our user
+                if (!WindowsUserExists(Values.RdpOverSshWindowsUsername))
+                {
+                    CreateWindowsUser(Values.RdpOverSshWindowsUsername);
+                    EventLog.WriteEntry($"Created Windows user '{Values.RdpOverSshWindowsUsername}'.");
+                }
+
                 // Make sure we have the keys file.
                 if (FileUtils.CreateFileWithSecureAcl(Values.AdministratorsAuthorizedKeysFilePath))
                 {
@@ -127,7 +136,6 @@ namespace RDPoverSSH.Service
                 ConnectionServiceModel connectionServiceModel = new ConnectionServiceModel
                 {
                     ObjectId = connectionModel.ObjectId,
-                    //LocalTunnelPort = DatabaseEngine.GetCollection<ConnectionServiceModel>().FindById(connectionModel.ObjectId)?.LocalTunnelPort ?? 0,
                     Direction = Direction.Incoming
                 };
 
@@ -227,8 +235,8 @@ namespace RDPoverSSH.Service
                     {
                         try
                         {
-                            var connectionInfo = new ConnectionInfo(connectionModel.TunnelEndpoint, connectionModel.TunnelPort, connectionModel.Username,
-                                new PrivateKeyAuthenticationMethod(connectionModel.Username, new PrivateKeyFile(Values.ClientServerPrivateKeyFilePath(connectionModel.ObjectId))))
+                            var connectionInfo = new ConnectionInfo(connectionModel.TunnelEndpoint, connectionModel.TunnelPort, Values.RdpOverSshWindowsUsername,
+                                new PrivateKeyAuthenticationMethod(Values.RdpOverSshWindowsUsername, new PrivateKeyFile(Values.ClientServerPrivateKeyFilePath(connectionModel.ObjectId))))
                             {
                                 Timeout = TimeSpan.FromSeconds(10)
                             };
@@ -315,11 +323,6 @@ namespace RDPoverSSH.Service
                 return false;
             }
 
-            if (client.ConnectionInfo.Username != connection.Username)
-            {
-                return false;
-            }
-
             if (connection.IsReverseTunnel)
             {
                 if (client.ForwardedPorts.FirstOrDefault() is ForwardedPortRemote forwardedPortRemote)
@@ -379,6 +382,48 @@ namespace RDPoverSSH.Service
             return true;
         }
 
+        #region Windows user
+
+        private bool WindowsUserExists(string name)
+        {
+            DirectoryEntry ad = new DirectoryEntry($"WinNT://{Environment.MachineName},computer");
+            return ad.Children.OfType<DirectoryEntry>().FirstOrDefault(d => d.Properties["Name"].Value as string == name) != null;
+        }
+
+        private void CreateWindowsUser(string name)
+        {
+            DirectoryEntry ad = new DirectoryEntry($"WinNT://{Environment.MachineName},computer");
+            DirectoryEntry user = ad.Children.Add(name, "user");
+            user.CommitChanges();
+
+            DirectoryEntry administratorsGroup = ad.Children.Find("Administrators", "group");
+            administratorsGroup.Invoke("Add", user.Path);
+
+            // Add a special registry entry that causes this user to be hidden from most of the user-facing user management
+            var specialAccounts = Registry.LocalMachine.CreateSubKey(@"SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon\SpecialAccounts\UserList");
+            specialAccounts?.SetValue(name, 0);
+        }
+
+        private void DeleteWindowsUser(string name)
+        {
+            DirectoryEntry ad = new DirectoryEntry($"WinNT://{Environment.MachineName},computer");
+
+            if (ad.Children.OfType<DirectoryEntry>().FirstOrDefault(d => d.Properties["Name"].Value as string == name) is { } user)
+            {
+                ad.Children.Remove(user);
+            }
+
+            var specialAccounts = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon\SpecialAccounts\UserList", true);
+            if (specialAccounts?.GetValue(name) != null)
+            {
+                specialAccounts.DeleteValue(name);
+            }
+        }
+
+        #endregion
+
+        #endregion
+
         #region Private fields
 
         private readonly ServiceController _sshServiceController = new ServiceController(_sshServiceName);
@@ -389,8 +434,6 @@ namespace RDPoverSSH.Service
         #region Private static
 
         private static readonly string _sshServiceName = "sshd";
-
-        #endregion
 
         #endregion
 

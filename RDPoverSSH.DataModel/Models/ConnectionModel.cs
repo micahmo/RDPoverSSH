@@ -97,13 +97,6 @@ namespace RDPoverSSH.Models
         }
         private int _localTunnelPort = NetworkUtils.GetFreeTcpPort();
 
-        public string Username
-        {
-            get => _username;
-            set => SetProperty(ref _username, value);
-        }
-        private string _username;
-
         [BsonIgnore]
         public bool IsReverseTunnel => ConnectionDirection != TunnelDirection;
 
