@@ -7,6 +7,8 @@ using System.Linq;
 using System.ServiceProcess;
 using System.Threading;
 using System.Threading.Tasks;
+using CliWrap;
+using CliWrap.Buffered;
 using PeterKottas.DotNetCore.WindowsService.Interfaces;
 using RDPoverSSH.Common;
 using RDPoverSSH.DataStore;
@@ -129,7 +131,48 @@ namespace RDPoverSSH.Service
                     Direction = Direction.Incoming
                 };
 
-                connectionServiceModel.Status = _sshServiceController.Status == ServiceControllerStatus.Running ? TunnelStatus.Connected : TunnelStatus.Disconnected;
+                if (_sshServiceController.Status == ServiceControllerStatus.Running)
+                {
+                    if (connectionModel.IsReverseTunnel)
+                    {
+                        // For a reverse tunnel, we can check if we have a connection
+                        try
+                        {
+                            var res = (Cli.Wrap("netstat").WithArguments("-ano") | Cli.Wrap("findstr").WithArguments($"\"\\[::1\\]:{connectionModel.LocalTunnelPort}\""))
+                                .WithValidation(CommandResultValidation.None)
+                                .ExecuteBufferedAsync().GetAwaiter().GetResult()
+                                .StandardOutput;
+
+                            if (!string.IsNullOrEmpty(res) // See if we got any output from netstat after filtering through findstr.
+                                && int.TryParse(res.Split().LastOrDefault(s => !string.IsNullOrEmpty(s)), out int pid) // Parse the netstat output; the last non-empty column is the PID
+                                && Process.GetProcessById(pid).ProcessName.Equals(_sshServiceName)) // See if the PID holding this port is sshd
+                            {
+                                // We found the SSH server process listening on our LocalTunnelPort, so we're totally connected.
+                                connectionServiceModel.Status = TunnelStatus.Connected;
+                            }
+                            else
+                            {
+                                // We couldn't find the SSH server process listening on our LocalTunnelPort, so we're not totally connected.
+                                connectionServiceModel.Status = TunnelStatus.Partial;
+                            }
+                        }
+                        catch
+                        {
+                            // If there's any exception trying to get a process listening on our LocalTunnelPort, we can't prove that it's working.
+                            connectionServiceModel.Status = TunnelStatus.Partial;
+                        }
+                    }
+                    else
+                    {
+                        // Not a reverse tunnel, so all we can do is verify that sshd is running.
+                        connectionServiceModel.Status = TunnelStatus.Connected;
+                    }
+                }
+                else
+                {
+                    // SSH server isn't running.
+                    connectionServiceModel.Status = TunnelStatus.Disconnected;
+                }
 
                 // Update based on the changes we made
                 DatabaseEngine.GetCollection<ConnectionServiceModel>().Upsert(connectionServiceModel);
@@ -338,8 +381,14 @@ namespace RDPoverSSH.Service
 
         #region Private fields
 
-        private readonly ServiceController _sshServiceController = new ServiceController("sshd");
+        private readonly ServiceController _sshServiceController = new ServiceController(_sshServiceName);
         private readonly Dictionary<int, SshClient> _sshClients = new Dictionary<int, SshClient>();
+
+        #endregion
+
+        #region Private static
+
+        private static readonly string _sshServiceName = "sshd";
 
         #endregion
 

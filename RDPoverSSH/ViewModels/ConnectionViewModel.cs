@@ -88,7 +88,11 @@ namespace RDPoverSSH.ViewModels
                 ServerKeysCommand.Description = ServerKeysDescription;
 
                 UpdateTunnelStatusInfo();
+            }
 
+            if (e.PropertyName.Equals(nameof(Model.TunnelDirection))
+                || e.PropertyName.Equals(nameof(Model.ConnectionDirection)))
+            {
                 Model.LocalTunnelPort = Model.TunnelDirection switch
                 {
                     Direction.Outgoing => Model.IsReverseTunnel switch
@@ -114,7 +118,8 @@ namespace RDPoverSSH.ViewModels
 
             if (e.PropertyName.Equals(nameof(Model.TunnelDirection))
                 || e.PropertyName.Equals(nameof(Model.TunnelEndpoint))
-                || e.PropertyName.Equals(nameof(Model.TunnelPort)))
+                || e.PropertyName.Equals(nameof(Model.TunnelPort))
+                || e.PropertyName.Equals(nameof(Model.LocalTunnelPort)))
             {
                 Status = TunnelStatus.Unknown;
             }
@@ -270,8 +275,11 @@ namespace RDPoverSSH.ViewModels
                     Direction.Incoming => Status switch
                     {
                         TunnelStatus.Disconnected => (Resources.SshServerNotRunning, Icons.X),
-                        TunnelStatus.Connected => (Resources.SshServerRunning, Icons.Check),
+                        TunnelStatus.Connected => Model.IsReverseTunnel 
+                            ? (string.Format(Resources.SshServerReverseTunnelRunning, Model.LocalTunnelPort), Icons.Check) 
+                            : (Resources.SshServerRunning, Icons.Check),
                         TunnelStatus.Unknown => (Resources.SshStateUnknown, Icons.Question),
+                        TunnelStatus.Partial => (string.Format(Resources.SshServerRunningNoReverseTunnel, Model.LocalTunnelPort), Icons.Warning),
                         _ => default
                     },
                     _ => default

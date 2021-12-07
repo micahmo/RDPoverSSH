@@ -17,5 +17,6 @@
         public static readonly string DownArrow = "\xE896";
         public static readonly string Add = "\xECC8";
         public static readonly string Settings = "\xE713";
+        public static readonly string Warning = "\xE7BA";
     }
 }

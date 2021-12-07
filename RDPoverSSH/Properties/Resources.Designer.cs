@@ -521,11 +521,29 @@ namespace RDPoverSSH.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The SSH server is running and a reverse tunnel is established on local port {0}..
+        /// </summary>
+        public static string SshServerReverseTunnelRunning {
+            get {
+                return ResourceManager.GetString("SshServerReverseTunnelRunning", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The SSH server is running..
         /// </summary>
         public static string SshServerRunning {
             get {
                 return ResourceManager.GetString("SshServerRunning", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The SSH server is running, but no reverse tunnel is detected on port {0}. Is the remote machine running and configured correctly?.
+        /// </summary>
+        public static string SshServerRunningNoReverseTunnel {
+            get {
+                return ResourceManager.GetString("SshServerRunningNoReverseTunnel", resourceCulture);
             }
         }
         

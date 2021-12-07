@@ -246,8 +246,14 @@
 	<data name="SshServerRunning" xml:space="preserve">
 		<value>The SSH server is running.</value>
 	</data>
+	<data name="SshServerReverseTunnelRunning" xml:space="preserve">
+		<value>The SSH server is running and a reverse tunnel is established on local port {0}.</value>
+	</data>
 	<data name="SshStateUnknown" xml:space="preserve">
 		<value>The state of the SSH server is currently unknown.</value>
+	</data>
+	<data name="SshServerRunningNoReverseTunnel" xml:space="preserve">
+		<value>The SSH server is running, but no reverse tunnel is detected on port {0}. Is the remote machine running and configured correctly?</value>
 	</data>
 	<data name="IncomingTunnelLocalTunnelPortDescription" xml:space="preserve">
 		<value>The reverse tunnel will route this port on the local machine (localhost:{0}) to the connection port on the remote machine ({1}).</value>

@@ -61,6 +61,13 @@ namespace RDPoverSSH.Models
         /// <summary>
         /// The tunnel was unable to connect, or was connected and has become disconnected
         /// </summary>
-        Disconnected
+        Disconnected,
+
+        /// <summary>
+        /// This status is intended for incoming reverse tunnels.
+        /// It indicates that that the SSH server is running,
+        ///  but no reverse tunnel is detected on the expected LocalTunnelPort
+        /// </summary>
+        Partial
     }
 }
