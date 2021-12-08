@@ -244,7 +244,7 @@
 		<value>The SSH server is not running. It will be started shortly.</value>
 	</data>
 	<data name="SshServerRunning" xml:space="preserve">
-		<value>The SSH server is running.</value>
+		<value>The SSH server is running on port {0}. (If behind NAT, ensure that port {0} is mapped to a public port via port forwarding.)</value>
 	</data>
 	<data name="SshServerReverseTunnelRunning" xml:space="preserve">
 		<value>The SSH server is running and a reverse tunnel is established on local port {0}.</value>
@@ -253,7 +253,7 @@
 		<value>The state of the SSH server is currently unknown.</value>
 	</data>
 	<data name="SshServerRunningNoReverseTunnel" xml:space="preserve">
-		<value>The SSH server is running, but no reverse tunnel is detected on port {0}. Is the remote machine running and configured correctly?</value>
+		<value>The SSH server is running on port {0}, but no reverse tunnel is detected on port {1}. Is the remote machine running and configured correctly? (If behind NAT, ensure that port {0} is mapped to a public port via port forwarding.)</value>
 	</data>
 	<data name="IncomingTunnelLocalTunnelPortDescription" xml:space="preserve">
 		<value>The reverse tunnel will route this port on the local machine (localhost:{0}) to the connection port on the remote machine ({1}).</value>
@@ -272,5 +272,8 @@
 	</data>
 	<data name="NoConnectionsMatchFilter" xml:space="preserve">
 		<value>No connections match filter '{0}'...</value>
+	</data>
+	<data name="SshPublicPortHint" xml:space="preserve">
+		<value>Select the public port for the target SSH connection. This is usually a port that is forwarded to 22 on the target machine.</value>
 	</data>
 </root>

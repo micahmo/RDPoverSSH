@@ -13,6 +13,7 @@ namespace RDPoverSSH.Common
         public static readonly string OurPublicKeyFilePath = Path.Combine(SshProgramDataPath, "ssh_rdp_over_ssh_key.pub");
         public static readonly string AdministratorsAuthorizedKeysFilePath = Path.Combine(SshProgramDataPath, "administrators_authorized_keys");
         public static readonly string RdpOverSshWindowsUsername = "RDPoverSSH";
+        public static readonly string SshdConfigFile = Path.Combine(SshProgramDataPath, "sshd_config");
         
         public static string ClientServerPrivateKeyFilePath(int connectionId) => Path.Combine(SshProgramDataPath, $"ssh_rdp_over_ssh_{connectionId}_key");
     }

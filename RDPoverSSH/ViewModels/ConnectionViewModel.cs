@@ -276,9 +276,9 @@ namespace RDPoverSSH.ViewModels
                         TunnelStatus.Disconnected => (Resources.SshServerNotRunning, Icons.X),
                         TunnelStatus.Connected => Model.IsReverseTunnel 
                             ? (string.Format(Resources.SshServerReverseTunnelRunning, Model.LocalTunnelPort), Icons.Check) 
-                            : (Resources.SshServerRunning, Icons.Check),
+                            : (string.Format(Resources.SshServerRunning, SshUtils.GetConfigValue("Port", 23, includeCommented: true)), Icons.Check),
                         TunnelStatus.Unknown => (Resources.SshStateUnknown, Icons.Question),
-                        TunnelStatus.Partial => (string.Format(Resources.SshServerRunningNoReverseTunnel, Model.LocalTunnelPort), Icons.Warning),
+                        TunnelStatus.Partial => (string.Format(Resources.SshServerRunningNoReverseTunnel, SshUtils.GetConfigValue("Port", 23, includeCommented: true), Model.LocalTunnelPort), Icons.Warning),
                         _ => default
                     },
                     _ => default

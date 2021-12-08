@@ -484,6 +484,15 @@ namespace RDPoverSSH.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Select the public port for the target SSH connection. This is usually a port that is forwarded to 22 on the target machine..
+        /// </summary>
+        public static string SshPublicPortHint {
+            get {
+                return ResourceManager.GetString("SshPublicPortHint", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to SSH Server Private Key.
         /// </summary>
         public static string SshServerKeyHeading {
@@ -530,7 +539,7 @@ namespace RDPoverSSH.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The SSH server is running..
+        ///   Looks up a localized string similar to The SSH server is running on port {0}. (If behind NAT, ensure that port {0} is mapped to a public port via port forwarding.).
         /// </summary>
         public static string SshServerRunning {
             get {
@@ -539,7 +548,7 @@ namespace RDPoverSSH.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The SSH server is running, but no reverse tunnel is detected on port {0}. Is the remote machine running and configured correctly?.
+        ///   Looks up a localized string similar to The SSH server is running on port {0}, but no reverse tunnel is detected on port {1}. Is the remote machine running and configured correctly? (If behind NAT, ensure that port {0} is mapped to a public port via port forwarding.).
         /// </summary>
         public static string SshServerRunningNoReverseTunnel {
             get {
