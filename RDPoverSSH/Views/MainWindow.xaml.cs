@@ -50,31 +50,6 @@ namespace RDPoverSSH.Views
             MainWindowViewModel viewModel = new MainWindowViewModel();
             DataContext = viewModel;
 
-            try
-            {
-                RootModel.Instance.Load(PredicateBuilder.New<ConnectionModel>(true));
-            }
-            catch (Exception ex) when (ex is IOException || ex is UnauthorizedAccessException)
-            {
-                MessageBox.Show("There was an error accessing the database configuration file. Shutting down.", "RDPoverSSH Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                throw;
-            }
-
-            viewModel.PropertyChanged += (_, args) =>
-            {
-                if (args.PropertyName.Equals(nameof(MainWindowViewModel.Filter)))
-                {
-                    ExpressionStarter<ConnectionModel> predicate = PredicateBuilder.New<ConnectionModel>(true);
-
-                    if (!string.IsNullOrEmpty(viewModel.Filter))
-                    {
-                        predicate = predicate.And(i => i.Name.Contains(viewModel.Filter));
-                    }
-
-                    RootModel.Instance.Load(predicate);
-                }
-            };
-
             // Make sure the worker service is installed and running.
             Task.Run(async () =>
             {

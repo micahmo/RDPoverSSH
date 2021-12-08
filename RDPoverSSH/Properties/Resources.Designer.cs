@@ -250,6 +250,15 @@ namespace RDPoverSSH.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to There was an error accessing the database configuration file. Shutting down..
+        /// </summary>
+        public static string ErrorAccessingDatabase {
+            get {
+                return ResourceManager.GetString("ErrorAccessingDatabase", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to There was an error connecting to {0}:{1}. The details are below..
         /// </summary>
         public static string ErrorConnectingToTunnel {
@@ -435,6 +444,15 @@ namespace RDPoverSSH.Properties {
         public static string PasteSshServerPrivateKey {
             get {
                 return ResourceManager.GetString("PasteSshServerPrivateKey", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to RDPoverSSH Error.
+        /// </summary>
+        public static string RdpOverSshError {
+            get {
+                return ResourceManager.GetString("RdpOverSshError", resourceCulture);
             }
         }
         

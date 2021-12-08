@@ -285,4 +285,10 @@
 	<data name="ConnectButtonHint" xml:space="preserve">
 		<value>Connect to port {0} on the remote machine via localhost:{1}</value>
 	</data>
+	<data name="ErrorAccessingDatabase" xml:space="preserve">
+		<value>There was an error accessing the database configuration file. Shutting down.</value>
+	</data>
+	<data name="RdpOverSshError" xml:space="preserve">
+		<value>RDPoverSSH Error</value>
+	</data>
 </root>
