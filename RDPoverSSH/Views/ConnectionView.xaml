@@ -11,6 +11,10 @@
              xmlns:c="clr-namespace:CalcBinding;assembly=CalcBinding"
              mc:Ignorable="d" d:DesignWidth="600"
              d:DataContext="{d:DesignInstance Type={x:Type viewModels:ConnectionViewModel}}">
+    <UserControl.Resources>
+        <ui:BindingProxy x:Key="BindingProxy" Value="{Binding}"/>
+    </UserControl.Resources>
+    
     <Grid>
         <Grid.ColumnDefinitions>
             <!-- Connection items left padding -->
@@ -95,7 +99,18 @@
                                           Visibility="{c:Binding 'IsConnectionPortCustom', FalseToVisibility=Collapsed}"/>
                             <views:CommandButton DataContext="{Binding ConnectCommand}"
                                                  Visibility="{c:Binding '!DataContext.IsConnectionPortCustom and DataContext.Model.ConnectionDirection == sharedModels:Direction.Outgoing', RelativeSource={RelativeSource AncestorType=views:ConnectionItem}, FalseToVisibility=Collapsed}"
-                                                 IsEnabled="{c:Binding 'DataContext.SelectedConnectionPort != null', RelativeSource={RelativeSource AncestorType=views:ConnectionItem}}"/>
+                                                 IsEnabled="{c:Binding 'DataContext.SelectedConnectionPort != null', RelativeSource={RelativeSource AncestorType=views:ConnectionItem}}">
+                                <views:CommandButton.ToolTip>
+                                    <TextBlock>
+                                        <TextBlock.Text>
+                                            <MultiBinding StringFormat="{x:Static properties:Resources.ConnectButtonHint}">
+                                                <Binding Path="Value.Model.ConnectionPort" Source="{StaticResource BindingProxy}"/>
+                                                <Binding Path="Value.Model.LocalTunnelPort" Source="{StaticResource BindingProxy}"/>
+                                            </MultiBinding>
+                                        </TextBlock.Text>
+                                    </TextBlock>
+                                </views:CommandButton.ToolTip>
+                            </views:CommandButton>
                         </StackPanel>
                     </Grid>
 

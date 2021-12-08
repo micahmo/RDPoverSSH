@@ -151,6 +151,15 @@ namespace RDPoverSSH.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Connect to port {0} on the remote machine via localhost:{1}.
+        /// </summary>
+        public static string ConnectButtonHint {
+            get {
+                return ResourceManager.GetString("ConnectButtonHint", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The tunnel is currently connected..
         /// </summary>
         public static string ConnectedTunnelStatus {
@@ -174,6 +183,15 @@ namespace RDPoverSSH.Properties {
         public static string ConnectionNameHint {
             get {
                 return ResourceManager.GetString("ConnectionNameHint", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to localhost:{0} will be mapped to this port ({1}) on the remote machine..
+        /// </summary>
+        public static string ConnectionPortHint {
+            get {
+                return ResourceManager.GetString("ConnectionPortHint", resourceCulture);
             }
         }
         
