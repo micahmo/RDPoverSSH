@@ -118,7 +118,8 @@ namespace RDPoverSSH.ViewModels
             if (e.PropertyName.Equals(nameof(Model.TunnelDirection))
                 || e.PropertyName.Equals(nameof(Model.TunnelEndpoint))
                 || e.PropertyName.Equals(nameof(Model.TunnelPort))
-                || e.PropertyName.Equals(nameof(Model.LocalTunnelPort)))
+                || e.PropertyName.Equals(nameof(Model.LocalTunnelPort))
+                || e.PropertyName.Equals(nameof(Model.ConnectionPort)))
             {
                 Status = TunnelStatus.Unknown;
             }
@@ -187,6 +188,8 @@ namespace RDPoverSSH.ViewModels
         {
             PortViewModel.RdpPort,
             PortViewModel.SmbPort,
+            PortViewModel.HttpPort,
+            PortViewModel.HttpsPort,
             PortViewModel.Custom
         };
 
@@ -212,9 +215,9 @@ namespace RDPoverSSH.ViewModels
 
         public List<PortViewModel> DefaultTunnelPorts { get; } = new List<PortViewModel>
         {
-            new PortViewModel {Value = 22, Name = "SSH"},
-            new PortViewModel {Value = 80, Name = "HTTP"},
-            new PortViewModel {Value = 443, Name = "HTTPS"},
+            PortViewModel.SshPort,
+            PortViewModel.HttpPort,
+            PortViewModel.HttpsPort,
             PortViewModel.Custom
         };
 
@@ -448,6 +451,11 @@ namespace RDPoverSSH.ViewModels
             else if (SelectedConnectionPort == PortViewModel.SmbPort)
             {
                 // TODO
+            }
+            else if (SelectedConnectionPort == PortViewModel.HttpPort || SelectedConnectionPort == PortViewModel.HttpsPort)
+            {
+                // Open the mapped port in the browser (with the correct protocol).
+                Process.Start("explorer.exe", $"http{(SelectedConnectionPort == PortViewModel.HttpsPort ? "s" : string.Empty)}://localhost:{Model.LocalTunnelPort}");
             }
         }
 
