@@ -6,6 +6,7 @@ using System.Reactive.Linq;
 using System.ServiceProcess;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
 using CommandLine;
 using CommandLine.Text;
@@ -124,6 +125,9 @@ namespace RDPoverSSH.Views
                     }
                 });
             });
+
+            // Make all tooltips stay open
+            ToolTipService.ShowDurationProperty.OverrideMetadata(typeof(DependencyObject), new FrameworkPropertyMetadata((int)TimeSpan.FromSeconds(30).TotalMilliseconds));
         }
 
         private void ShowMessage(ShowMessageArgument arg)

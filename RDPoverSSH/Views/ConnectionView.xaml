@@ -122,7 +122,7 @@
                             <ui:NumberBox Margin="5" SpinButtonPlacementMode="Inline" Value="{Binding Model.TunnelPort}" SmallChange="1" LargeChange="1"
                                       Visibility="{c:Binding 'IsTunnelPortCustom and Model.TunnelDirection == sharedModels:Direction.Outgoing', FalseToVisibility=Collapsed}"/>
                             <ui:NumberBox Margin="5" SpinButtonPlacementMode="Inline" Value="{Binding Model.LocalTunnelPort}" SmallChange="1" LargeChange="1"
-                                          ToolTip="{Binding LocalTunnelPortDescription}" ToolTipService.ShowDuration="30000"
+                                          ToolTip="{Binding LocalTunnelPortDescription}"
                                           Visibility="{c:Binding 'Model.IsReverseTunnel', FalseToVisibility=Collapsed}"/>
                             <views:CommandButton DataContext="{Binding ServerKeysCommand}"/>
                             <views:CommandButton DataContext="{Binding TunnelStatusButton}" IsReadOnly="True"/>
