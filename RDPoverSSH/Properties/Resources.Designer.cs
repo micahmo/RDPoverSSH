@@ -441,9 +441,18 @@ namespace RDPoverSSH.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Remote Computer.
         /// </summary>
-        public static string Remote_Computer {
+        public static string RemoteComputer {
             get {
-                return ResourceManager.GetString("Remote Computer", resourceCulture);
+                return ResourceManager.GetString("RemoteComputer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} (Remote Computer).
+        /// </summary>
+        public static string RemoteComputerName {
+            get {
+                return ResourceManager.GetString("RemoteComputerName", resourceCulture);
             }
         }
         

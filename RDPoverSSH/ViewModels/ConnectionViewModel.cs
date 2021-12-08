@@ -122,6 +122,7 @@ namespace RDPoverSSH.ViewModels
                 || e.PropertyName.Equals(nameof(Model.ConnectionPort)))
             {
                 Status = TunnelStatus.Unknown;
+                RemoteMachineName = Resources.RemoteComputer;
             }
         }
 
@@ -181,6 +182,13 @@ namespace RDPoverSSH.ViewModels
         };
 
         public string MachineName => string.Format(Resources.LocalComputerName, Environment.MachineName);
+
+        public string RemoteMachineName
+        {
+            get => _remoteMachineName;
+            set => SetProperty(ref _remoteMachineName, value);
+        }
+        private string _remoteMachineName = Resources.RemoteComputer;
 
         #region Connection ports
 
@@ -414,7 +422,8 @@ namespace RDPoverSSH.ViewModels
                     DateTime newClientServerKeyFileLastModifiedTime = new FileInfo(Values.ClientServerPrivateKeyFilePath(Model.ObjectId)).LastWriteTimeUtc;
                     if (newClientServerKeyFileLastModifiedTime > previousClientServerKeyFileLastModifiedTime)
                     {
-                        Status = TunnelStatus.Unknown;
+                        // Raise something that we know will put us in the unknown state so we can centralize the logic.
+                        Model.RaisePropertyChanged(nameof(Model.TunnelPort));
                     }
                 };
 

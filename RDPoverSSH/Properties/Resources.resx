@@ -267,8 +267,11 @@
 	<data name="ChangeOutgoingLocalTunnelPortWarning" xml:space="preserve">
 		<value>Obtain this value from the remote computer.</value>
 	</data>
-	<data name="Remote Computer" xml:space="preserve">
+	<data name="RemoteComputer" xml:space="preserve">
 		<value>Remote Computer</value>
+	</data>
+	<data name="RemoteComputerName" xml:space="preserve">
+		<value>{0} (Remote Computer)</value>
 	</data>
 	<data name="NoConnectionsMatchFilter" xml:space="preserve">
 		<value>No connections match filter '{0}'...</value>

@@ -1,5 +1,6 @@
 ﻿using System;
 using LiteDB;
+using Microsoft.Toolkit.Mvvm.ComponentModel;
 using RDPoverSSH.Common;
 
 namespace RDPoverSSH.Models
@@ -104,6 +105,15 @@ namespace RDPoverSSH.Models
         public override string ToString() =>
             $"SSH -> {(TunnelDirection == Direction.Incoming ? $"localhost:{TunnelPort}" : $"{TunnelEndpoint}:{TunnelPort}")}  -  " +
             $"Connect -> {(ConnectionDirection == Direction.Incoming ? $"localhost:{ConnectionPort}" : $"{TunnelEndpoint}:{ConnectionPort}")}";
+
+        /// <summary>
+        /// Exposes the protected <see cref="ObservableObject.OnPropertyChanged(string?)"/>.
+        /// </summary>
+        /// <param name="propertyName"></param>
+        public void RaisePropertyChanged(string propertyName)
+        {
+            OnPropertyChanged(propertyName);
+        }
     }
 
     /// <summary>

@@ -41,6 +41,11 @@ namespace RDPoverSSH.Models
         public Direction Direction { get; set; }
 
         public DateTimeOffset LastStatusUpdateDateTime { get; private set; }
+
+        /// <summary>
+        /// If we have an outgoing tunnel, we can detect the remote machine's name over SSH
+        /// </summary>
+        public string RemoteMachineName { get; set; }
     }
 
     /// <summary>

@@ -197,7 +197,8 @@ namespace RDPoverSSH.Service
                 ConnectionServiceModel connectionServiceModel = new ConnectionServiceModel
                 {
                     ObjectId = connectionModel.ObjectId,
-                    Direction = Direction.Outgoing
+                    Direction = Direction.Outgoing,
+                    RemoteMachineName = DatabaseEngine.GetCollection<ConnectionServiceModel>().FindById(connectionModel.ObjectId)?.RemoteMachineName
                 };
 
                 if (_sshClients.TryGetValue(connectionModel.ObjectId, out var existingClient))
@@ -230,6 +231,8 @@ namespace RDPoverSSH.Service
 
                 if (needNewTunnel)
                 {
+                    connectionServiceModel.RemoteMachineName = string.Empty;
+
                     // Check if we have keys
                     if (File.Exists(Values.ClientServerPrivateKeyFilePath(connectionModel.ObjectId)))
                     {
@@ -265,6 +268,10 @@ namespace RDPoverSSH.Service
                             };
 
                             forwardedPort.Start();
+
+                            // Get the hostname over SSH
+                            string hostname = client.CreateCommand("hostname").Execute();
+                            connectionServiceModel.RemoteMachineName = hostname;
 
                             _sshClients[connectionModel.ObjectId] = client;
                         }

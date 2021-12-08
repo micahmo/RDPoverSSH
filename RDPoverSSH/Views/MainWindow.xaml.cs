@@ -121,6 +121,13 @@ namespace RDPoverSSH.Views
                             {
                                 connectionViewModel.LastError = connection.TimestampedLastError;
                             }
+
+                            if (connectionViewModel.Model.TunnelDirection == Direction.Outgoing)
+                            {
+                                connectionViewModel.RemoteMachineName = string.IsNullOrWhiteSpace(connection.RemoteMachineName)
+                                    ? Properties.Resources.RemoteComputer
+                                    : string.Format(Properties.Resources.RemoteComputerName, connection.RemoteMachineName);
+                            }
                         }
                     }
                 });
