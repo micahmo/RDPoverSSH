@@ -94,9 +94,10 @@
                     <Grid Grid.Column="{c:Binding 'Model.ConnectionDirection == sharedModels:Direction.Incoming ? 1 : 3'}" Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Center">
                         <StackPanel Orientation="Horizontal">
                             <ComboBox ui:ControlHelper.PlaceholderText="Destination Port" ItemsSource="{Binding DefaultConnectionPorts}" DisplayMemberPath="DisplayName"
-                                      SelectedItem="{Binding SelectedConnectionPort}"/>
+                                      SelectedItem="{Binding SelectedConnectionPort}"
+                                      Visibility="{c:Binding '!(Model.TunnelDirection == sharedModels:Direction.Incoming and Model.ConnectionDirection == sharedModels:Direction.Incoming)', FalseToVisibility=Collapsed}"/>
                             <ui:NumberBox Margin="5" SpinButtonPlacementMode="Inline" Value="{Binding Model.ConnectionPort}" SmallChange="1" LargeChange="1"
-                                          Visibility="{c:Binding 'IsConnectionPortCustom', FalseToVisibility=Collapsed}"/>
+                                          Visibility="{c:Binding 'IsConnectionPortCustom and !(Model.TunnelDirection == sharedModels:Direction.Incoming and Model.ConnectionDirection == sharedModels:Direction.Incoming)', FalseToVisibility=Collapsed}"/>
                             <views:CommandButton DataContext="{Binding ConnectCommand}"
                                                  Visibility="{c:Binding '!DataContext.IsConnectionPortCustom and DataContext.Model.ConnectionDirection == sharedModels:Direction.Outgoing', RelativeSource={RelativeSource AncestorType=views:ConnectionItem}, FalseToVisibility=Collapsed}"
                                                  IsEnabled="{c:Binding 'DataContext.SelectedConnectionPort != null', RelativeSource={RelativeSource AncestorType=views:ConnectionItem}}">

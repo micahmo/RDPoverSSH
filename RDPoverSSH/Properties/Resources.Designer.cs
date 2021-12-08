@@ -566,7 +566,7 @@ namespace RDPoverSSH.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The SSH server is running on port {0}. (If behind NAT, ensure that port {0} is mapped to a public port via port forwarding.).
+        ///   Looks up a localized string similar to The SSH server is running on port {0}. (If behind NAT, ensure that a public port is being forwarded to this machine&apos;s port {0}.).
         /// </summary>
         public static string SshServerRunning {
             get {
@@ -575,7 +575,7 @@ namespace RDPoverSSH.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The SSH server is running on port {0}, but no reverse tunnel is detected on port {1}. Is the remote machine running and configured correctly? (If behind NAT, ensure that port {0} is mapped to a public port via port forwarding.).
+        ///   Looks up a localized string similar to The SSH server is running on port {0}, but no reverse tunnel is detected on port {1}. Is the remote machine running and configured correctly? (If behind NAT, ensure that a public port is being forwarded to this machine&apos;s port {0}.).
         /// </summary>
         public static string SshServerRunningNoReverseTunnel {
             get {

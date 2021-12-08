@@ -2,7 +2,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.DirectoryServices;
 using System.IO;
 using System.Linq;
 using System.ServiceProcess;
@@ -10,7 +9,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using CliWrap;
 using CliWrap.Buffered;
-using Microsoft.Win32;
 using PeterKottas.DotNetCore.WindowsService.Interfaces;
 using RDPoverSSH.Common;
 using RDPoverSSH.DataStore;
