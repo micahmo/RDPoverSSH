@@ -195,7 +195,6 @@ namespace RDPoverSSH.ViewModels
         public List<PortViewModel> DefaultConnectionPorts { get; } = new List<PortViewModel>
         {
             PortViewModel.RdpPort,
-            PortViewModel.SmbPort,
             PortViewModel.HttpPort,
             PortViewModel.HttpsPort,
             PortViewModel.Custom
@@ -457,11 +456,7 @@ namespace RDPoverSSH.ViewModels
                 // Go get the service model
                 Process.Start(Environment.ExpandEnvironmentVariables(Path.Combine(Environment.SystemDirectory, "mstsc.exe")), $"/v:localhost:{Model.LocalTunnelPort}");
             }
-            else if (SelectedConnectionPort == PortViewModel.SmbPort)
-            {
-                // TODO
-            }
-            else if (SelectedConnectionPort == PortViewModel.HttpPort || SelectedConnectionPort == PortViewModel.HttpsPort)
+            else
             {
                 // Open the mapped port in the browser (with the correct protocol).
                 Process.Start("explorer.exe", $"http{(SelectedConnectionPort == PortViewModel.HttpsPort ? "s" : string.Empty)}://localhost:{Model.LocalTunnelPort}");
