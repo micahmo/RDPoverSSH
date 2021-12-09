@@ -311,7 +311,16 @@ namespace RDPoverSSH.Service
         {
             _sshClients.Where(kvp => kvp.Key == connectionId).Select(kvp => kvp).ToList().ForEach(kvp =>
             {
-                kvp.Value?.Dispose();
+                try
+                {
+                    kvp.Value?.Dispose();
+                }
+                catch
+                {
+                    // Swallow. SshClient throws a rare "collection modified" exception when disposing ports. 
+                    // https://github.com/sshnet/SSH.NET/blob/a5bd08d655bb6a3c762306472cec354556dca3a3/src/Renci.SshNet/SshClient.cs#L167
+                }
+
                 _sshClients.Remove(kvp.Key);
             });
         }
