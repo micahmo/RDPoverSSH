@@ -312,4 +312,7 @@
 	<data name="RdpConnectionProfileCommandDescription" xml:space="preserve">
 		<value>Connect with '{0}' profile</value>
 	</data>
+	<data name="UnexpectedError" xml:space="preserve">
+		<value>There was an unexpected error.</value>
+	</data>
 </root>

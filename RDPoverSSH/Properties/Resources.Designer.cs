@@ -683,6 +683,15 @@ namespace RDPoverSSH.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to There was an unexpected error..
+        /// </summary>
+        public static string UnexpectedError {
+            get {
+                return ResourceManager.GetString("UnexpectedError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The tunnel status is unknown. If the tunnel configuration was recently changed, a new connection attempt will occur shortly..
         /// </summary>
         public static string UnknownTunnelStatus {
