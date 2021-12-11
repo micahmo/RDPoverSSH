@@ -61,6 +61,15 @@ namespace RDPoverSSH.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Add RDP Profile.
+        /// </summary>
+        public static string AddRdpProfile {
+            get {
+                return ResourceManager.GetString("AddRdpProfile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Add SSH Server Key.
         /// </summary>
         public static string AddSshServerKey {
@@ -214,6 +223,15 @@ namespace RDPoverSSH.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Delete.
+        /// </summary>
+        public static string Delete {
+            get {
+                return ResourceManager.GetString("Delete", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Delete connection.
         /// </summary>
         public static string DeleteConnectionCommanDescription {
@@ -237,6 +255,15 @@ namespace RDPoverSSH.Properties {
         public static string DuplicateConnection {
             get {
                 return ResourceManager.GetString("DuplicateConnection", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Edit.
+        /// </summary>
+        public static string Edit {
+            get {
+                return ResourceManager.GetString("Edit", resourceCulture);
             }
         }
         
@@ -358,6 +385,15 @@ namespace RDPoverSSH.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Name.
+        /// </summary>
+        public static string Name {
+            get {
+                return ResourceManager.GetString("Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to New Connection.
         /// </summary>
         public static string NewConnection {
@@ -448,11 +484,29 @@ namespace RDPoverSSH.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Connect with &apos;{0}&apos; profile.
+        /// </summary>
+        public static string RdpConnectionProfileCommandDescription {
+            get {
+                return ResourceManager.GetString("RdpConnectionProfileCommandDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to RDPoverSSH Error.
         /// </summary>
         public static string RdpOverSshError {
             get {
                 return ResourceManager.GetString("RdpOverSshError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enter a name for the RDP profile..
+        /// </summary>
+        public static string RdpProfileNamePrompt {
+            get {
+                return ResourceManager.GetString("RdpProfileNamePrompt", resourceCulture);
             }
         }
         
@@ -471,6 +525,15 @@ namespace RDPoverSSH.Properties {
         public static string RemoteComputerName {
             get {
                 return ResourceManager.GetString("RemoteComputerName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Rename.
+        /// </summary>
+        public static string Rename {
+            get {
+                return ResourceManager.GetString("Rename", resourceCulture);
             }
         }
         

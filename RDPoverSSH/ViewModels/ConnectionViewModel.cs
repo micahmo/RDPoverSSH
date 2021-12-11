@@ -27,7 +27,6 @@ namespace RDPoverSSH.ViewModels
             Model.PropertyChanged += Model_PropertyChanged;
             PropertyChanged += ConnectionViewModel_PropertyChanged;
 
-            // TODO: Make this converter?
             if (Model.ConnectionPort != default)
             {
                 if (DefaultConnectionPorts.FirstOrDefault(p => p.Value == Model.ConnectionPort) is { } selectedPortViewModel)
@@ -246,9 +245,8 @@ namespace RDPoverSSH.ViewModels
 
         #endregion
 
-        public GenericCommandViewModel ConnectCommand => _connectCommand ??=
-            new GenericCommandViewModel(Resources.Connect, new RelayCommand(Connect), string.Empty);
-        private GenericCommandViewModel _connectCommand;
+        public ConnectCommandViewModel ConnectCommand => _connectCommand ??= new ConnectCommandViewModel(this);
+        private ConnectCommandViewModel _connectCommand;
 
         public GenericCommandViewModel TunnelStatusButton => _tunnelStatusButton ??= new Func<GenericCommandViewModel>(() =>
         {
@@ -446,20 +444,6 @@ namespace RDPoverSSH.ViewModels
             if (Status == TunnelStatus.Disconnected && Model.TunnelDirection == Direction.Outgoing)
             {
                 await MessageBoxHelper.ShowCopyableText(string.Format(Resources.ErrorConnectingToTunnel, Model.TunnelEndpoint, Model.TunnelPort), Resources.ConnectionError, LastError);
-            }
-        }
-
-        private void Connect()
-        {
-            if (SelectedConnectionPort == PortViewModel.RdpPort)
-            {
-                // Go get the service model
-                Process.Start(Environment.ExpandEnvironmentVariables(Path.Combine(Environment.SystemDirectory, "mstsc.exe")), $"/v:localhost:{Model.LocalTunnelPort}");
-            }
-            else
-            {
-                // Open the mapped port in the browser (with the correct protocol).
-                Process.Start("explorer.exe", $"http{(SelectedConnectionPort == PortViewModel.HttpsPort ? "s" : string.Empty)}://localhost:{Model.LocalTunnelPort}");
             }
         }
 

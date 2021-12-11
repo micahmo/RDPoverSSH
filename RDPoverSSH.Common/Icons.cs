@@ -18,5 +18,8 @@
         public static readonly string Add = "\xECC8";
         public static readonly string Settings = "\xE713";
         public static readonly string Warning = "\xE7BA";
+        public static readonly string Edit = "\xE70F";
+        public static readonly string Rename = "\xE8AC";
+        public static readonly string Connect = "\xE761";
     }
 }

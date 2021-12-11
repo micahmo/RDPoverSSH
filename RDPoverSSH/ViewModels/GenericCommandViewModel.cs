@@ -15,12 +15,13 @@ namespace RDPoverSSH.ViewModels
         /// <summary>
         /// Constructor
         /// </summary>
-        public GenericCommandViewModel(string name, ICommand command, string iconGlyph, string description = default)
+        public GenericCommandViewModel(string name, ICommand command, string iconGlyph, string description = default, bool hasSubCommandSeparator = false)
         {
             Name = name;
             Command = command;
             IconGlyph = iconGlyph;
             Description = description;
+            HasSubCommandSeparator = hasSubCommandSeparator;
         }
 
         #endregion
@@ -35,6 +36,9 @@ namespace RDPoverSSH.ViewModels
             set => SetProperty(ref _description, value);
         }
         private string _description;
+
+        /// <inheritdoc/>
+        public override bool HasSubCommandSeparator { get; }
 
         /// <inheritdoc/>
         public override ICommand Command { get; }

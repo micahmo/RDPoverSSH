@@ -100,7 +100,7 @@
                                 <ui:NumberBox Margin="5" SpinButtonPlacementMode="Inline" Value="{Binding Model.ConnectionPort}" SmallChange="1" LargeChange="1"
                                           Visibility="{c:Binding 'IsConnectionPortCustom and !(Model.TunnelDirection == sharedModels:Direction.Incoming and Model.ConnectionDirection == sharedModels:Direction.Incoming)', FalseToVisibility=Collapsed}"/>
                                 <views:CommandButton DataContext="{Binding ConnectCommand}"
-                                                 Visibility="{c:Binding '!DataContext.IsConnectionPortCustom and DataContext.Model.ConnectionDirection == sharedModels:Direction.Outgoing', RelativeSource={RelativeSource AncestorType=views:ConnectionItem}, FalseToVisibility=Collapsed}"
+                                                 Visibility="{c:Binding 'DataContext.Model.ConnectionDirection == sharedModels:Direction.Outgoing', RelativeSource={RelativeSource AncestorType=views:ConnectionItem}, FalseToVisibility=Collapsed}"
                                                  IsEnabled="{c:Binding 'DataContext.SelectedConnectionPort != null', RelativeSource={RelativeSource AncestorType=views:ConnectionItem}}">
                                     <views:CommandButton.ToolTip>
                                         <TextBlock>

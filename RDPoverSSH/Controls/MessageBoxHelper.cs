@@ -3,6 +3,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Media;
+using System.Windows.Threading;
 using ModernWpf.Controls;
 using RDPoverSSH.Properties;
 
@@ -88,6 +89,28 @@ namespace RDPoverSSH.Controls
             return stackPanel;
         }
 
+        private static FrameworkElement GetTextBoxContent(string message, string initialInput, out TextBox textBox)
+        {
+            StackPanel stackPanel = new StackPanel();
+            stackPanel.Children.Add(new TextBlock
+            {
+                Text = message,
+                TextWrapping = TextWrapping.Wrap
+            });
+
+            textBox = new TextBox
+            {
+                Text = initialInput,
+                HorizontalScrollBarVisibility = ScrollBarVisibility.Auto,
+                VerticalScrollBarVisibility = ScrollBarVisibility.Auto,
+                Margin = new Thickness(0, 5, 0, 5)
+            };
+            textBox.SelectAll();
+            stackPanel.Children.Add(textBox);
+
+            return stackPanel;
+        }
+
         public static async Task ShowCopyableText(string message, string title, string textBlock, bool monospace = false)
         {
             var stackPanel = GetTextBlockContent(message, textBlock, monospace, readOnly: true, out _);
@@ -126,6 +149,28 @@ namespace RDPoverSSH.Controls
             }
 
             return default;
+        }
+
+        public static async Task<(string Text, ContentDialogResult Result)> ShowInputBox(string message, string title, string initialInput = default)
+        {
+            var stackPanel = GetTextBoxContent(message, initialInput, out var textBox);
+
+            ContentDialog contentDialog = new ContentDialog
+            {
+                Title = title,
+                Content = stackPanel,
+                DefaultButton = ContentDialogButton.Primary,
+                PrimaryButtonText = Resources.Save,
+                CloseButtonText = Resources.Cancel
+            };
+
+            contentDialog.Loaded += (_, __) =>
+            {
+                Dispatcher.CurrentDispatcher.BeginInvoke(() => textBox.Focus());
+            };
+
+            var res = await contentDialog.ShowAsync();
+            return (textBox.Text, res);
         }
     }
 }

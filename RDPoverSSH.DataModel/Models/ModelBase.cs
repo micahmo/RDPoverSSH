@@ -1,6 +1,5 @@
 ﻿using System;
 using LiteDB;
-using Microsoft.Toolkit.Mvvm.ComponentModel;
 
 namespace RDPoverSSH.Models
 {
@@ -13,7 +12,7 @@ namespace RDPoverSSH.Models
     /// public class <typeparamref name="T"/> : ModelBase&lt;<typeparamref name="T"/>&gt;
     /// </code>
     /// </remarks>
-    public abstract class ModelBase<T> : ObservableObject
+    public abstract class ModelBase<T> : MyObservableObject
     {
         /// <summary>
         /// An initialization callback that can be invoked upon database creation to create standing data, for example.

@@ -6,10 +6,11 @@
              xmlns:ui="http://schemas.modernwpf.com/2019"
              xmlns:viewModels="clr-namespace:RDPoverSSH.ViewModels"
              xmlns:c="clr-namespace:CalcBinding;assembly=CalcBinding"
+             xmlns:views="clr-namespace:RDPoverSSH.Views"
              mc:Ignorable="d" 
              d:DataContext="{d:DesignInstance Type={x:Type viewModels:CommandViewModelBase}}"
              x:Name="This"
-             ToolTip="{Binding Description}">
+             ToolTip="{Binding TooltipText}">
     <UserControl.Resources>
         <Style TargetType="TextBlock">
             <Style.Triggers>
@@ -68,16 +69,35 @@
                                 <Setter TargetName="Background" Property="Background" Value="Transparent" />
                                 <Setter TargetName="Border" Property="BorderBrush" Value="{DynamicResource ButtonBorderBrushDisabled}" />
                             </DataTrigger>
+                            <DataTrigger Binding="{Binding ElementName=This, Path=IsSubCommand}" Value="True">
+                                <Setter Property="Background" Value="Transparent"/>
+                                <Setter Property="Margin" Value="0" />
+                                <Setter Property="HorizontalContentAlignment" Value="Left"/>
+                                <Setter Property="HorizontalAlignment" Value="Stretch"/>
+                            </DataTrigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
         </Style>
 
+        <Style TargetType="ui:SplitButton">
+            <Setter Property="Margin" Value="5"/>
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding ElementName=This, Path=IsSubCommand}" Value="True">
+                    <Setter Property="Background" Value="Transparent"/>
+                    <Setter Property="Margin" Value="0" />
+                    <Setter Property="HorizontalContentAlignment" Value="Left"/>
+                    <Setter Property="HorizontalAlignment" Value="Stretch"/>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
     </UserControl.Resources>
 
     <Grid>
-        <Button Command="{Binding Command}" CommandParameter="{Binding ElementName=This, Path=CommandParameter}">
+        <!-- Be sure to keep this in sync with the other button below -->
+        <Button Command="{Binding Command, ElementName=This}" CommandParameter="{Binding ElementName=This, Path=CommandParameter}"
+                Visibility="{c:Binding '!HasSubCommands', FalseToVisibility=Collapsed}">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto"/>
@@ -89,5 +109,41 @@
                 <TextBlock Grid.Column="2" Text="{Binding Name}"/>
             </Grid>
         </Button>
+
+        <!-- Be sure to keep this in sync with the other button above, minus the Flyout stuff -->
+        <ui:SplitButton Command="{Binding Command, ElementName=This}" CommandParameter="{Binding ElementName=This, Path=CommandParameter}"
+                        Visibility="{c:Binding HasSubCommands, FalseToVisibility=Collapsed}">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="{c:Binding 'HasParts ? 5 : 0'}"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <ui:FontIcon Grid.Column="0" FontSize="17" Glyph="{Binding IconGlyph}"/>
+                <TextBlock Grid.Column="2" Text="{Binding Name}"/>
+            </Grid>
+            
+            <ui:SplitButton.Flyout>
+                <ui:Flyout Placement="BottomEdgeAlignedRight" Opening="SubCommandsMenu_Opening">
+                    <ui:Flyout.FlyoutPresenterStyle>
+                        <Style TargetType="ui:FlyoutPresenter">
+                            <Setter Property="Padding" Value="0"/>
+                        </Style>
+                    </ui:Flyout.FlyoutPresenterStyle>
+
+                    <ItemsControl ItemsSource="{Binding SubCommands}" Margin="0" VerticalAlignment="Center">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel>
+                                    <Separator Visibility="{c:Binding HasSubCommandSeparator, FalseToVisibility=Collapsed}"/>
+                                    <views:CommandButton DataContext="{Binding}" IsSubCommand="True" ParentSplitButton="{Binding RelativeSource={RelativeSource AncestorType=ui:SplitButton}}"/>
+                                </StackPanel>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </ui:Flyout>
+            </ui:SplitButton.Flyout>
+        </ui:SplitButton>
     </Grid>
 </UserControl>

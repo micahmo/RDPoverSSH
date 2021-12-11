@@ -103,17 +103,8 @@ namespace RDPoverSSH.Models
 
         /// <inheritdoc/>
         public override string ToString() =>
-            $"SSH -> {(TunnelDirection == Direction.Incoming ? $"localhost:{TunnelPort}" : $"{TunnelEndpoint}:{TunnelPort}")}  -  " +
-            $"Connect -> {(ConnectionDirection == Direction.Incoming ? $"localhost:{ConnectionPort}" : $"{TunnelEndpoint}:{ConnectionPort}")}";
-
-        /// <summary>
-        /// Exposes the protected <see cref="ObservableObject.OnPropertyChanged(string?)"/>.
-        /// </summary>
-        /// <param name="propertyName"></param>
-        public void RaisePropertyChanged(string propertyName)
-        {
-            OnPropertyChanged(propertyName);
-        }
+            $"SSH -> {(TunnelDirection == Direction.Incoming ? $"{Values.MappedAddress(TunnelPort)}" : $"{TunnelEndpoint}:{TunnelPort}")}  -  " +
+            $"Connect -> {(ConnectionDirection == Direction.Incoming ? $"{Values.MappedAddress(ConnectionPort)}" : $"{TunnelEndpoint}:{ConnectionPort}")}";
     }
 
     /// <summary>

@@ -10,7 +10,6 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using CommandLine;
 using CommandLine.Text;
-using LinqKit;
 using RDPoverSSH.Arguments;
 using RDPoverSSH.Common;
 using RDPoverSSH.Controls;

@@ -1,13 +1,33 @@
-﻿using System.Windows.Input;
-using Microsoft.Toolkit.Mvvm.ComponentModel;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Windows.Input;
 
 namespace RDPoverSSH.ViewModels
 {
     /// <summary>
     /// The base class for commands
     /// </summary>
-    public abstract class CommandViewModelBase : ObservableObject
+    public abstract class CommandViewModelBase : MyObservableObject
     {
+        /// <summary>
+        /// Base constructor
+        /// </summary>
+        protected CommandViewModelBase()
+        {
+            PropertyChanged += (_, args) =>
+            {
+                if (args.PropertyName.Equals(nameof(Name)) || args.PropertyName.Equals(nameof(Description)))
+                {
+                    OnPropertyChanged(nameof(TooltipText));
+                }
+
+                if (args.PropertyName.Equals(nameof(SubCommands)))
+                {
+                    OnPropertyChanged(nameof(HasSubCommands));
+                }
+            };
+        }
+
         /// <summary>
         /// The user-friendly name of the command
         /// </summary>
@@ -31,6 +51,8 @@ namespace RDPoverSSH.ViewModels
         /// </remarks>
         public virtual string IconGlyph { get; set; }
 
+        public virtual bool HasSubCommandSeparator { get; } = false;
+
         /// <summary>
         /// Whether or not this command has both name and glyph
         /// </summary>
@@ -38,5 +60,14 @@ namespace RDPoverSSH.ViewModels
         /// Useful for binding
         /// </remarks>
         public bool HasParts => !string.IsNullOrWhiteSpace(Name) && !string.IsNullOrEmpty(IconGlyph);
+
+        /// <summary>
+        /// The text that should be displayed on the tooltip
+        /// </summary>
+        public string TooltipText => string.IsNullOrWhiteSpace(Description) ? Name : Description;
+
+        public virtual List<CommandViewModelBase> SubCommands { get; } = new List<CommandViewModelBase>();
+
+        public bool HasSubCommands => SubCommands.Any();
     }
 }
