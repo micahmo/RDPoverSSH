@@ -98,6 +98,13 @@ namespace RDPoverSSH.Models
         }
         private int _localTunnelPort = NetworkUtils.GetFreeTcpPort();
 
+        public bool IsInEditMode
+        {
+            get => _isInEditMode;
+            set => SetProperty(ref _isInEditMode, value);
+        }
+        private bool _isInEditMode = true;
+
         [BsonIgnore]
         public bool IsReverseTunnel => ConnectionDirection != TunnelDirection;
 

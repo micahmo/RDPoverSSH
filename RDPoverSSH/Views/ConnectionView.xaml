@@ -41,116 +41,149 @@
                 <Grid.RowDefinitions>
                     <RowDefinition Height="10"/>
                     <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="25"/>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="10"/>
                 </Grid.RowDefinitions>
 
                 <TextBox Grid.Column="1" Grid.Row="1" ui:ControlHelper.PlaceholderText="{x:Static properties:Resources.ConnectionNameHint}" 
                          Text="{Binding Model.Name, UpdateSourceTrigger=PropertyChanged, Delay=100}"/>
-                
+
+                <StackPanel Orientation="Horizontal" Grid.Column="0" Grid.ColumnSpan="5" Grid.Row="1" HorizontalAlignment="Center">
+                    <!-- Keep this in sync with the edit mode button -->
+                    <views:CommandButton DataContext="{Binding ConnectCommand}"
+                                         Visibility="{c:Binding '!DataContext.Model.IsInEditMode and DataContext.Model.ConnectionDirection == sharedModels:Direction.Outgoing', RelativeSource={RelativeSource AncestorType=views:ConnectionItem}, FalseToVisibility=Collapsed}"
+                                         IsEnabled="{c:Binding 'DataContext.SelectedConnectionPort != null', RelativeSource={RelativeSource AncestorType=views:ConnectionItem}}">
+                        <views:CommandButton.ToolTip>
+                            <TextBlock>
+                                <TextBlock.Text>
+                                    <MultiBinding StringFormat="{x:Static properties:Resources.ConnectButtonHint}">
+                                        <Binding Path="Value.Model.ConnectionPort" Source="{StaticResource BindingProxy}"/>
+                                        <Binding Path="Value.Model.LocalTunnelPort" Source="{StaticResource BindingProxy}"/>
+                                    </MultiBinding>
+                                </TextBlock.Text>
+                            </TextBlock>
+                        </views:CommandButton.ToolTip>
+                    </views:CommandButton>
+
+                    <views:CommandButton DataContext="{Binding TunnelStatusButton}" IsReadOnly="True" Visibility="{c:Binding '!DataContext.Model.IsInEditMode', RelativeSource={RelativeSource AncestorType=views:ConnectionItem}, FalseToVisibility=Collapsed}"/>
+                </StackPanel>
+
                 <StackPanel Grid.Column="3" Grid.Row="1" Orientation="Horizontal">
                     <views:CommandButton DataContext="{Binding ExportConnectionCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=views:ConnectionItem}, Path=DataContext}"/>
                     <views:CommandButton DataContext="{Binding DuplicateConnectionCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=views:ConnectionItem}, Path=DataContext}"/>
                     <views:CommandButton DataContext="{Binding DeleteConnectionCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=views:ConnectionItem}, Path=DataContext}"/>
                 </StackPanel>
 
-                <Border Grid.Column="1" Grid.ColumnSpan="3" Grid.Row="2" Margin="10"
-                        CornerRadius="2" >
-                    <Border.Background>
-                        <SolidColorBrush Color="{ui:StaticColor SystemListLowColor}"/>
-                    </Border.Background>
-                </Border>
+                <Expander Grid.Column="1" Grid.ColumnSpan="3" Grid.Row="2" IsExpanded="{Binding Model.IsInEditMode}" Margin="5">
+                    <Expander.Header>
+                        <!-- Need to use this width hack in order for the header content to stretch horizontally -->
+                        <!-- https://stackoverflow.com/a/680512/4206279 -->
+                        <Grid Width="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Expander}}, Path=ActualWidth}">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
 
-                <Grid Grid.Column="1" Grid.ColumnSpan="3" Grid.Row="3">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto"/>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="Auto"/>
-                        <ColumnDefinition Width="1.25*"/>
-                    </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0" Text="{x:Static properties:Resources.Settings}"/>
+                            <Border Grid.Column="1" CornerRadius="2" Margin="10,8,24,5" HorizontalAlignment="Stretch">
+                                <Border.Background>
+                                    <SolidColorBrush Color="{ui:StaticColor SystemListLowColor}"/>
+                                </Border.Background>
+                            </Border>
+                        </Grid>
+                    </Expander.Header>
 
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="5"/>
-                        <RowDefinition Height="Auto"/>
-                    </Grid.RowDefinitions>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="1.25*"/>
+                        </Grid.ColumnDefinitions>
 
-                    <TextBlock Grid.Column="1" Grid.Row="0" HorizontalAlignment="Center" FontWeight="Bold" Margin="5" Text="{Binding MachineName}"/>
-                    <TextBlock Grid.Column="3" Grid.Row="0" HorizontalAlignment="Center" FontWeight="Bold" Margin="5" Text="{Binding RemoteMachineName}"/>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="5"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
 
-                    <!-- Connection -->
-                    <Border Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="4" CornerRadius="3" BorderThickness="1">
-                        <Border.BorderBrush>
-                            <SolidColorBrush Color="{ui:StaticColor SystemChromeLowColor}"/>
-                        </Border.BorderBrush>
-                    </Border>
+                        <TextBlock Grid.Column="1" Grid.Row="0" HorizontalAlignment="Center" FontWeight="Bold" FontSize="12" Margin="5" Text="{Binding MachineName}"/>
+                        <TextBlock Grid.Column="3" Grid.Row="0" HorizontalAlignment="Center" FontWeight="Bold" FontSize="12" Margin="5" Text="{Binding RemoteMachineName}"/>
 
-                    <views:CommandButton Grid.Column="2" Grid.Row="1" DataContext="{Binding ToggleConnectionDirectionCommand}" />
-                    <TextBlock Grid.Column="0" Grid.Row="1" HorizontalAlignment="Left" FontWeight="Bold" Margin="5" VerticalAlignment="Center" Text="Connection"/>
+                        <!-- Connection -->
+                        <Border Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="4" CornerRadius="3" BorderThickness="1">
+                            <Border.BorderBrush>
+                                <SolidColorBrush Color="{ui:StaticColor SystemChromeLowColor}"/>
+                            </Border.BorderBrush>
+                        </Border>
 
-                    <!-- Connection settings -->
-                    <Grid Grid.Column="{c:Binding 'Model.ConnectionDirection == sharedModels:Direction.Incoming ? 1 : 3'}" Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Center">
-                        <ScrollViewer HorizontalScrollBarVisibility="Auto">
-                            <StackPanel Orientation="Horizontal">
-                                <ComboBox ui:ControlHelper.PlaceholderText="Destination Port" ItemsSource="{Binding DefaultConnectionPorts}" DisplayMemberPath="DisplayName"
+                        <views:CommandButton Grid.Column="2" Grid.Row="1" DataContext="{Binding ToggleConnectionDirectionCommand}" />
+                        <TextBlock Grid.Column="0" Grid.Row="1" HorizontalAlignment="Left" FontWeight="Bold" FontSize="12" Margin="5" VerticalAlignment="Center" Text="Connection"/>
+
+                        <!-- Connection settings -->
+                        <Grid Grid.Column="{c:Binding 'Model.ConnectionDirection == sharedModels:Direction.Incoming ? 1 : 3'}" Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Center">
+                            <ScrollViewer HorizontalScrollBarVisibility="Auto">
+                                <StackPanel Orientation="Horizontal">
+                                    <ComboBox ui:ControlHelper.PlaceholderText="Destination Port" ItemsSource="{Binding DefaultConnectionPorts}" DisplayMemberPath="DisplayName"
                                       SelectedItem="{Binding SelectedConnectionPort}"
                                       Visibility="{c:Binding '!(Model.TunnelDirection == sharedModels:Direction.Incoming and Model.ConnectionDirection == sharedModels:Direction.Incoming)', FalseToVisibility=Collapsed}"/>
-                                <ui:NumberBox Margin="5" SpinButtonPlacementMode="Inline" Value="{Binding Model.ConnectionPort}" SmallChange="1" LargeChange="1"
+                                    <ui:NumberBox Margin="5" SpinButtonPlacementMode="Inline" Value="{Binding Model.ConnectionPort}" SmallChange="1" LargeChange="1"
                                           Visibility="{c:Binding 'IsConnectionPortCustom and !(Model.TunnelDirection == sharedModels:Direction.Incoming and Model.ConnectionDirection == sharedModels:Direction.Incoming)', FalseToVisibility=Collapsed}"/>
-                                <views:CommandButton DataContext="{Binding ConnectCommand}"
-                                                 Visibility="{c:Binding 'DataContext.Model.ConnectionDirection == sharedModels:Direction.Outgoing', RelativeSource={RelativeSource AncestorType=views:ConnectionItem}, FalseToVisibility=Collapsed}"
-                                                 IsEnabled="{c:Binding 'DataContext.SelectedConnectionPort != null', RelativeSource={RelativeSource AncestorType=views:ConnectionItem}}">
-                                    <views:CommandButton.ToolTip>
-                                        <TextBlock>
-                                            <TextBlock.Text>
-                                                <MultiBinding StringFormat="{x:Static properties:Resources.ConnectButtonHint}">
-                                                    <Binding Path="Value.Model.ConnectionPort" Source="{StaticResource BindingProxy}"/>
-                                                    <Binding Path="Value.Model.LocalTunnelPort" Source="{StaticResource BindingProxy}"/>
-                                                </MultiBinding>
-                                            </TextBlock.Text>
-                                        </TextBlock>
-                                    </views:CommandButton.ToolTip>
-                                </views:CommandButton>
-                            </StackPanel>
-                        </ScrollViewer>
-                    </Grid>
+                                    <!-- Keep this in sync with the summary mode button -->
+                                    <views:CommandButton DataContext="{Binding ConnectCommand}"
+                                                         Visibility="{c:Binding 'DataContext.Model.ConnectionDirection == sharedModels:Direction.Outgoing', RelativeSource={RelativeSource AncestorType=views:ConnectionItem}, FalseToVisibility=Collapsed}"
+                                                         IsEnabled="{c:Binding 'DataContext.SelectedConnectionPort != null', RelativeSource={RelativeSource AncestorType=views:ConnectionItem}}">
+                                        <views:CommandButton.ToolTip>
+                                            <TextBlock>
+                                                <TextBlock.Text>
+                                                    <MultiBinding StringFormat="{x:Static properties:Resources.ConnectButtonHint}">
+                                                        <Binding Path="Value.Model.ConnectionPort" Source="{StaticResource BindingProxy}"/>
+                                                        <Binding Path="Value.Model.LocalTunnelPort" Source="{StaticResource BindingProxy}"/>
+                                                    </MultiBinding>
+                                                </TextBlock.Text>
+                                            </TextBlock>
+                                        </views:CommandButton.ToolTip>
+                                    </views:CommandButton>
+                                </StackPanel>
+                            </ScrollViewer>
+                        </Grid>
 
-                    <!-- Tunnel -->
-                    <Border Grid.Column="0" Grid.Row="3" Grid.ColumnSpan="4" CornerRadius="3" BorderThickness="1">
-                        <Border.BorderBrush>
-                            <SolidColorBrush Color="{ui:StaticColor SystemChromeLowColor}"/>
-                        </Border.BorderBrush>
-                    </Border>
+                        <!-- Tunnel -->
+                        <Border Grid.Column="0" Grid.Row="3" Grid.ColumnSpan="4" CornerRadius="3" BorderThickness="1">
+                            <Border.BorderBrush>
+                                <SolidColorBrush Color="{ui:StaticColor SystemChromeLowColor}"/>
+                            </Border.BorderBrush>
+                        </Border>
 
-                    <views:CommandButton Grid.Column="2" Grid.Row="3" DataContext="{Binding ToggleTunnelDirectionCommand}" />
-                    <TextBlock Grid.Column="0" Grid.Row="3" HorizontalAlignment="Left" FontWeight="Bold" Margin="5" VerticalAlignment="Center" Text="Tunnel"/>
+                        <views:CommandButton Grid.Column="2" Grid.Row="3" DataContext="{Binding ToggleTunnelDirectionCommand}" />
+                        <TextBlock Grid.Column="0" Grid.Row="3" HorizontalAlignment="Left" FontWeight="Bold" Margin="5" FontSize="12" VerticalAlignment="Center" Text="Tunnel"/>
 
-                    <!-- Tunnel settings -->
-                    <Grid Grid.Column="{c:Binding 'Model.TunnelDirection == sharedModels:Direction.Incoming ? 1 : 3'}" Grid.Row="3" VerticalAlignment="Center" HorizontalAlignment="Center">
-                        <ScrollViewer HorizontalScrollBarVisibility="Auto">
-                            <StackPanel Orientation="Horizontal">
-                                <TextBox ui:ControlHelper.PlaceholderText="Tunnel IP address or name" 
+                        <!-- Tunnel settings -->
+                        <Grid Grid.Column="{c:Binding 'Model.TunnelDirection == sharedModels:Direction.Incoming ? 1 : 3'}" Grid.Row="3" VerticalAlignment="Center" HorizontalAlignment="Center">
+                            <ScrollViewer HorizontalScrollBarVisibility="Auto">
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBox ui:ControlHelper.PlaceholderText="Tunnel IP address or name" 
                                      Text="{Binding Model.TunnelEndpoint, UpdateSourceTrigger=PropertyChanged, Delay=100}" 
                                      Visibility="{c:Binding 'Model.TunnelDirection == sharedModels:Direction.Outgoing', FalseToVisibility=Collapsed}"/>
-                                <ComboBox ui:ControlHelper.PlaceholderText="Tunnel Port" ItemsSource="{Binding DefaultTunnelPorts}" DisplayMemberPath="DisplayName"
+                                    <ComboBox ui:ControlHelper.PlaceholderText="Tunnel Port" ItemsSource="{Binding DefaultTunnelPorts}" DisplayMemberPath="DisplayName"
                                       SelectedItem="{Binding SelectedTunnelPort}"
                                       Visibility="{c:Binding 'Model.TunnelDirection == sharedModels:Direction.Outgoing', FalseToVisibility=Collapsed}"
                                       ToolTip="{x:Static properties:Resources.SshPublicPortHint}"/>
-                                <ui:NumberBox Margin="5" SpinButtonPlacementMode="Inline" Value="{Binding Model.TunnelPort}" SmallChange="1" LargeChange="1"
+                                    <ui:NumberBox Margin="5" SpinButtonPlacementMode="Inline" Value="{Binding Model.TunnelPort}" SmallChange="1" LargeChange="1"
                                       Visibility="{c:Binding 'IsTunnelPortCustom and Model.TunnelDirection == sharedModels:Direction.Outgoing', FalseToVisibility=Collapsed}"
                                       ToolTip="{x:Static properties:Resources.SshPublicPortHint}"/>
-                                <ui:NumberBox Margin="5" SpinButtonPlacementMode="Inline" Value="{Binding Model.LocalTunnelPort}" SmallChange="1" LargeChange="1"
+                                    <ui:NumberBox Margin="5" SpinButtonPlacementMode="Inline" Value="{Binding Model.LocalTunnelPort}" SmallChange="1" LargeChange="1"
                                           ToolTip="{Binding LocalTunnelPortDescription}"
                                           Visibility="{c:Binding 'Model.IsReverseTunnel', FalseToVisibility=Collapsed}"/>
-                                <views:CommandButton DataContext="{Binding ServerKeysCommand}"/>
-                                <views:CommandButton DataContext="{Binding TunnelStatusButton}" IsReadOnly="True"/>
-                            </StackPanel>
-                        </ScrollViewer>
-                    </Grid>
+                                    <views:CommandButton DataContext="{Binding ServerKeysCommand}"/>
+                                    <views:CommandButton DataContext="{Binding TunnelStatusButton}" IsReadOnly="True"/>
+                                </StackPanel>
+                            </ScrollViewer>
+                        </Grid>
 
-                </Grid>
+                    </Grid>
+                </Expander>
             </Grid>
         </Border>
     </Grid>
