@@ -4,7 +4,7 @@
     <!-- This project is a library, but needs to be Core for Harmony -->
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <RootNamespace>RDPoverSSH</RootNamespace>
-     <LangVersion>8</LangVersion>
+    <LangVersion>8</LangVersion>
   </PropertyGroup>
 
   <ItemGroup>
