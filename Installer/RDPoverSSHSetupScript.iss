@@ -88,8 +88,7 @@ begin
   begin
     if not OpenSSHServerInstalled then
       InstallOpenSSHServer;
-    if not OpenSSHClientInstalled then
-      InstallOpenSSHClient;
+    // We don't need to install OpenSSH Client because our service becomes the client using an SSH-compliant .NET library.
   end;
 end;
 
