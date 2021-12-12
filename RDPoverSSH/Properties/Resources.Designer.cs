@@ -214,6 +214,15 @@ namespace RDPoverSSH.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Attempt to detect and copy the public IP address of this machine&apos;s network..
+        /// </summary>
+        public static string CopyPublicIpAddressCommandDescription {
+            get {
+                return ResourceManager.GetString("CopyPublicIpAddressCommandDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Custom.
         /// </summary>
         public static string Custom {
@@ -318,6 +327,15 @@ namespace RDPoverSSH.Properties {
         public static string ExportCommandDescription {
             get {
                 return ResourceManager.GetString("ExportCommandDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Failed to detect the public IP address..
+        /// </summary>
+        public static string FailedToCopyPublicIp {
+            get {
+                return ResourceManager.GetString("FailedToCopyPublicIp", resourceCulture);
             }
         }
         
@@ -670,6 +688,15 @@ namespace RDPoverSSH.Properties {
         public static string SshStateUnknown {
             get {
                 return ResourceManager.GetString("SshStateUnknown", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Successfully copied the public IP address &apos;{0}&apos; to the clipboard..
+        /// </summary>
+        public static string SuccessfullyCopiedPublicIp {
+            get {
+                return ResourceManager.GetString("SuccessfullyCopiedPublicIp", resourceCulture);
             }
         }
         

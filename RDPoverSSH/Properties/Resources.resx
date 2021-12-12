@@ -315,4 +315,13 @@
 	<data name="UnexpectedError" xml:space="preserve">
 		<value>There was an unexpected error.</value>
 	</data>
+	<data name="CopyPublicIpAddressCommandDescription" xml:space="preserve">
+		<value>Attempt to detect and copy the public IP address of this machine's network.</value>
+	</data>
+	<data name="SuccessfullyCopiedPublicIp" xml:space="preserve">
+		<value>Successfully copied the public IP address '{0}' to the clipboard.</value>
+	</data>
+	<data name="FailedToCopyPublicIp" xml:space="preserve">
+		<value>Failed to detect the public IP address.</value>
+	</data>
 </root>

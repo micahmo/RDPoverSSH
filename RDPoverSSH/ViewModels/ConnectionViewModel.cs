@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Net.Http;
 using System.Threading.Tasks;
 using System.Windows;
 using Microsoft.Toolkit.Mvvm.ComponentModel;
@@ -259,6 +260,10 @@ namespace RDPoverSSH.ViewModels
             new GenericCommandViewModel(string.Empty, new RelayCommand(HandleServerKeys), Icons.Lock, ServerKeysDescription);
         private GenericCommandViewModel _serverKeysCommand;
 
+        public GenericCommandViewModel PublicIpCommand => _publicIpCommand ??=
+            new GenericCommandViewModel(string.Empty, new RelayCommand(CopyPublicIpAddress), Icons.Network, Resources.CopyPublicIpAddressCommandDescription);
+        private GenericCommandViewModel _publicIpCommand;
+
         private string ServerKeysDescription => Model.TunnelDirection switch
         {
             Direction.Incoming => Resources.ShowSshServerKey,
@@ -351,6 +356,40 @@ namespace RDPoverSSH.ViewModels
             {
                 await AcceptServerKeys();
             }
+        }
+
+        private async void CopyPublicIpAddress()
+        {
+            string ip = default;
+
+            try
+            {
+                ip = await new HttpClient().GetStringAsync("https://api.ipify.org");
+            }
+            catch
+            {
+                // Swallow
+            }
+
+            if (!string.IsNullOrEmpty(ip))
+            {
+                // Copy ip
+                Clipboard.SetText(ip);
+
+                // Indicate success
+                PublicIpCommand.Description = string.Format(Resources.SuccessfullyCopiedPublicIp, ip);
+                PublicIpCommand.IconGlyph = Icons.Check;
+            }
+            else
+            {
+                PublicIpCommand.Description = Resources.FailedToCopyPublicIp;
+                PublicIpCommand.IconGlyph = Icons.X;
+            }
+
+            // Wait, then restore the UI
+            await Task.Delay(TimeSpan.FromSeconds(5));
+            PublicIpCommand.Description = Resources.CopyPublicIpAddressCommandDescription;
+            PublicIpCommand.IconGlyph = Icons.Network;
         }
 
         private async Task ShowServerKeys()

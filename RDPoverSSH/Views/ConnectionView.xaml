@@ -177,6 +177,8 @@
                                           ToolTip="{Binding LocalTunnelPortDescription}"
                                           Visibility="{c:Binding 'Model.IsReverseTunnel', FalseToVisibility=Collapsed}"/>
                                     <views:CommandButton DataContext="{Binding ServerKeysCommand}"/>
+                                    <views:CommandButton DataContext="{Binding PublicIpCommand}" 
+                                                         Visibility="{c:Binding 'DataContext.Model.TunnelDirection == sharedModels:Direction.Incoming', RelativeSource={RelativeSource AncestorType=views:ConnectionItem}, FalseToVisibility=Collapsed}"/>
                                     <views:CommandButton DataContext="{Binding TunnelStatusButton}" IsReadOnly="True"/>
                                 </StackPanel>
                             </ScrollViewer>
