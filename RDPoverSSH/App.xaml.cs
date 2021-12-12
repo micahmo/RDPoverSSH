@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Threading;
 using CommandLine;
@@ -31,6 +33,16 @@ namespace RDPoverSSH
                     Environment.Exit(0);
                 });
             }
+            else
+            {
+                // See if we're already running, and if so focus that instance.
+                // But only do so if we're a UI instance and not a CLI instance (as indicated by no args).
+                if (Process.GetProcessesByName(Process.GetCurrentProcess().ProcessName).FirstOrDefault(p => p.Id != Process.GetCurrentProcess().Id) is { } existingProcess)
+                {
+                    SetForegroundWindow(existingProcess.MainWindowHandle);
+                    Environment.Exit(0);
+                }
+            }
 
             // Handle global exceptions
             DispatcherUnhandledException += App_DispatcherUnhandledException;
@@ -47,5 +59,12 @@ namespace RDPoverSSH
             // Don't kill the app
             e.Handled = true;
         }
+
+        #region P/Invoke
+
+        [DllImport("user32.dll")]
+        static extern bool SetForegroundWindow(IntPtr hWnd);
+
+        #endregion
     }
 }
