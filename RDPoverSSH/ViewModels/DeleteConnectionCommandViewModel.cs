@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System.IO;
+using System.Windows;
 using System.Windows.Input;
 using Microsoft.Toolkit.Mvvm.Input;
 using ModernWpf.Controls;
@@ -7,6 +8,7 @@ using RDPoverSSH.Controls;
 using RDPoverSSH.DataStore;
 using RDPoverSSH.Models;
 using RDPoverSSH.Properties;
+using RDPoverSSH.Utilities;
 
 namespace RDPoverSSH.ViewModels
 {
@@ -44,6 +46,12 @@ namespace RDPoverSSH.ViewModels
                 {
                     RootModel.Instance.Connections.Remove(connectionViewModel.Model);
                     DatabaseEngine.GetCollection<ConnectionModel>().Delete(connectionViewModel.Model.ObjectId);
+
+                    // Delete associated RDP Profiles
+                    foreach (FileInfo fileInfo in new DirectoryInfo(Values.ApplicationDataPath).GetFiles(RdpUtils.RdpConnectionFilesWildcard(connectionViewModel.Model.ObjectId)))
+                    {
+                        File.Delete(fileInfo.FullName);
+                    }
                 }
             }
         }
