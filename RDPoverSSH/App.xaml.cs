@@ -3,11 +3,15 @@ using System.Diagnostics;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Windows;
+using System.Windows.Forms;
 using System.Windows.Threading;
 using CommandLine;
+using Jot;
+using Jot.Storage;
 using RDPoverSSH.Arguments;
 using RDPoverSSH.Common;
 using RDPoverSSH.Controls;
+using Application = System.Windows.Application;
 
 namespace RDPoverSSH
 {
@@ -46,6 +50,14 @@ namespace RDPoverSSH
 
             // Handle global exceptions
             DispatcherUnhandledException += App_DispatcherUnhandledException;
+
+            // Set up state tracking
+            Tracker.Configure<Window>()
+                .Id(w => w.Name, SystemInformation.VirtualScreen.Size)
+                .Properties(w => new {w.Top, w.Width, w.Height, w.Left, w.WindowState})
+                .PersistOn(nameof(Window.Closing))
+                .StopTrackingOn(nameof(Window.Closing))
+                .WhenPersistingProperty((w, p) => p.Cancel = p.Property == nameof(w.WindowState) && w.WindowState == WindowState.Minimized);
         }
 
         public static bool HasArgs { get; private set; }
@@ -59,6 +71,8 @@ namespace RDPoverSSH
             // Don't kill the app
             e.Handled = true;
         }
+
+        public static Tracker Tracker { get; } = new Tracker(new JsonFileStore(Values.RoamingApplicationDataPath));
 
         #region P/Invoke
 

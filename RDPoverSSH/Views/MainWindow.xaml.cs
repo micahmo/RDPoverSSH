@@ -111,6 +111,15 @@ namespace RDPoverSSH.Views
             ToolTipService.ShowDurationProperty.OverrideMetadata(typeof(DependencyObject), new FrameworkPropertyMetadata((int)TimeSpan.FromSeconds(30).TotalMilliseconds));
         }
 
+        protected override void OnSourceInitialized(EventArgs e)
+        {
+            base.OnSourceInitialized(e);
+
+            // Need to do this hear instead of in the constructor to handle multi-window.
+            // https://github.com/anakic/Jot/issues/3
+            App.Tracker.Track(this);
+        }
+
         private void ShowMessage(ShowMessageArgument arg)
         {
             Loaded += async (_, __) =>
