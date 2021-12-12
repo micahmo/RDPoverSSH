@@ -130,8 +130,8 @@ Name: "{autodesktop}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; Tasks: de
 ; .NET Core Desktop Runtime
 Filename: "{tmp}\{#NetCoreRuntime}"; Flags: runascurrentuser; StatusMsg: "Installing .NET Core Desktop Runtime..."; Check: NetCoreRuntimeNotInstalled
 
-; runascurrentuser is needed to launch as admin -- we can remove this once admin operators (starting services) are in a Windows server
-Filename: "{app}\{#MyAppExeName}"; Description: "{cm:LaunchProgram,{#StringChange(MyAppName, '&', '&&')}}"; Flags: nowait postinstall skipifsilent runascurrentuser
+; Run the app, not as admin
+Filename: "{app}\{#MyAppExeName}"; Description: "{cm:LaunchProgram,{#StringChange(MyAppName, '&', '&&')}}"; Flags: nowait postinstall skipifsilent
 
 ; Uninstall the service (if there was a previous instance), then install/start the service. This one definitely needs to be done as admin
 Filename: "{#ServicePath}"; Parameters: "action:uninstall"; StatusMsg: "Stopping RDPoverSSH Service..."; Flags: runascurrentuser runhidden;
