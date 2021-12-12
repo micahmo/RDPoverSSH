@@ -1,4 +1,4 @@
-![logo](https://user-images.githubusercontent.com/7417301/142896950-c9dad594-ecb0-4b5a-b1d0-8865a71f2358.png)
+![logo](https://raw.githubusercontent.com/micahmo/RDPoverSSH/main/RDPoverSSH/Images/logo.png)
 
 
 # RDPoverSSH
