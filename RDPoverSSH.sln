@@ -10,13 +10,14 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		.gitignore = .gitignore
 		Directory.Build.props = Directory.Build.props
 		README.md = README.md
+		RDPoverSSH\VersionInfo.xml = RDPoverSSH\VersionInfo.xml
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RDPoverSSH.Service", "RDPoverSSH.Service\RDPoverSSH.Service.csproj", "{75117BCB-FDAB-46E2-91E7-ACCAF90270AF}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RDPoverSSH.DataModel", "RDPoverSSH.DataModel\RDPoverSSH.DataModel.csproj", "{6CAA5426-BFCA-4E1B-A902-C3D173890560}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RDPoverSSH.Common", "RDPoverSSH.Common\RDPoverSSH.Common.csproj", "{24D9A280-729D-4C39-8EB9-5ED1191F12CE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RDPoverSSH.Common", "RDPoverSSH.Common\RDPoverSSH.Common.csproj", "{24D9A280-729D-4C39-8EB9-5ED1191F12CE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

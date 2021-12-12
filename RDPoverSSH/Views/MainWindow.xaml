@@ -16,7 +16,8 @@
         Foreground="{DynamicResource SystemControlPageTextBaseHighBrush}"
         ui:ThemeManager.IsThemeAware="True"
         Closing="Window_Closing"
-        MouseDown="Window_MouseDown">
+        MouseDown="Window_MouseDown"
+        Icon="/Images/logo.ico">
 
     <Grid x:Name="RootControl">
         <Grid>

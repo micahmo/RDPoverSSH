@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using Bluegrams.Application;
 using CommandLine;
 using CommandLine.Text;
 using RDPoverSSH.Arguments;
@@ -15,6 +16,7 @@ using RDPoverSSH.Common;
 using RDPoverSSH.Controls;
 using RDPoverSSH.DataStore;
 using RDPoverSSH.Models;
+using RDPoverSSH.Utilities;
 using RDPoverSSH.ViewModels;
 
 namespace RDPoverSSH.Views
@@ -118,6 +120,9 @@ namespace RDPoverSSH.Views
             // Need to do this hear instead of in the constructor to handle multi-window.
             // https://github.com/anakic/Jot/issues/3
             App.Tracker.Track(this);
+
+            // Check for updates
+            new MyUpdateChecker(Values.VersionInfoUrl, this).CheckForUpdates(UpdateNotifyMode.Auto);
         }
 
         private void ShowMessage(ShowMessageArgument arg)

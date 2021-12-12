@@ -22,5 +22,6 @@
         public static readonly string Rename = "\xE8AC";
         public static readonly string Connect = "\xE761";
         public static readonly string Network = "\xEC27";
+        public static readonly string Info = "\xE946";
     }
 }

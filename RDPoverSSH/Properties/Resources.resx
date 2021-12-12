@@ -324,4 +324,7 @@
 	<data name="FailedToCopyPublicIp" xml:space="preserve">
 		<value>Failed to detect the public IP address.</value>
 	</data>
+	<data name="About" xml:space="preserve">
+		<value>About</value>
+	</data>
 </root>

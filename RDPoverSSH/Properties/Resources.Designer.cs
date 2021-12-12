@@ -61,6 +61,15 @@ namespace RDPoverSSH.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to About.
+        /// </summary>
+        public static string About {
+            get {
+                return ResourceManager.GetString("About", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Add RDP Profile.
         /// </summary>
         public static string AddRdpProfile {

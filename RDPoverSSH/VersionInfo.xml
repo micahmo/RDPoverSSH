@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Things to update: Version, Date, Version Notes -->
+<AppUpdate xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/micahmo/RDPoverSSH/master/RDPoverSSH/AppUpdate.xsd">
+  <Version>1.0.0.1</Version>
+  <ReleaseDate>2021-12-11</ReleaseDate>
+  <!-- Default download -->
+  <DownloadLink>https://github.com/micahmo/RDPoverSSH/releases/download/v1.0.0/RDPoverSSHSetup-1.0.0.exe</DownloadLink>
+  <DownloadFileName>RDPoverSSHSetup-1.0.0.exe</DownloadFileName>
+  <!-- Release notes --> 
+  <!-- To account for scrollbars, always add a newline at the end of version notes. Also add 4 spaces to the end of a long line. -->
+  <VersionNotes></VersionNotes>
+  <ReleaseNotes></ReleaseNotes>
+</AppUpdate>
