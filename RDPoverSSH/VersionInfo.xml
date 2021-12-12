@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <!-- Things to update: Version, Date, Version Notes -->
 <AppUpdate xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-           xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/micahmo/RDPoverSSH/master/RDPoverSSH/AppUpdate.xsd">
+           xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/micahmo/RDPoverSSH/main/RDPoverSSH/AppUpdate.xsd">
   <Version>1.0.0.1</Version>
   <ReleaseDate>2021-12-11</ReleaseDate>
   <!-- Default download -->
