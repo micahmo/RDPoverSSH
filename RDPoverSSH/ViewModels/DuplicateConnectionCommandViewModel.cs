@@ -1,8 +1,9 @@
-﻿using System.Windows;
-using System.Windows.Input;
+﻿using System.Windows.Input;
+using LiteDB;
 using Microsoft.Toolkit.Mvvm.Input;
 using RDPoverSSH.Common;
-using RDPoverSSH.Controls;
+using RDPoverSSH.DataStore;
+using RDPoverSSH.Models;
 using RDPoverSSH.Properties;
 
 namespace RDPoverSSH.ViewModels
@@ -28,11 +29,24 @@ namespace RDPoverSSH.ViewModels
 
         #region Command
 
-        private async void DeleteConnectionItem(object param)
+        private void DeleteConnectionItem(object param)
         {
             if (param is ConnectionViewModel connectionViewModel)
             {
-                await MessageBoxHelper.Show("TODO", "TODO", MessageBoxButton.OK);
+                BsonMapper bsonMapper = new BsonMapper();
+                
+                // Deep clone via serialization
+                ConnectionModel duplicateConnection = bsonMapper.Deserialize<ConnectionModel>(bsonMapper.Serialize(connectionViewModel.Model));
+                
+                // Clear ObjectID so LiteDB sees this as a new object
+                duplicateConnection.ObjectId = default;
+                
+                // Reset the tunnel port so that it is not shared with any other connection
+                duplicateConnection.LocalTunnelPort = NetworkUtils.GetFreeTcpPort();
+                
+                // Add and save
+                RootModel.Instance.Connections.Add(duplicateConnection);
+                DatabaseEngine.GetCollection<ConnectionModel>().Insert(duplicateConnection);
             }
         }
 
