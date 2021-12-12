@@ -42,6 +42,9 @@ namespace RDPoverSSH.ViewModels
         private ICommand _command;
 
         /// <inheritdoc/>
+        public override string IconGlyph => Icons.Connect;
+
+        /// <inheritdoc/>
         public override List<CommandViewModelBase> SubCommands => _connection.SelectedConnectionPort == PortViewModel.RdpPort
             ? new Func<List<CommandViewModelBase>>(() =>
             {
