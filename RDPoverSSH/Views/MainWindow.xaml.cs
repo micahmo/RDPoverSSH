@@ -117,12 +117,15 @@ namespace RDPoverSSH.Views
         {
             base.OnSourceInitialized(e);
 
-            // Need to do this hear instead of in the constructor to handle multi-window.
-            // https://github.com/anakic/Jot/issues/3
-            App.Tracker.Track(this);
+            if (!App.HasArgs) // Don't do any state tracking or update checking in CLI mode
+            {
+                // Need to do this hear instead of in the constructor to handle multi-window.
+                // https://github.com/anakic/Jot/issues/3
+                App.Tracker.Track(this);
 
-            // Check for updates
-            new MyUpdateChecker(Values.VersionInfoUrl, this).CheckForUpdates(UpdateNotifyMode.Auto);
+                // Check for updates
+                new MyUpdateChecker(Values.VersionInfoUrl, this).CheckForUpdates(UpdateNotifyMode.Auto);
+            }
         }
 
         private void ShowMessage(ShowMessageArgument arg)
