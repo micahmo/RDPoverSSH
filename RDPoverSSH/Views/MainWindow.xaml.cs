@@ -43,7 +43,7 @@ namespace RDPoverSSH.Views
 
                 RootControl.Visibility = Visibility.Hidden;
                 Width = 500;
-                Height = 500;
+                Height = 525;
                 return;
             }
 
