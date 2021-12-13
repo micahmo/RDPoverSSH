@@ -64,10 +64,8 @@
 
             <TextBlock Grid.Row="2" Margin="25,10,0,0" FontStyle="Oblique" FontSize="15" 
                        Text="{Binding Model.Filter, StringFormat={x:Static properties:Resources.NoConnectionsMatchFilter}}"
-                       Visibility="{c:Binding ShowNoResultsHint, FalseToVisibility=Collapsed}">
-                <TextBlock.Foreground>
-                    <SolidColorBrush Color="{ui:StaticColor SystemBaseMediumColor}"/>
-                </TextBlock.Foreground>
+                       Visibility="{c:Binding ShowNoResultsHint, FalseToVisibility=Collapsed}"
+                       Foreground="{DynamicResource SystemControlBackgroundBaseMediumBrush}">
             </TextBlock>
 
             <ScrollViewer Grid.Row="2">

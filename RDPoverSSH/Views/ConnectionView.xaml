@@ -24,11 +24,7 @@
             <ColumnDefinition Width="15"/>
         </Grid.ColumnDefinitions>
 
-        <Border Grid.Column="1" BorderThickness="1" CornerRadius="3">
-            <Border.BorderBrush>
-                <SolidColorBrush Color="{ui:StaticColor SystemListLowColor}"/>
-            </Border.BorderBrush>
-
+        <Border Grid.Column="1" BorderThickness="1" CornerRadius="3" BorderBrush="{DynamicResource SystemControlBackgroundListLowBrush}">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="10"/>
@@ -85,11 +81,7 @@
                             </Grid.ColumnDefinitions>
 
                             <TextBlock Grid.Column="0" Text="{x:Static properties:Resources.Settings}"/>
-                            <Border Grid.Column="1" CornerRadius="2" Margin="10,8,24,5" HorizontalAlignment="Stretch">
-                                <Border.Background>
-                                    <SolidColorBrush Color="{ui:StaticColor SystemListLowColor}"/>
-                                </Border.Background>
-                            </Border>
+                            <Border Grid.Column="1" CornerRadius="2" Margin="10,8,24,5" HorizontalAlignment="Stretch" Background="{DynamicResource SystemControlBackgroundListLowBrush}"/>
                         </Grid>
                     </Expander.Header>
 
@@ -112,11 +104,7 @@
                         <TextBlock Grid.Column="3" Grid.Row="0" HorizontalAlignment="Center" FontWeight="Bold" FontSize="12" Margin="5" Text="{Binding RemoteMachineName}"/>
 
                         <!-- Connection -->
-                        <Border Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="4" CornerRadius="3" BorderThickness="1">
-                            <Border.BorderBrush>
-                                <SolidColorBrush Color="{ui:StaticColor SystemChromeLowColor}"/>
-                            </Border.BorderBrush>
-                        </Border>
+                        <Border Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="4" CornerRadius="3" BorderThickness="1" BorderBrush="{DynamicResource SystemControlPageBackgroundChromeLowBrush}"/>
 
                         <views:CommandButton Grid.Column="2" Grid.Row="1" DataContext="{Binding ToggleConnectionDirectionCommand}" />
                         <TextBlock Grid.Column="0" Grid.Row="1" HorizontalAlignment="Left" FontWeight="Bold" FontSize="12" Margin="5" VerticalAlignment="Center" Text="Connection"/>
@@ -150,12 +138,8 @@
                         </Grid>
 
                         <!-- Tunnel -->
-                        <Border Grid.Column="0" Grid.Row="3" Grid.ColumnSpan="4" CornerRadius="3" BorderThickness="1">
-                            <Border.BorderBrush>
-                                <SolidColorBrush Color="{ui:StaticColor SystemChromeLowColor}"/>
-                            </Border.BorderBrush>
-                        </Border>
-
+                        <Border Grid.Column="0" Grid.Row="3" Grid.ColumnSpan="4" CornerRadius="3" BorderThickness="1" BorderBrush="{DynamicResource SystemControlPageBackgroundChromeLowBrush}"/>
+                        
                         <views:CommandButton Grid.Column="2" Grid.Row="3" DataContext="{Binding ToggleTunnelDirectionCommand}" />
                         <TextBlock Grid.Column="0" Grid.Row="3" HorizontalAlignment="Left" FontWeight="Bold" Margin="5" FontSize="12" VerticalAlignment="Center" Text="Tunnel"/>
 

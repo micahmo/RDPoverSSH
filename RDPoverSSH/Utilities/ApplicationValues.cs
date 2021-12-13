@@ -5,6 +5,6 @@ namespace RDPoverSSH.Utilities
 {
     public static class ApplicationValues
     {
-        public static readonly Color SystemBaseHighColor = (Color)Application.Current.Resources["SystemBaseHighColor"];
+        public static Color SystemBaseHighColor => (Color)Application.Current.Resources["SystemBaseHighColor"];
     }
 }

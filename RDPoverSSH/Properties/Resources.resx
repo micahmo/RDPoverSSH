@@ -327,4 +327,10 @@
 	<data name="About" xml:space="preserve">
 		<value>About</value>
 	</data>
+	<data name="ApplicationSettingsCategory" xml:space="preserve">
+		<value>Application Settings</value>
+	</data>
+	<data name="DarkModeSettingName" xml:space="preserve">
+		<value>Use dark mode</value>
+	</data>
 </root>

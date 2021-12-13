@@ -274,7 +274,7 @@ namespace RDPoverSSH.ViewModels
             _ => default
         };
 
-        public (string Description, string Glyph, Color Color) TunnelStatusInfo
+        public (string Description, string Glyph, Color? Color) TunnelStatusInfo
         {
             get
             {
@@ -282,7 +282,7 @@ namespace RDPoverSSH.ViewModels
                 {
                     Direction.Outgoing => Status switch
                     {
-                        TunnelStatus.Unknown => (Resources.UnknownTunnelStatus, Icons.Question, ApplicationValues.SystemBaseHighColor),
+                        TunnelStatus.Unknown => (Resources.UnknownTunnelStatus, Icons.Question, null),
                         TunnelStatus.Disconnected => (Resources.DisconnectedTunnelStatus, Icons.X, Colors.Red),
                         TunnelStatus.Connected => (Resources.ConnectedTunnelStatus, Icons.Check, Colors.Green),
                         _ => default
@@ -293,7 +293,7 @@ namespace RDPoverSSH.ViewModels
                         TunnelStatus.Connected => Model.IsReverseTunnel 
                             ? (string.Format(Resources.SshServerReverseTunnelRunning, Model.LocalTunnelPort), Icons.Check, Colors.Green) 
                             : (string.Format(Resources.SshServerRunning, SshUtils.GetConfigValue("Port", 23, includeCommented: true)), Icons.Check, Colors.Green),
-                        TunnelStatus.Unknown => (Resources.SshStateUnknown, Icons.Question, ApplicationValues.SystemBaseHighColor),
+                        TunnelStatus.Unknown => (Resources.SshStateUnknown, Icons.Question, null),
                         TunnelStatus.Partial => (string.Format(Resources.SshServerRunningNoReverseTunnel, SshUtils.GetConfigValue("Port", 23, includeCommented: true), Model.LocalTunnelPort), Icons.Warning, Colors.Goldenrod),
                         _ => default
                     },

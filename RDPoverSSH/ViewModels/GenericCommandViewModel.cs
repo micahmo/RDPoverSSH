@@ -52,13 +52,5 @@ namespace RDPoverSSH.ViewModels
             set => SetProperty(ref _iconGlyph, value);
         }
         private string _iconGlyph;
-
-        /// <inheritdoc/>
-        public override Color IconColor
-        {
-            get => _iconColor;
-            set => SetProperty(ref _iconColor, value);
-        }
-        private Color _iconColor = ApplicationValues.SystemBaseHighColor;
     }
 }

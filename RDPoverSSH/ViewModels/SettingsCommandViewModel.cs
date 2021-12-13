@@ -2,6 +2,7 @@
 using Microsoft.Toolkit.Mvvm.Input;
 using RDPoverSSH.Common;
 using RDPoverSSH.Properties;
+using RDPoverSSH.Views;
 
 namespace RDPoverSSH.ViewModels
 {
@@ -26,7 +27,10 @@ namespace RDPoverSSH.ViewModels
 
         #region Commands
 
-        private void SettingsCommand() { }
+        private async void SettingsCommand()
+        {
+            await new SettingsDialog().ShowAsync();
+        }
 
         #endregion
     }

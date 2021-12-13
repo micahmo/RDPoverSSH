@@ -106,6 +106,15 @@ namespace RDPoverSSH.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Application Settings.
+        /// </summary>
+        public static string ApplicationSettingsCategory {
+            get {
+                return ResourceManager.GetString("ApplicationSettingsCategory", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Cancel.
         /// </summary>
         public static string Cancel {
@@ -237,6 +246,15 @@ namespace RDPoverSSH.Properties {
         public static string Custom {
             get {
                 return ResourceManager.GetString("Custom", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use dark mode.
+        /// </summary>
+        public static string DarkModeSettingName {
+            get {
+                return ResourceManager.GetString("DarkModeSettingName", resourceCulture);
             }
         }
         

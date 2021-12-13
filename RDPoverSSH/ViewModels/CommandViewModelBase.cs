@@ -3,6 +3,7 @@ using System.Linq;
 using System.Windows.Input;
 using System.Windows.Media;
 using RDPoverSSH.Utilities;
+using RDPoverSSH.ViewModels.Settings;
 
 namespace RDPoverSSH.ViewModels
 {
@@ -28,6 +29,8 @@ namespace RDPoverSSH.ViewModels
                     OnPropertyChanged(nameof(HasSubCommands));
                 }
             };
+
+            GlobalSettings.DarkModeSetting.ApplicationThemeChanged += (_, __) => OnPropertyChanged(nameof(IconColor));
         }
 
         /// <summary>
@@ -56,7 +59,12 @@ namespace RDPoverSSH.ViewModels
         /// <summary>
         /// The color of the icon
         /// </summary>
-        public virtual Color IconColor { get; set; } = ApplicationValues.SystemBaseHighColor;
+        public Color? IconColor
+        {
+            get => _iconColor ?? ApplicationValues.SystemBaseHighColor;
+            set => SetProperty(ref _iconColor, value);
+        }
+        private Color? _iconColor;
 
         public virtual bool HasSubCommandSeparator { get; } = false;
 
