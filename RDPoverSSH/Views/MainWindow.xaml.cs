@@ -42,7 +42,6 @@ namespace RDPoverSSH.Views
                     });
 
                 RootControl.Visibility = Visibility.Hidden;
-                WindowStyle = WindowStyle.None;
                 Width = 500;
                 Height = 500;
                 return;
@@ -138,7 +137,7 @@ namespace RDPoverSSH.Views
                     try
                     {
                         string privateKeyText = await File.ReadAllTextAsync(Values.OurPrivateKeyFilePath);
-                        await MessageBoxHelper.ShowCopyableText(Properties.Resources.SshPrivateKeyDescription, Properties.Resources.SshServerKeyHeading, privateKeyText, monospace: true);
+                        await MessageBoxHelper.ShowCopyableText(Properties.Resources.SshPrivateKeyDescription, Properties.Resources.SshServerKeyHeading, privateKeyText, monospace: true, standalone: true);
                     }
                     catch (Exception)
                     {
@@ -163,7 +162,7 @@ namespace RDPoverSSH.Views
                 {
                     try
                     {
-                        string privateKey = await MessageBoxHelper.ShowPastableText(Properties.Resources.PasteSshServerPrivateKey, Properties.Resources.SshServerKeyHeading, monospace: true);
+                        string privateKey = await MessageBoxHelper.ShowPastableText(Properties.Resources.PasteSshServerPrivateKey, Properties.Resources.SshServerKeyHeading, monospace: true, standalone: true);
                         if (!string.IsNullOrEmpty(privateKey))
                         {
                             FileUtils.CreateFileWithSecureAcl(Values.ClientServerPrivateKeyFilePath(args.ConnectionId));

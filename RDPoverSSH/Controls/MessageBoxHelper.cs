@@ -14,6 +14,8 @@ namespace RDPoverSSH.Controls
     /// </summary>
     public static class MessageBoxHelper
     {
+        #region Public methods
+
         /// <summary>
         /// Show a MessageBox with the given options
         /// </summary>
@@ -54,6 +56,93 @@ namespace RDPoverSSH.Controls
             return contentDialog.ShowAsync();
         }
 
+        /// <summary>
+        /// Show a message box from which the can copy prepopulated text
+        /// </summary>
+        public static async Task ShowCopyableText(string message, string title, string textBlock, bool monospace = false, bool standalone = false)
+        {
+            var stackPanel = GetTextBlockContent(message, textBlock, monospace, readOnly: true, out _);
+
+            ContentDialog contentDialog = new ContentDialog
+            {
+                Title = title,
+                Content = stackPanel,
+                DefaultButton = ContentDialogButton.Primary,
+                PrimaryButtonText = Resources.Copy,
+                CloseButtonText = Resources.Close
+            };
+
+            if (standalone)
+            {
+                contentDialog.BorderThickness = new Thickness(0);
+                contentDialog.IsShadowEnabled = false;
+            }
+
+            if (await contentDialog.ShowAsync() == ContentDialogResult.Primary)
+            {
+                Clipboard.SetText(textBlock);
+            }
+        }
+
+        /// <summary>
+        /// Show a message box into which the user can paste text and save
+        /// </summary>
+        public static async Task<string> ShowPastableText(string message, string title, bool monospace = false, bool standalone = false)
+        {
+            var stackPanel = GetTextBlockContent(message, string.Empty, monospace, readOnly: false, out var flowDocument);
+
+            ContentDialog contentDialog = new ContentDialog
+            {
+                Title = title,
+                Content = stackPanel,
+                DefaultButton = ContentDialogButton.Primary,
+                PrimaryButtonText = Resources.Save,
+                CloseButtonText = Resources.Cancel
+            };
+
+            if (standalone)
+            {
+                contentDialog.BorderThickness = new Thickness(0);
+                contentDialog.IsShadowEnabled = false;
+            }
+
+            if (await contentDialog.ShowAsync() == ContentDialogResult.Primary)
+            {
+                return new TextRange(flowDocument.ContentStart, flowDocument.ContentEnd).Text;
+            }
+
+            return default;
+        }
+
+        /// <summary>
+        /// Show a message box into which the user can enter a single line of input
+        /// </summary>
+        public static async Task<(string Text, ContentDialogResult Result)> ShowInputBox(string message, string title, string initialInput = default)
+        {
+            var stackPanel = GetTextBoxContent(message, initialInput, out var textBox);
+
+            ContentDialog contentDialog = new ContentDialog
+            {
+                Title = title,
+                Content = stackPanel,
+                DefaultButton = ContentDialogButton.Primary,
+                PrimaryButtonText = Resources.Save,
+                CloseButtonText = Resources.Cancel
+            };
+
+            contentDialog.Loaded += (_, __) =>
+            {
+                Dispatcher.CurrentDispatcher.BeginInvoke(() => textBox.Focus());
+            };
+
+            var res = await contentDialog.ShowAsync();
+            return (textBox.Text, res);
+        }
+
+        #endregion
+
+        #region Private methods
+
         private static FrameworkElement GetTextBlockContent(string message, string textBlock, bool monospace, bool readOnly, out FlowDocument document)
         {
             StackPanel stackPanel = new StackPanel();
@@ -70,7 +159,7 @@ namespace RDPoverSSH.Controls
                 VerticalScrollBarVisibility = ScrollBarVisibility.Auto,
                 // This is needed in order for the vertical scrollbar to appear
                 Height = 300,
-                Margin = new Thickness(0, 5, 0, 5),
+                Margin = new Thickness(0, 5, 0, 5)
             };
 
             if (monospace)
@@ -111,66 +200,6 @@ namespace RDPoverSSH.Controls
             return stackPanel;
         }
 
-        public static async Task ShowCopyableText(string message, string title, string textBlock, bool monospace = false)
-        {
-            var stackPanel = GetTextBlockContent(message, textBlock, monospace, readOnly: true, out _);
-
-            ContentDialog contentDialog = new ContentDialog
-            {
-                Title = title,
-                Content = stackPanel,
-                DefaultButton = ContentDialogButton.Primary,
-                PrimaryButtonText = Resources.Copy,
-                CloseButtonText = Resources.Close
-            };
-
-            if (await contentDialog.ShowAsync() == ContentDialogResult.Primary)
-            {
-                Clipboard.SetText(textBlock);
-            }
-        }
-
-        public static async Task<string> ShowPastableText(string message, string title, bool monospace = false)
-        {
-            var stackPanel = GetTextBlockContent(message, string.Empty, monospace, readOnly: false, out var flowDocument);
-
-            ContentDialog contentDialog = new ContentDialog
-            {
-                Title = title,
-                Content = stackPanel,
-                DefaultButton = ContentDialogButton.Primary,
-                PrimaryButtonText = Resources.Save,
-                CloseButtonText = Resources.Cancel
-            };
-
-            if (await contentDialog.ShowAsync() == ContentDialogResult.Primary)
-            {
-                return new TextRange(flowDocument.ContentStart, flowDocument.ContentEnd).Text;
-            }
-
-            return default;
-        }
-
-        public static async Task<(string Text, ContentDialogResult Result)> ShowInputBox(string message, string title, string initialInput = default)
-        {
-            var stackPanel = GetTextBoxContent(message, initialInput, out var textBox);
-
-            ContentDialog contentDialog = new ContentDialog
-            {
-                Title = title,
-                Content = stackPanel,
-                DefaultButton = ContentDialogButton.Primary,
-                PrimaryButtonText = Resources.Save,
-                CloseButtonText = Resources.Cancel
-            };
-
-            contentDialog.Loaded += (_, __) =>
-            {
-                Dispatcher.CurrentDispatcher.BeginInvoke(() => textBox.Focus());
-            };
-
-            var res = await contentDialog.ShowAsync();
-            return (textBox.Text, res);
-        }
+        #endregion
     }
 }
