@@ -68,7 +68,7 @@ namespace RDPoverSSH.ViewModels
         {
             new AboutCommandViewModel(),
             new SettingsCommandViewModel(),
-            new ImportConnectionCommandViewModel(),
+            //new ImportConnectionCommandViewModel(),
             new NewConnectionCommandViewModel()
         };
 

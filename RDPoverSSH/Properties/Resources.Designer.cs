@@ -331,7 +331,7 @@ namespace RDPoverSSH.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Export connection (for importing on target machine).
+        ///   Looks up a localized string similar to Export connection.
         /// </summary>
         public static string ExportCommandDescription {
             get {
