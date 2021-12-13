@@ -105,7 +105,11 @@
                     <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
 
-                <ui:FontIcon Grid.Column="0" FontSize="17" Glyph="{Binding IconGlyph}"/>
+                <ui:FontIcon Grid.Column="0" FontSize="17" Glyph="{Binding IconGlyph}">
+                    <ui:FontIcon.Foreground>
+                        <SolidColorBrush Color="{Binding IconColor}"/>
+                    </ui:FontIcon.Foreground>
+                </ui:FontIcon>
                 <TextBlock Grid.Column="2" Text="{Binding Name}"/>
             </Grid>
         </Button>
@@ -120,7 +124,11 @@
                     <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
 
-                <ui:FontIcon Grid.Column="0" FontSize="17" Glyph="{Binding IconGlyph}"/>
+                <ui:FontIcon Grid.Column="0" FontSize="17" Glyph="{Binding IconGlyph}">
+                    <ui:FontIcon.Foreground>
+                        <SolidColorBrush Color="{Binding IconColor}"/>
+                    </ui:FontIcon.Foreground>
+                </ui:FontIcon>
                 <TextBlock Grid.Column="2" Text="{Binding Name}"/>
             </Grid>
             

@@ -7,6 +7,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Media;
 using Microsoft.Toolkit.Mvvm.ComponentModel;
 using Microsoft.Toolkit.Mvvm.Input;
 using RDPoverSSH.Arguments;
@@ -15,6 +16,7 @@ using RDPoverSSH.Controls;
 using RDPoverSSH.DataStore;
 using RDPoverSSH.Models;
 using RDPoverSSH.Properties;
+using RDPoverSSH.Utilities;
 
 namespace RDPoverSSH.ViewModels
 {
@@ -131,6 +133,7 @@ namespace RDPoverSSH.ViewModels
             var tunnelStatusInfo = TunnelStatusInfo;
             TunnelStatusButton.Description = tunnelStatusInfo.Description;
             TunnelStatusButton.IconGlyph = tunnelStatusInfo.Glyph;
+            TunnelStatusButton.IconColor = tunnelStatusInfo.Color;
         }
 
         #endregion
@@ -271,7 +274,7 @@ namespace RDPoverSSH.ViewModels
             _ => default
         };
 
-        public (string Description, string Glyph) TunnelStatusInfo
+        public (string Description, string Glyph, Color Color) TunnelStatusInfo
         {
             get
             {
@@ -279,19 +282,19 @@ namespace RDPoverSSH.ViewModels
                 {
                     Direction.Outgoing => Status switch
                     {
-                        TunnelStatus.Unknown => (Resources.UnknownTunnelStatus, Icons.Question),
-                        TunnelStatus.Disconnected => (Resources.DisconnectedTunnelStatus, Icons.X),
-                        TunnelStatus.Connected => (Resources.ConnectedTunnelStatus, Icons.Check),
+                        TunnelStatus.Unknown => (Resources.UnknownTunnelStatus, Icons.Question, ApplicationValues.SystemBaseHighColor),
+                        TunnelStatus.Disconnected => (Resources.DisconnectedTunnelStatus, Icons.X, Colors.Red),
+                        TunnelStatus.Connected => (Resources.ConnectedTunnelStatus, Icons.Check, Colors.Green),
                         _ => default
                     },
                     Direction.Incoming => Status switch
                     {
-                        TunnelStatus.Disconnected => (Resources.SshServerNotRunning, Icons.X),
+                        TunnelStatus.Disconnected => (Resources.SshServerNotRunning, Icons.X, Colors.Red),
                         TunnelStatus.Connected => Model.IsReverseTunnel 
-                            ? (string.Format(Resources.SshServerReverseTunnelRunning, Model.LocalTunnelPort), Icons.Check) 
-                            : (string.Format(Resources.SshServerRunning, SshUtils.GetConfigValue("Port", 23, includeCommented: true)), Icons.Check),
-                        TunnelStatus.Unknown => (Resources.SshStateUnknown, Icons.Question),
-                        TunnelStatus.Partial => (string.Format(Resources.SshServerRunningNoReverseTunnel, SshUtils.GetConfigValue("Port", 23, includeCommented: true), Model.LocalTunnelPort), Icons.Warning),
+                            ? (string.Format(Resources.SshServerReverseTunnelRunning, Model.LocalTunnelPort), Icons.Check, Colors.Green) 
+                            : (string.Format(Resources.SshServerRunning, SshUtils.GetConfigValue("Port", 23, includeCommented: true)), Icons.Check, Colors.Green),
+                        TunnelStatus.Unknown => (Resources.SshStateUnknown, Icons.Question, ApplicationValues.SystemBaseHighColor),
+                        TunnelStatus.Partial => (string.Format(Resources.SshServerRunningNoReverseTunnel, SshUtils.GetConfigValue("Port", 23, includeCommented: true), Model.LocalTunnelPort), Icons.Warning, Colors.Goldenrod),
                         _ => default
                     },
                     _ => default

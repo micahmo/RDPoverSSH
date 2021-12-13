@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Input;
+using System.Windows.Media;
+using RDPoverSSH.Utilities;
 
 namespace RDPoverSSH.ViewModels
 {
@@ -50,6 +52,11 @@ namespace RDPoverSSH.ViewModels
         /// <see href="https://docs.microsoft.com/en-us/windows/apps/design/style/segoe-ui-symbol-font"/>
         /// </remarks>
         public virtual string IconGlyph { get; set; }
+
+        /// <summary>
+        /// The color of the icon
+        /// </summary>
+        public virtual Color IconColor { get; set; } = ApplicationValues.SystemBaseHighColor;
 
         public virtual bool HasSubCommandSeparator { get; } = false;
 
