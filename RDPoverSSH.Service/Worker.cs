@@ -54,19 +54,25 @@ namespace RDPoverSSH.Service
         {
             while (!_cancellationToken.IsCancellationRequested)
             {
+                _skipWait = false;
+
                 try
                 {
                     DoSshServerPoll();
                     DoSshClientPoll();
                     DoClean();
+                    FixCommonProblems();
                 }
                 catch (Exception ex)
                 {
                     EventLog.WriteEntry($"RDPoverSSH encountered an error: {ex}", EventLogEntryType.Error);
                 }
 
-                // As opposed to Task.Delay, this doesn't throw an exception when the cancellation is set
-                await Task.Run(() => Thread.Sleep(TimeSpan.FromSeconds(5)), _cancellationToken.Token);
+                if (!_skipWait)
+                {
+                    // As opposed to Task.Delay, this doesn't throw an exception when the cancellation is set
+                    await Task.Run(() => Thread.Sleep(TimeSpan.FromSeconds(5)), _cancellationToken.Token);
+                }
             }
         }
 
@@ -396,12 +402,35 @@ namespace RDPoverSSH.Service
             return true;
         }
 
+        private void FixCommonProblems()
+        {
+            // Handle incoming tunnels needing fixing -- just restart sshd
+            if (DatabaseEngine.GetCollection<ConnectionModel>().Find(c => c.IsFixRequested && c.TunnelDirection == Direction.Incoming).Any())
+            {
+                // Kill all sshd processes
+                foreach (Process sshdProcess in Process.GetProcessesByName(_sshServiceName))
+                {
+                    sshdProcess.Kill();
+                }
+
+                _skipWait = true;
+            }
+
+            // Handle outgoing tunnels needing fixing, kill each client
+            foreach (var connection in DatabaseEngine.GetCollection<ConnectionModel>().Find(c => c.IsFixRequested && c.TunnelDirection == Direction.Outgoing).ToList())
+            {
+                DeleteClient(connection.ObjectId);
+                _skipWait = true;
+            }
+        }
+
         #endregion
 
         #region Private fields
 
         private readonly ServiceController _sshServiceController = new ServiceController(_sshServiceName);
         private readonly Dictionary<int, SshClient> _sshClients = new Dictionary<int, SshClient>();
+        private bool _skipWait;
 
         #endregion
 

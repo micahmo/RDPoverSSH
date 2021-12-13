@@ -23,5 +23,6 @@
         public static readonly string Connect = "\xE761";
         public static readonly string Network = "\xEC27";
         public static readonly string Info = "\xE946";
+        public static readonly string Repair = "\xE90F";
     }
 }

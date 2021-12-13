@@ -123,9 +123,14 @@ namespace RDPoverSSH.ViewModels
                 || e.PropertyName.Equals(nameof(Model.LocalTunnelPort))
                 || e.PropertyName.Equals(nameof(Model.ConnectionPort)))
             {
-                Status = TunnelStatus.Unknown;
-                RemoteMachineName = Resources.RemoteComputer;
+                SetUnknownStatus();
             }
+        }
+
+        private void SetUnknownStatus()
+        {
+            Status = TunnelStatus.Unknown;
+            RemoteMachineName = Resources.RemoteComputer;
         }
 
         private void UpdateTunnelStatusInfo()
@@ -134,6 +139,10 @@ namespace RDPoverSSH.ViewModels
             TunnelStatusButton.Description = tunnelStatusInfo.Description;
             TunnelStatusButton.IconGlyph = tunnelStatusInfo.Glyph;
             TunnelStatusButton.IconColor = tunnelStatusInfo.Color;
+
+            FixCommonProblemsCommand.IconGlyph = Icons.Repair;
+            FixCommonProblemsCommand.Description = Resources.FixConnectionIssues;
+            Model.IsFixRequested = false;
         }
 
         #endregion
@@ -147,6 +156,10 @@ namespace RDPoverSSH.ViewModels
         public DuplicateConnectionCommandViewModel DuplicateConnectionCommand { get; } = new DuplicateConnectionCommandViewModel();
 
         public ExportConnectionCommandViewModel ExportConnectionCommand { get; } = new ExportConnectionCommandViewModel();
+
+        public GenericCommandViewModel FixCommonProblemsCommand => _fixCommonProblemsCommand ??=
+            new GenericCommandViewModel(string.Empty, new RelayCommand(FixCommonProblems), Icons.Repair, Resources.FixConnectionIssues);
+        private GenericCommandViewModel _fixCommonProblemsCommand;
 
         public GenericCommandViewModel ToggleConnectionDirectionCommand => _toggleConnectionDirectionCommand ??=
             new GenericCommandViewModel(string.Empty, new RelayCommand(ToggleConnectionDirection), ConnectionDirectionGlyph, ConnectionDirectionDescription);
@@ -499,6 +512,14 @@ namespace RDPoverSSH.ViewModels
             }
 
             return currentApplicationFilePath;
+        }
+
+        private void FixCommonProblems()
+        {
+            SetUnknownStatus();
+            FixCommonProblemsCommand.IconGlyph = Icons.Check;
+            FixCommonProblemsCommand.Description = Resources.ConnectionIssuesBeingFixed;
+            Model.IsFixRequested = true;
         }
 
         #endregion

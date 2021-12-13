@@ -205,6 +205,15 @@ namespace RDPoverSSH.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Common connections issues are being fixed....
+        /// </summary>
+        public static string ConnectionIssuesBeingFixed {
+            get {
+                return ResourceManager.GetString("ConnectionIssuesBeingFixed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Enter connection name....
         /// </summary>
         public static string ConnectionNameHint {
@@ -372,6 +381,15 @@ namespace RDPoverSSH.Properties {
         public static string FilterHint {
             get {
                 return ResourceManager.GetString("FilterHint", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Fix common connection issues.
+        /// </summary>
+        public static string FixConnectionIssues {
+            get {
+                return ResourceManager.GetString("FixConnectionIssues", resourceCulture);
             }
         }
         

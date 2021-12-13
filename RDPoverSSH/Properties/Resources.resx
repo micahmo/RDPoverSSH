@@ -333,4 +333,10 @@
 	<data name="DarkModeSettingName" xml:space="preserve">
 		<value>Use dark mode</value>
 	</data>
+	<data name="FixConnectionIssues" xml:space="preserve">
+		<value>Fix common connection issues</value>
+	</data>
+	<data name="ConnectionIssuesBeingFixed" xml:space="preserve">
+		<value>Common connections issues are being fixed...</value>
+	</data>
 </root>

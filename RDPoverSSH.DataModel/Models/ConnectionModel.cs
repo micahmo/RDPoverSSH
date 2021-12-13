@@ -105,6 +105,13 @@ namespace RDPoverSSH.Models
         }
         private bool _isInEditMode = true;
 
+        public bool IsFixRequested
+        {
+            get => _isFixRequested;
+            set => SetProperty(ref _isFixRequested, value);
+        }
+        private bool _isFixRequested;
+
         [BsonIgnore]
         public bool IsReverseTunnel => ConnectionDirection != TunnelDirection;
 
