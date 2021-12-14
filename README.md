@@ -22,8 +22,8 @@ Download the latest release [here](https://github.com/micahmo/RDPoverSSH/release
 Read the scenario descriptions to determine which is most applicable. Note that the following is true in both cases:
  - Port forwarding must be configured on one end or the other.
  - It is recommended to begin configuration on whichever machine will be the SSH server because...
-   a. You will have to copy the SSH server private key to the SSH client.
-   b. In case of a reverse tunnel, you will have copy the server local tunnel port to the client.
+   1. You will have to copy the SSH server private key to the SSH client.
+   2. In case of a reverse tunnel, you will have copy the server local tunnel port to the client.
 
 #### Scenario 1 (Normal Tunnel)
 
