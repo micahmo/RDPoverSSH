@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Windows;
@@ -28,14 +29,26 @@ namespace RDPoverSSH
             if (e.Args.Any())
             {
                 HasArgs = true;
-                ParsedArgs = Parser.Default.ParseArguments<ShowMessageArgument, SaveKeyArgument, DeleteUserArgument>(e.Args);
+                ParsedArgs = Parser.Default.ParseArguments<
+                    ShowMessageArgument,
+                    SaveKeyArgument,
+                    DeleteUserArgument,
+                    SetSshdSettingArgument
+                >(e.Args);
 
                 // Handle some args here, without ever going to the UI
-                ParsedArgs.WithParsed<DeleteUserArgument>(arg =>
-                {
-                    UserUtils.DeleteWindowsUser(arg.Username);
-                    Environment.Exit(0);
-                });
+                ParsedArgs
+                    .WithParsed<DeleteUserArgument>(arg =>
+                    {
+                        UserUtils.DeleteWindowsUser(arg.Username);
+                        Environment.Exit(0);
+                    })
+                    .WithParsed<SetSshdSettingArgument>(arg =>
+                    {
+
+                        SshUtils.SetConfigValue(arg.Name, arg.Value);
+                        Environment.Exit(0);
+                    });
             }
             else
             {
@@ -73,6 +86,18 @@ namespace RDPoverSSH
         }
 
         public static Tracker Tracker { get; } = new Tracker(new JsonFileStore(Values.RoamingApplicationDataPath));
+
+        public static string GetApplicationFilePath()
+        {
+            string currentApplicationFilePath = new Uri(System.Reflection.Assembly.GetExecutingAssembly().CodeBase ?? string.Empty).LocalPath;
+            string currentApplicationFolderPath = Path.GetDirectoryName(currentApplicationFilePath) ?? string.Empty;
+            if (Path.GetExtension(currentApplicationFilePath).Equals(".dll", StringComparison.OrdinalIgnoreCase))
+            {
+                currentApplicationFilePath = Path.Combine(currentApplicationFolderPath, $"{Path.GetFileNameWithoutExtension(currentApplicationFilePath)}.exe");
+            }
+
+            return currentApplicationFilePath;
+        }
 
         #region P/Invoke
 

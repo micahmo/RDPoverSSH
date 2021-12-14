@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Linq;
-using RDPoverSSH.DataStore;
 using RDPoverSSH.Models;
 
 namespace RDPoverSSH.ViewModels.Settings
@@ -48,36 +46,41 @@ namespace RDPoverSSH.ViewModels.Settings
     }
 
     /// <inheritdoc/>
-    public class SettingViewModel<T> : SettingViewModelBase
+    public class SettingViewModel<TValue, TSetting> : SettingViewModelBase where TSetting : MyObservableObject, ISettingModel
     {
         #region Constructor
 
-        public SettingViewModel(Guid settingModelGuid, string category, string name, T defaultValue, string description = default)
+        public SettingViewModel(TSetting setting, string category, string name, TValue defaultValue, string description = default)
         {
-            _model = DatabaseEngine.GetCollection<SettingModel>().Find(setting => setting.Guid == settingModelGuid).FirstOrDefault() ?? new SettingModel {Guid = settingModelGuid};
+            _model = setting;
             Name = name;
             Category = category;
             Description = description;
             _defaultValue = defaultValue;
+
+            setting.PropertyChanged += (_, __) =>
+            {
+                OnPropertyChanged(nameof(Value));
+            };
         }
 
         #endregion
 
         #region SettingViewModelBase members
 
-        public override bool IsBinary => typeof(bool).IsAssignableFrom(typeof(T));
+        public override bool IsBinary => typeof(bool).IsAssignableFrom(typeof(TValue));
 
         #endregion
 
         #region Public properties
 
-        public T Value
+        public TValue Value
         {
             get
             {
                 try
                 {
-                    return (T)Convert.ChangeType(_model.Value, typeof(T));
+                    return (TValue)Convert.ChangeType(_model.Value, typeof(TValue));
                 }
                 catch
                 {
@@ -87,7 +90,7 @@ namespace RDPoverSSH.ViewModels.Settings
             set
             {
                 _model.Value = value.ToString();
-                DatabaseEngine.GetCollection<SettingModel>().Upsert(_model);
+                _model.Save();
                 OnPropertyChanged(nameof(Value));
             }
         }
@@ -96,8 +99,8 @@ namespace RDPoverSSH.ViewModels.Settings
 
         #region Private fields
 
-        private readonly SettingModel _model;
-        private readonly T _defaultValue;
+        private readonly TSetting _model;
+        private readonly TValue _defaultValue;
 
         #endregion
     }

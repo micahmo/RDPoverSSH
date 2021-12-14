@@ -42,7 +42,7 @@
                                                     <ColumnDefinition Width="Auto"/>
                                                 </Grid.ColumnDefinitions>
 
-                                                <TextBlock Grid.Column="0" Text="{Binding Name}"/>
+                                                <TextBlock Grid.Column="0" Text="{Binding Name}" VerticalAlignment="Center"/>
                                                 <controls:ToggleSwitch Grid.Column="2" IsOn="{Binding Value}" Visibility="{c:Binding IsBinary, FalseToVisibility=Collapsed}"
                                                                        OnContent="" OffContent="" Width="45"/>
                                             </Grid>

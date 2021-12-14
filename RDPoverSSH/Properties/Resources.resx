@@ -339,4 +339,13 @@
 	<data name="ConnectionIssuesBeingFixed" xml:space="preserve">
 		<value>Common connections issues are being fixed...</value>
 	</data>
+	<data name="SshServerSettings" xml:space="preserve">
+		<value>SSH Server Settings</value>
+	</data>
+	<data name="AllowPasswordAuthentication" xml:space="preserve">
+		<value>Allow Password Authentication</value>
+	</data>
+	<data name="AllowPasswordAuthenticationSettingDescription" xml:space="preserve">
+		<value>Turning this setting on allows SSH clients to connect to this computer using only username and password (default). Turning it off requires private key authentication (recommended).</value>
+	</data>
 </root>

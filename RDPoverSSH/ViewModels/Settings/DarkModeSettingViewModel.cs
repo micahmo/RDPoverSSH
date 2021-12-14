@@ -1,14 +1,18 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Linq;
 using System.Windows.Threading;
 using ModernWpf;
+using RDPoverSSH.DataStore;
 using RDPoverSSH.Properties;
 
 namespace RDPoverSSH.ViewModels.Settings
 {
-    public class DarkModeSetting : SettingViewModel<bool>
+    public class DarkModeSetting : SettingViewModel<bool, PersistentSettingModel>
     {
-        public DarkModeSetting() : base(new Guid("7A6271C3-E244-4A2E-AB51-68B046C221D0"), Resources.ApplicationSettingsCategory, Resources.DarkModeSettingName, defaultValue: false)
+        public DarkModeSetting() : base(
+            DatabaseEngine.GetCollection<PersistentSettingModel>().Find(setting => setting.Guid == DarkModeSettingGuid).FirstOrDefault() ?? new PersistentSettingModel {Guid = DarkModeSettingGuid},
+            Resources.ApplicationSettingsCategory, Resources.DarkModeSettingName, defaultValue: false)
         {
         }
 
@@ -23,5 +27,7 @@ namespace RDPoverSSH.ViewModels.Settings
         }
 
         public event EventHandler ApplicationThemeChanged;
+
+        private static readonly Guid DarkModeSettingGuid = new Guid("7A6271C3-E244-4A2E-AB51-68B046C221D0");
     }
 }

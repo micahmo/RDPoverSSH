@@ -106,6 +106,24 @@ namespace RDPoverSSH.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Allow Password Authentication.
+        /// </summary>
+        public static string AllowPasswordAuthentication {
+            get {
+                return ResourceManager.GetString("AllowPasswordAuthentication", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Turning this setting on allows SSH clients to connect to this computer using only username and password (default). Turning it off requires private key authentication (recommended)..
+        /// </summary>
+        public static string AllowPasswordAuthenticationSettingDescription {
+            get {
+                return ResourceManager.GetString("AllowPasswordAuthenticationSettingDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Application Settings.
         /// </summary>
         public static string ApplicationSettingsCategory {
@@ -724,6 +742,15 @@ namespace RDPoverSSH.Properties {
         public static string SshServerRunningNoReverseTunnel {
             get {
                 return ResourceManager.GetString("SshServerRunningNoReverseTunnel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to SSH Server Settings.
+        /// </summary>
+        public static string SshServerSettings {
+            get {
+                return ResourceManager.GetString("SshServerSettings", resourceCulture);
             }
         }
         

@@ -305,7 +305,7 @@ namespace RDPoverSSH.ViewModels
                         TunnelStatus.Disconnected => (Resources.SshServerNotRunning, Icons.X, Colors.Red),
                         TunnelStatus.Connected => Model.IsReverseTunnel 
                             ? (string.Format(Resources.SshServerReverseTunnelRunning, Model.LocalTunnelPort), Icons.Check, Colors.Green) 
-                            : (string.Format(Resources.SshServerRunning, SshUtils.GetConfigValue("Port", 23, includeCommented: true)), Icons.Check, Colors.Green),
+                            : (string.Format(Resources.SshServerRunning, SshUtils.GetConfigValue("Port", 22, includeCommented: true)), Icons.Check, Colors.Green),
                         TunnelStatus.Unknown => (Resources.SshStateUnknown, Icons.Question, null),
                         TunnelStatus.Partial => (string.Format(Resources.SshServerRunningNoReverseTunnel, SshUtils.GetConfigValue("Port", 23, includeCommented: true), Model.LocalTunnelPort), Icons.Warning, Colors.Goldenrod),
                         _ => default
@@ -416,7 +416,7 @@ namespace RDPoverSSH.ViewModels
                 {
                     StartInfo = new ProcessStartInfo
                     {
-                        FileName = GetApplicationFilePath(),
+                        FileName = App.GetApplicationFilePath(),
                         Arguments = $"showmessage {ShowMessageArgument.SshServerPrivateKey}",
                         // Run as admin
                         Verb = "runas",
@@ -455,7 +455,7 @@ namespace RDPoverSSH.ViewModels
             {
                 StartInfo = new ProcessStartInfo
                 {
-                    FileName = GetApplicationFilePath(),
+                    FileName = App.GetApplicationFilePath(),
                     Arguments = $"savekey {SaveKeyArgument.SshServerPrivateKey} {Model.ObjectId}",
                     // Run as admin
                     Verb = "runas",
@@ -500,18 +500,6 @@ namespace RDPoverSSH.ViewModels
             {
                 await MessageBoxHelper.ShowCopyableText(string.Format(Resources.ErrorConnectingToTunnel, Model.TunnelEndpoint, Model.TunnelPort), Resources.ConnectionError, $"{LastError}{Environment.NewLine}");
             }
-        }
-
-        private static string GetApplicationFilePath()
-        {
-            string currentApplicationFilePath = new Uri(System.Reflection.Assembly.GetExecutingAssembly().CodeBase ?? string.Empty).LocalPath;
-            string currentApplicationFolderPath = Path.GetDirectoryName(currentApplicationFilePath) ?? string.Empty;
-            if (Path.GetExtension(currentApplicationFilePath).Equals(".dll", StringComparison.OrdinalIgnoreCase))
-            {
-                currentApplicationFilePath = Path.Combine(currentApplicationFolderPath, $"{Path.GetFileNameWithoutExtension(currentApplicationFilePath)}.exe");
-            }
-
-            return currentApplicationFilePath;
         }
 
         private void FixCommonProblems()
