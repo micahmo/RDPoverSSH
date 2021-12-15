@@ -73,6 +73,11 @@ namespace RDPoverSSH.Models
         /// It indicates that that the SSH server is running,
         ///  but no reverse tunnel is detected on the expected LocalTunnelPort
         /// </summary>
-        Partial
+        Partial,
+
+        /// <summary>
+        /// This status is intended to indicate the SSH server not being fully installed
+        /// </summary>
+        Uninstalled
     }
 }

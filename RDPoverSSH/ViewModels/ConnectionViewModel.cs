@@ -308,6 +308,7 @@ namespace RDPoverSSH.ViewModels
                             : (string.Format(Resources.SshServerRunning, SshUtils.GetConfigValue("Port", 22, includeCommented: true)), Icons.Check, Colors.Green),
                         TunnelStatus.Unknown => (Resources.SshStateUnknown, Icons.Question, null),
                         TunnelStatus.Partial => (string.Format(Resources.SshServerRunningNoReverseTunnel, SshUtils.GetConfigValue("Port", 23, includeCommented: true), Model.LocalTunnelPort), Icons.Warning, Colors.Goldenrod),
+                        TunnelStatus.Uninstalled => (Resources.SshServiceNotInstalled, Icons.X, Colors.Red),
                         _ => default
                     },
                     _ => default

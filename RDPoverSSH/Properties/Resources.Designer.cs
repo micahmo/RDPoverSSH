@@ -755,6 +755,15 @@ namespace RDPoverSSH.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The SSH service could not be found. If you recently installed RDPoverSSH, please try restarting your computer..
+        /// </summary>
+        public static string SshServiceNotInstalled {
+            get {
+                return ResourceManager.GetString("SshServiceNotInstalled", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The state of the SSH server is currently unknown..
         /// </summary>
         public static string SshStateUnknown {

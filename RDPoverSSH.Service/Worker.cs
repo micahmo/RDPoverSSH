@@ -78,15 +78,25 @@ namespace RDPoverSSH.Service
 
         private void DoSshServerPoll()
         {
+            bool sshServerInstalled = true;
+
             if (DatabaseEngine.GetCollection<ConnectionModel>().Count(c => c.TunnelDirection == Direction.Incoming) > 0)
             {
                 // If we have at least one connection whose tunnel is incoming, we need to make sure ssh server is configured.
 
                 // First, make sure the server is running.
-                _sshServiceController.Refresh();
-                if (_sshServiceController.Status != ServiceControllerStatus.Running)
+                try
                 {
-                    _sshServiceController.Start();
+                    _sshServiceController.Refresh();
+                    if (_sshServiceController.Status != ServiceControllerStatus.Running)
+                    {
+                        _sshServiceController.Start();
+                    }
+                }
+                catch
+                {
+                    // Error loading the service. It must not be installed.
+                    sshServerInstalled = false;
                 }
 
                 // Check if we have our user
@@ -143,47 +153,55 @@ namespace RDPoverSSH.Service
                     Direction = Direction.Incoming
                 };
 
-                if (_sshServiceController.Status == ServiceControllerStatus.Running)
+                if (sshServerInstalled)
                 {
-                    if (connectionModel.IsReverseTunnel)
+                    if (_sshServiceController.Status == ServiceControllerStatus.Running)
                     {
-                        // For a reverse tunnel, we can check if we have a connection
-                        try
+                        if (connectionModel.IsReverseTunnel)
                         {
-                            var res = (Cli.Wrap("netstat").WithArguments("-ano") | Cli.Wrap("findstr").WithArguments($"\"\\[::1\\]:{connectionModel.LocalTunnelPort}\""))
-                                .WithValidation(CommandResultValidation.None)
-                                .ExecuteBufferedAsync().GetAwaiter().GetResult()
-                                .StandardOutput;
+                            // For a reverse tunnel, we can check if we have a connection
+                            try
+                            {
+                                var res = (Cli.Wrap("netstat").WithArguments("-ano") | Cli.Wrap("findstr").WithArguments($"\"\\[::1\\]:{connectionModel.LocalTunnelPort}\""))
+                                    .WithValidation(CommandResultValidation.None)
+                                    .ExecuteBufferedAsync().GetAwaiter().GetResult()
+                                    .StandardOutput;
 
-                            if (!string.IsNullOrEmpty(res) // See if we got any output from netstat after filtering through findstr.
-                                && int.TryParse(res.Split().LastOrDefault(s => !string.IsNullOrEmpty(s)), out int pid) // Parse the netstat output; the last non-empty column is the PID
-                                && Process.GetProcessById(pid).ProcessName.Equals(_sshServiceName)) // See if the PID holding this port is sshd
-                            {
-                                // We found the SSH server process listening on our LocalTunnelPort, so we're totally connected.
-                                connectionServiceModel.Status = TunnelStatus.Connected;
+                                if (!string.IsNullOrEmpty(res) // See if we got any output from netstat after filtering through findstr.
+                                    && int.TryParse(res.Split().LastOrDefault(s => !string.IsNullOrEmpty(s)), out int pid) // Parse the netstat output; the last non-empty column is the PID
+                                    && Process.GetProcessById(pid).ProcessName.Equals(_sshServiceName)) // See if the PID holding this port is sshd
+                                {
+                                    // We found the SSH server process listening on our LocalTunnelPort, so we're totally connected.
+                                    connectionServiceModel.Status = TunnelStatus.Connected;
+                                }
+                                else
+                                {
+                                    // We couldn't find the SSH server process listening on our LocalTunnelPort, so we're not totally connected.
+                                    connectionServiceModel.Status = TunnelStatus.Partial;
+                                }
                             }
-                            else
+                            catch
                             {
-                                // We couldn't find the SSH server process listening on our LocalTunnelPort, so we're not totally connected.
+                                // If there's any exception trying to get a process listening on our LocalTunnelPort, we can't prove that it's working.
                                 connectionServiceModel.Status = TunnelStatus.Partial;
                             }
                         }
-                        catch
+                        else
                         {
-                            // If there's any exception trying to get a process listening on our LocalTunnelPort, we can't prove that it's working.
-                            connectionServiceModel.Status = TunnelStatus.Partial;
+                            // Not a reverse tunnel, so all we can do is verify that sshd is running.
+                            connectionServiceModel.Status = TunnelStatus.Connected;
                         }
                     }
                     else
                     {
-                        // Not a reverse tunnel, so all we can do is verify that sshd is running.
-                        connectionServiceModel.Status = TunnelStatus.Connected;
+                        // SSH server isn't running.
+                        connectionServiceModel.Status = TunnelStatus.Disconnected;
                     }
                 }
                 else
                 {
-                    // SSH server isn't running.
-                    connectionServiceModel.Status = TunnelStatus.Disconnected;
+                    // SSH server isn't installed.
+                    connectionServiceModel.Status = TunnelStatus.Uninstalled;
                 }
 
                 // Update based on the changes we made

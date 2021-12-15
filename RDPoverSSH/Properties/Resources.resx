@@ -348,4 +348,7 @@
 	<data name="AllowPasswordAuthenticationSettingDescription" xml:space="preserve">
 		<value>Turning this setting on allows SSH clients to connect to this computer using only username and password (default). Turning it off requires private key authentication (recommended).</value>
 	</data>
+	<data name="SshServiceNotInstalled" xml:space="preserve">
+		<value>The SSH service could not be found. If you recently installed RDPoverSSH, please try restarting your computer.</value>
+	</data>
 </root>
