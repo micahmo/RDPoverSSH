@@ -162,19 +162,25 @@ namespace RDPoverSSH.Service
                             // For a reverse tunnel, we can check if we have a connection
                             try
                             {
-                                var res = (Cli.Wrap("netstat").WithArguments("-ano") | Cli.Wrap("findstr").WithArguments($"\"\\[::1\\]:{connectionModel.LocalTunnelPort}\""))
+                                var processes = (Cli.Wrap("netstat").WithArguments("-ano") | Cli.Wrap("findstr").WithArguments($"\"\\[::1\\]:{connectionModel.LocalTunnelPort}\""))
                                     .WithValidation(CommandResultValidation.None)
                                     .ExecuteBufferedAsync().GetAwaiter().GetResult()
-                                    .StandardOutput;
+                                    .StandardOutput.Split(new[] {Environment.NewLine}, StringSplitOptions.RemoveEmptyEntries);
 
-                                if (!string.IsNullOrEmpty(res) // See if we got any output from netstat after filtering through findstr.
-                                    && int.TryParse(res.Split().LastOrDefault(s => !string.IsNullOrEmpty(s)), out int pid) // Parse the netstat output; the last non-empty column is the PID
-                                    && Process.GetProcessById(pid).ProcessName.Equals(_sshServiceName)) // See if the PID holding this port is sshd
+                                bool foundSshd = false;
+                                foreach (string process in processes)
                                 {
-                                    // We found the SSH server process listening on our LocalTunnelPort, so we're totally connected.
-                                    connectionServiceModel.Status = TunnelStatus.Connected;
+                                    if (!string.IsNullOrEmpty(process) // See if we got any output from netstat after filtering through findstr.
+                                        && int.TryParse(process.Split().LastOrDefault(s => !string.IsNullOrEmpty(s)), out int pid) // Parse the netstat output; the last non-empty column is the PID
+                                        && Process.GetProcessById(pid).ProcessName.Equals(_sshServiceName)) // See if the PID holding this port is sshd
+                                    {
+                                        // We found the SSH server process listening on our LocalTunnelPort, so we're totally connected.
+                                        foundSshd = true;
+                                        connectionServiceModel.Status = TunnelStatus.Connected;
+                                    }
                                 }
-                                else
+
+                                if (!foundSshd)
                                 {
                                     // We couldn't find the SSH server process listening on our LocalTunnelPort, so we're not totally connected.
                                     connectionServiceModel.Status = TunnelStatus.Partial;
