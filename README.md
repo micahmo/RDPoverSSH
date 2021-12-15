@@ -41,6 +41,10 @@ See the [wiki](https://github.com/micahmo/RDPoverSSH/wiki) for full instructions
 
 ![image](https://user-images.githubusercontent.com/7417301/146233797-91029011-f427-45f0-a430-1110afa89168.png)
 
+### Dark Mode
+
+![image](https://user-images.githubusercontent.com/7417301/146233997-29b4c707-a31b-475a-905a-703313e03260.png)
+
 ## Requirements
 
 Requires Windows 10 or later.
