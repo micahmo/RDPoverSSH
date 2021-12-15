@@ -3,7 +3,7 @@
 <AppUpdate xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
            xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/micahmo/RDPoverSSH/main/RDPoverSSH/AppUpdate.xsd">
   <Version>1.0.0.1</Version>
-  <ReleaseDate>2021-12-11</ReleaseDate>
+  <ReleaseDate>2021-12-15</ReleaseDate>
   <!-- Default download -->
   <DownloadLink>https://github.com/micahmo/RDPoverSSH/releases/download/v1.0.0/RDPoverSSHSetup-1.0.0.exe</DownloadLink>
   <DownloadFileName>RDPoverSSHSetup-1.0.0.exe</DownloadFileName>

@@ -5,8 +5,8 @@
 #define MyAppExeName "RDPoverSSH.exe"
 #define NetCoreRuntimeVersion "3.1.21"
 #define NetCoreRuntime "windowsdesktop-runtime-" + NetCoreRuntimeVersion + "-win-x64.exe"
-;#define BuildConfig "Release"
-#define BuildConfig "Debug"
+#define BuildConfig "Release"
+;#define BuildConfig "Debug"
 #define ServicePath "{app}\Service\RDPoverSSH.Service.exe"
 
 [Setup]
