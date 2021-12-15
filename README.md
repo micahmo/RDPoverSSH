@@ -1,6 +1,5 @@
 ![logo](https://raw.githubusercontent.com/micahmo/RDPoverSSH/main/RDPoverSSH/Images/logo.png)
 
-![image](https://user-images.githubusercontent.com/7417301/146212019-262a83a5-1512-47c7-9f52-138792813d13.png)
 
 # RDPoverSSH
 
