@@ -269,10 +269,13 @@ namespace RDPoverSSH.Service
                             var connectionInfo = new ConnectionInfo(connectionModel.TunnelEndpoint, connectionModel.TunnelPort, Values.RdpOverSshWindowsUsername,
                                 new PrivateKeyAuthenticationMethod(Values.RdpOverSshWindowsUsername, new PrivateKeyFile(Values.ClientServerPrivateKeyFilePath(connectionModel.ObjectId))))
                             {
-                                Timeout = TimeSpan.FromSeconds(10)
+                                Timeout = TimeSpan.FromSeconds(10),
                             };
 
-                            SshClient client = new SshClient(connectionInfo);
+                            SshClient client = new SshClient(connectionInfo)
+                            {
+                                KeepAliveInterval = TimeSpan.FromSeconds(10)
+                            };
                             client.Connect();
 
                             connectionServiceModel.LastError = string.Empty;
