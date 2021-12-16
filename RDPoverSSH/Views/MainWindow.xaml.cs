@@ -18,6 +18,7 @@ using RDPoverSSH.DataStore;
 using RDPoverSSH.Models;
 using RDPoverSSH.Utilities;
 using RDPoverSSH.ViewModels;
+using RDPoverSSH.ViewModels.Settings;
 
 namespace RDPoverSSH.Views
 {
@@ -44,6 +45,10 @@ namespace RDPoverSSH.Views
                 RootControl.Visibility = Visibility.Hidden;
                 Width = 500;
                 Height = 525;
+
+                // Poke the dark mode setting so we get the right theme, even if we're not loading the main UI
+                var _ = GlobalSettings.DarkModeSetting;
+
                 return;
             }
 
