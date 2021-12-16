@@ -163,7 +163,7 @@ namespace RDPoverSSH.Service
                             // For a reverse tunnel, we can check if we have a connection
                             try
                             {
-                                var processes = (Cli.Wrap("netstat").WithArguments("-ano") | Cli.Wrap("findstr").WithArguments($"\"\\[::1\\]:{connectionModel.LocalTunnelPort}\""))
+                                var processes = (Cli.Wrap("netstat").WithArguments("-ano") | Cli.Wrap("findstr").WithArguments($"\"{IPAddress.Loopback}:{connectionModel.LocalTunnelPort}\""))
                                     .WithValidation(CommandResultValidation.None)
                                     .ExecuteBufferedAsync().GetAwaiter().GetResult()
                                     .StandardOutput.Split(new[] {Environment.NewLine}, StringSplitOptions.RemoveEmptyEntries);
