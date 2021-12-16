@@ -290,8 +290,8 @@ namespace RDPoverSSH.Service
                             // We're connected, now make a long-running connection to keep open the tunnel
                             ForwardedPort forwardedPort = connectionModel.IsReverseTunnel switch
                             {
-                                true => new ForwardedPortRemote(IPAddress.Loopback.ToString(), (uint)connectionModel.LocalTunnelPort, string.Empty, (uint)connectionModel.ConnectionPort),
-                                false => new ForwardedPortLocal(IPAddress.Loopback.ToString(), (uint)connectionModel.LocalTunnelPort, string.Empty, (uint)connectionModel.ConnectionPort)
+                                true => new ForwardedPortRemote(IPAddress.Loopback.ToString(), (uint)connectionModel.LocalTunnelPort, IPAddress.Loopback.ToString(), (uint)connectionModel.ConnectionPort),
+                                false => new ForwardedPortLocal(IPAddress.Loopback.ToString(), (uint)connectionModel.LocalTunnelPort, IPAddress.Loopback.ToString(), (uint)connectionModel.ConnectionPort)
                             };
 
                             client.AddForwardedPort(forwardedPort);
