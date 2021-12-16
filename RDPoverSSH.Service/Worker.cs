@@ -276,6 +276,11 @@ namespace RDPoverSSH.Service
                             {
                                 KeepAliveInterval = TimeSpan.FromSeconds(10)
                             };
+
+                            // Track the client immediately after instantiating (before connecting)
+                            // So that we can clean it up if anything goes wrong.
+                            _sshClients[connectionModel.ObjectId] = client;
+
                             client.Connect();
 
                             connectionServiceModel.LastError = string.Empty;
@@ -303,11 +308,12 @@ namespace RDPoverSSH.Service
                             // Get the hostname over SSH
                             string hostname = client.CreateCommand("hostname").Execute();
                             connectionServiceModel.RemoteMachineName = hostname;
-
-                            _sshClients[connectionModel.ObjectId] = client;
                         }
                         catch (Exception ex)
                         {
+                            // In case we got far enough to create a client but failed later (e.g., while port forwarding) clean up the client
+                            DeleteClient(connectionModel.ObjectId);
+
                             // Log
                             EventLog.WriteEntry($"There was an error creating the SSH client for connection \"{connectionModel}\": {ex}", EventLogEntryType.Warning);
 
