@@ -1,5 +1,5 @@
 #define MyAppName "RDPoverSSH"
-#define MyAppVersion "1.0.2"
+#define MyAppVersion "1.0.3"
 #define MyAppPublisher "Micah Morrison"
 #define MyAppURL "https://github.com/micahmo/RDPoverSSH"
 #define MyAppExeName "RDPoverSSH.exe"
