@@ -82,7 +82,7 @@
                             </Grid.ColumnDefinitions>
 
                             <TextBlock Grid.Column="0" Text="{x:Static properties:Resources.Settings}"/>
-                            <Border Grid.Column="1" CornerRadius="2" Margin="10,8,24,5" HorizontalAlignment="Stretch" Background="{DynamicResource SystemControlBackgroundListLowBrush}"/>
+                            <Border Grid.Column="1" CornerRadius="2" Margin="10,8,22,5" HorizontalAlignment="Stretch" Background="{DynamicResource SystemControlBackgroundListLowBrush}"/>
                         </Grid>
                     </Expander.Header>
 
