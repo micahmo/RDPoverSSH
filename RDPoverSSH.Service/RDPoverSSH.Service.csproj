@@ -9,7 +9,7 @@
 
   <ItemGroup>
     <PackageReference Include="PeterKottas.DotNetCore.WindowsService" Version="2.0.12" />
-    <PackageReference Include="SSH.NET" Version="2020.0.1" />
+    <PackageReference Include="SSH.NET" Version="2020.0.2" />
     <PackageReference Include="SshKeyGenerator" Version="1.1.40" />
     <PackageReference Include="System.Diagnostics.EventLog" Version="6.0.0" />
   </ItemGroup>
