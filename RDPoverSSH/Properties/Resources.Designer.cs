@@ -205,7 +205,7 @@ namespace RDPoverSSH.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Connect to port {0} on the remote machine via localhost:{1}.
+        ///   Looks up a localized string similar to Connect with RDP to port {0} on the remote machine via localhost:{1}.
         /// </summary>
         public static string ConnectButtonHint {
             get {
@@ -219,6 +219,15 @@ namespace RDPoverSSH.Properties {
         public static string ConnectedTunnelStatus {
             get {
                 return ResourceManager.GetString("ConnectedTunnelStatus", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Connect over HTTP(S) to port {0} on the remote machine via localhost:{1} in the browser.
+        /// </summary>
+        public static string ConnectInBrowserDescription {
+            get {
+                return ResourceManager.GetString("ConnectInBrowserDescription", resourceCulture);
             }
         }
         
@@ -264,6 +273,24 @@ namespace RDPoverSSH.Properties {
         public static string Copy {
             get {
                 return ResourceManager.GetString("Copy", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Copy connection address.
+        /// </summary>
+        public static string CopyConnectionAddress {
+            get {
+                return ResourceManager.GetString("CopyConnectionAddress", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Copy the connection address, {0}, to the clipboard.
+        /// </summary>
+        public static string CopyConnectionAddressDescription {
+            get {
+                return ResourceManager.GetString("CopyConnectionAddressDescription", resourceCulture);
             }
         }
         
@@ -561,6 +588,15 @@ namespace RDPoverSSH.Properties {
         public static string OK {
             get {
                 return ResourceManager.GetString("OK", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Open in browser.
+        /// </summary>
+        public static string OpenInBrowser {
+            get {
+                return ResourceManager.GetString("OpenInBrowser", resourceCulture);
             }
         }
         

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Windows;
 using System.Windows.Input;
 using Microsoft.Toolkit.Mvvm.Input;
 using ModernWpf.Controls;
@@ -45,10 +46,10 @@ namespace RDPoverSSH.ViewModels
         public override string IconGlyph => Icons.Connect;
 
         /// <inheritdoc/>
-        public override List<CommandViewModelBase> SubCommands => _connection.SelectedConnectionPort == PortViewModel.RdpPort
-            ? new Func<List<CommandViewModelBase>>(() =>
+        public override List<CommandViewModelBase> SubCommands =>
+            new Func<List<CommandViewModelBase>>(() =>
             {
-                List<CommandViewModelBase> rdpFiles = new List<CommandViewModelBase>();
+                List<CommandViewModelBase> commands = new List<CommandViewModelBase>();
 
                 foreach (FileInfo fileInfo in new DirectoryInfo(Values.ApplicationDataPath).GetFiles(RdpUtils.RdpConnectionFilesWildcard(_connection.Model.ObjectId)))
                 {
@@ -57,14 +58,16 @@ namespace RDPoverSSH.ViewModels
                     {
                         OnPropertyChanged(nameof(SubCommands));
                     };
-                    rdpFiles.Add(rdpConnectionProfileCommandViewModel);
+                    commands.Add(rdpConnectionProfileCommandViewModel);
                 }
 
-                rdpFiles.Add(new GenericCommandViewModel(Resources.AddRdpProfile, new RelayCommand(AddRdpProfile), Icons.Add, hasSubCommandSeparator: rdpFiles.Any()));
+                commands.Add(new GenericCommandViewModel(Resources.AddRdpProfile, new RelayCommand(AddRdpProfile), Icons.Add, hasSubCommandSeparator: commands.Any()));
 
-                return rdpFiles;
-            })()
-            : Enumerable.Empty<CommandViewModelBase>().ToList();
+                commands.Add(new GenericCommandViewModel(Resources.OpenInBrowser, new RelayCommand(ConnectInBrowser), Icons.Browser, string.Format(Resources.ConnectInBrowserDescription, _connection.Model.ConnectionPort, _connection.Model.LocalTunnelPort), hasSubCommandSeparator: true));
+                commands.Add(new GenericCommandViewModel(Resources.CopyConnectionAddress, new RelayCommand(CopyConnectionAddress), Icons.Copy, string.Format(Resources.CopyConnectionAddressDescription, Values.MappedAddress(_connection.Model.LocalTunnelPort)), hasSubCommandSeparator: false));
+
+                return commands;
+            })();
 
         #endregion
 
@@ -72,15 +75,7 @@ namespace RDPoverSSH.ViewModels
 
         private void Connect()
         {
-            if (_connection.SelectedConnectionPort == PortViewModel.RdpPort)
-            {
-                Process.Start(RdpUtils.MstscExecutable, $"/v:{Values.MappedAddress(_connection.Model.LocalTunnelPort)}");
-            }
-            else
-            {
-                // Open the mapped port in the browser (with the correct protocol).
-                Process.Start("explorer.exe", $"http{(_connection.SelectedConnectionPort == PortViewModel.HttpsPort ? "s" : string.Empty)}://{Values.MappedAddress(_connection.Model.LocalTunnelPort)}");
-            }
+            Process.Start(RdpUtils.MstscExecutable, $"/v:{Values.MappedAddress(_connection.Model.LocalTunnelPort)}");
         }
 
         private async void AddRdpProfile()
@@ -108,6 +103,17 @@ namespace RDPoverSSH.ViewModels
             await File.WriteAllTextAsync(newRdpConnectionFilePath, $"full address:s:{Values.MappedAddress(_connection.Model.LocalTunnelPort)}");
 
             Process.Start(RdpUtils.MstscExecutable, $"/edit \"{newRdpConnectionFilePath}\"");
+        }
+
+        private void ConnectInBrowser()
+        {
+            // Open the mapped port in the browser (with the correct protocol).
+            Process.Start("explorer.exe", $"http{(_connection.SelectedConnectionPort == PortViewModel.HttpsPort ? "s" : string.Empty)}://{Values.MappedAddress(_connection.Model.LocalTunnelPort)}");
+        }
+
+        private void CopyConnectionAddress()
+        {
+            Clipboard.SetText(Values.MappedAddress(_connection.Model.LocalTunnelPort));
         }
 
         #endregion

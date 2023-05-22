@@ -283,7 +283,7 @@
 		<value>localhost:{0} will be mapped to this port ({1}) on the remote machine.</value>
 	</data>
 	<data name="ConnectButtonHint" xml:space="preserve">
-		<value>Connect to port {0} on the remote machine via localhost:{1}</value>
+		<value>Connect with RDP to port {0} on the remote machine via localhost:{1}</value>
 	</data>
 	<data name="ErrorAccessingDatabase" xml:space="preserve">
 		<value>There was an error accessing the database configuration file. Shutting down.</value>
@@ -368,5 +368,17 @@
         </data>
         <data name="CollapseAllConnectionsToolTip" xml:space="preserve">
           <value>Hide settings for all connections</value>
+        </data>
+        <data name="OpenInBrowser" xml:space="preserve">
+          <value>Open in browser</value>
+        </data>
+        <data name="CopyConnectionAddress" xml:space="preserve">
+          <value>Copy connection address</value>
+        </data>
+        <data name="CopyConnectionAddressDescription" xml:space="preserve">
+          <value>Copy the connection address, {0}, to the clipboard</value>
+        </data>
+        <data name="ConnectInBrowserDescription" xml:space="preserve">
+          <value>Connect over HTTP(S) to port {0} on the remote machine via localhost:{1} in the browser</value>
         </data>
 </root>

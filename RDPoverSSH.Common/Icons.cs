@@ -31,5 +31,6 @@
         public static readonly string ChevronUp = "\xE70E";
         public static readonly string ExpandAll = "\xECCD";
         public static readonly string CollapseAll = "\xF165";
+        public static readonly string Browser = "\xE774";
     }
 }
