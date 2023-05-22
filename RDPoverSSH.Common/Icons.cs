@@ -3,6 +3,9 @@
     /// <summary>
     /// A collection of icon glyph identifiers
     /// </summary>
+    /// <remarks>
+    /// https://learn.microsoft.com/en-us/windows/apps/design/style/segoe-ui-symbol-font
+    /// </remarks>
     public static class Icons
     {
         public static readonly string RightArrow = "\xF0AF";
@@ -24,5 +27,9 @@
         public static readonly string Network = "\xEC27";
         public static readonly string Info = "\xE946";
         public static readonly string Repair = "\xE90F";
+        public static readonly string ChevronDown = "\xE70D";
+        public static readonly string ChevronUp = "\xE70E";
+        public static readonly string ExpandAll = "\xECCD";
+        public static readonly string CollapseAll = "\xF165";
     }
 }

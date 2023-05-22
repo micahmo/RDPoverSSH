@@ -357,4 +357,16 @@
         <data name="FilteredFromString" xml:space="preserve">
         	<value> (filtered from: {0})</value>
         </data>
+        <data name="HideSettings" xml:space="preserve">
+          <value>Hide settings</value>
+        </data>
+        <data name="ShowSettings" xml:space="preserve">
+          <value>Show settings</value>
+        </data>
+        <data name="ExpandAllConnectionsToolTip" xml:space="preserve">
+          <value>Show settings for all connections</value>
+        </data>
+        <data name="CollapseAllConnectionsToolTip" xml:space="preserve">
+          <value>Hide settings for all connections</value>
+        </data>
 </root>

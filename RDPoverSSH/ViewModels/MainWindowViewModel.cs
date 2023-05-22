@@ -67,6 +67,8 @@ namespace RDPoverSSH.ViewModels
         /// </summary>
         public List<CommandViewModelBase> Commands => new List<CommandViewModelBase>
         {
+            new ExpandAllConnectionsCommandViewModel(this),
+            new CollapseAllConnectionsCommandViewModel(this),
             new AboutCommandViewModel(),
             new SettingsCommandViewModel(),
             //new ImportConnectionCommandViewModel(),

@@ -169,6 +169,15 @@ namespace RDPoverSSH.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Hide settings for all connections.
+        /// </summary>
+        public static string CollapseAllConnectionsToolTip {
+            get {
+                return ResourceManager.GetString("CollapseAllConnectionsToolTip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Confirm.
         /// </summary>
         public static string Confirm {
@@ -385,6 +394,15 @@ namespace RDPoverSSH.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Show settings for all connections.
+        /// </summary>
+        public static string ExpandAllConnectionsToolTip {
+            get {
+                return ResourceManager.GetString("ExpandAllConnectionsToolTip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Export connection.
         /// </summary>
         public static string ExportCommandDescription {
@@ -426,6 +444,15 @@ namespace RDPoverSSH.Properties {
         public static string FixConnectionIssues {
             get {
                 return ResourceManager.GetString("FixConnectionIssues", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Hide settings.
+        /// </summary>
+        public static string HideSettings {
+            get {
+                return ResourceManager.GetString("HideSettings", resourceCulture);
             }
         }
         
@@ -669,6 +696,15 @@ namespace RDPoverSSH.Properties {
         public static string Settings {
             get {
                 return ResourceManager.GetString("Settings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Show settings.
+        /// </summary>
+        public static string ShowSettings {
+            get {
+                return ResourceManager.GetString("ShowSettings", resourceCulture);
             }
         }
         

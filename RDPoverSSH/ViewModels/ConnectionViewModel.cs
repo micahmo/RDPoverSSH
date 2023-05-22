@@ -7,6 +7,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Input;
 using System.Windows.Media;
 using Microsoft.Toolkit.Mvvm.ComponentModel;
 using Microsoft.Toolkit.Mvvm.Input;
@@ -17,6 +18,7 @@ using RDPoverSSH.DataStore;
 using RDPoverSSH.Models;
 using RDPoverSSH.Properties;
 using RDPoverSSH.Utilities;
+using RDPoverSSH.ViewModels.Settings;
 
 namespace RDPoverSSH.ViewModels
 {
@@ -53,6 +55,8 @@ namespace RDPoverSSH.ViewModels
                     SelectedTunnelPort = PortViewModel.Custom;
                 }
             }
+
+            GlobalSettings.DarkModeSetting.ApplicationThemeChanged += (_, __) => OnPropertyChanged(nameof(ToggleIsInEditModeBrush));
         }
 
         private void ConnectionViewModel_PropertyChanged(object sender, PropertyChangedEventArgs e)
@@ -124,6 +128,13 @@ namespace RDPoverSSH.ViewModels
                 || e.PropertyName.Equals(nameof(Model.ConnectionPort)))
             {
                 SetUnknownStatus();
+            }
+
+            if (e.PropertyName.Equals(nameof(Model.IsInEditMode)))
+            {
+                OnPropertyChanged(nameof(ToggleIsInEditModeGlyph));
+                OnPropertyChanged(nameof(ToggleIsInEditModeToolTip));
+                OnPropertyChanged(nameof(ToggleIsInEditModeBrush));
             }
         }
 
@@ -279,6 +290,30 @@ namespace RDPoverSSH.ViewModels
         public GenericCommandViewModel PublicIpCommand => _publicIpCommand ??=
             new GenericCommandViewModel(string.Empty, new RelayCommand(CopyPublicIpAddress), Icons.Network, Resources.CopyPublicIpAddressCommandDescription);
         private GenericCommandViewModel _publicIpCommand;
+
+        public ICommand ToggleIsInEditModeCommand => _toggleIsInEditModeCommand ??= new RelayCommand(() =>
+        {
+            Model.IsInEditMode = !Model.IsInEditMode;
+        });
+        private RelayCommand _toggleIsInEditModeCommand;
+
+        public string ToggleIsInEditModeGlyph => Model.IsInEditMode switch
+        {
+            true => Icons.ChevronUp,
+            false => Icons.ChevronDown
+        };
+
+        public string ToggleIsInEditModeToolTip => Model.IsInEditMode switch
+        {
+            true => Resources.HideSettings,
+            false => Resources.ShowSettings
+        };
+
+        public SolidColorBrush ToggleIsInEditModeBrush => Model.IsInEditMode switch
+        {
+            true => Application.Current.Resources["SystemControlDisabledBaseHighBrush"] as SolidColorBrush,
+            false => Application.Current.Resources["SystemControlBackgroundListLowBrush"] as SolidColorBrush
+        };
 
         private string ServerKeysDescription => Model.TunnelDirection switch
         {
