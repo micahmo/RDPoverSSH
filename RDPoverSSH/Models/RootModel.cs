@@ -24,10 +24,13 @@ namespace RDPoverSSH.Models
         /// </summary>
         public ObservableCollection<ConnectionModel> Connections { get; } = new ObservableCollection<ConnectionModel>();
 
+        public int ConnectionsTotalCount { get; private set; }
+
         public void Load(ExpressionStarter<ConnectionModel> connectionPredicate)
         {
             Connections.Clear();
             DatabaseEngine.GetCollection<ConnectionModel>().Find(connectionPredicate).ToList().ForEach(c => Connections.Add(c));
+            ConnectionsTotalCount = DatabaseEngine.GetCollection<ConnectionModel>().Count();
         }
     }
 }

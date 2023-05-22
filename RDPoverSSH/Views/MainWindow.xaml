@@ -27,6 +27,7 @@
                 <RowDefinition Height="50" />
                 <RowDefinition Height="50" />
                 <RowDefinition Height="*" />
+                <RowDefinition Height="20" />
             </Grid.RowDefinitions>
 
             <Grid>
@@ -87,6 +88,15 @@
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>
             </ScrollViewer>
+
+            <Grid Grid.Row="3" Background="{DynamicResource SystemControlBackgroundListLowBrush}">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="23" />
+                </Grid.ColumnDefinitions>
+
+                <Label HorizontalAlignment="Right" Content="{Binding ConnectionsCountString}" />
+            </Grid>
         </Grid>
     </Grid>
 </Window>

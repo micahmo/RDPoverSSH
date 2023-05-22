@@ -26,6 +26,7 @@ namespace RDPoverSSH.ViewModels
                 OnPropertyChanged(nameof(Connections));
                 OnPropertyChanged(nameof(ShowFilter));
                 OnPropertyChanged(nameof(ShowNoResultsHint));
+                OnPropertyChanged(nameof(ConnectionsCountString));
             };
 
             try
@@ -77,6 +78,8 @@ namespace RDPoverSSH.ViewModels
         public bool ShowFilter => Connections.Count > 0 || !string.IsNullOrEmpty(Model.Filter);
 
         public bool ShowNoResultsHint => Connections.Count == 0 && !string.IsNullOrEmpty(Model.Filter);
+
+        public string ConnectionsCountString => string.Format(Resources.CountString, Connections.Count) + (!string.IsNullOrEmpty(Model.Filter) ? string.Format(Resources.FilteredFromString, RootModel.Instance.ConnectionsTotalCount) : string.Empty);
 
         #region Private methods
 
