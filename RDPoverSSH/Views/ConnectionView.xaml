@@ -35,8 +35,9 @@
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="0" />
                     <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width=".65*" />
                     <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="0" />
                 </Grid.ColumnDefinitions>
@@ -61,13 +62,13 @@
                 <TextBox
                     Grid.Row="1"
                     Grid.Column="2"
+                    HorizontalAlignment="Left"
                     ui:ControlHelper.PlaceholderText="{x:Static properties:Resources.ConnectionNameHint}"
                     Text="{Binding Model.Name, UpdateSourceTrigger=PropertyChanged, Delay=100}" />
 
                 <StackPanel
                     Grid.Row="1"
-                    Grid.Column="0"
-                    Grid.ColumnSpan="6"
+                    Grid.Column="3"
                     HorizontalAlignment="Center"
                     Orientation="Horizontal">
                     <!--  Keep this in sync with the edit mode button  -->
@@ -100,7 +101,7 @@
 
                 <StackPanel
                     Grid.Row="1"
-                    Grid.Column="4"
+                    Grid.Column="5"
                     Orientation="Horizontal">
                     <!--<views:CommandButton DataContext="{Binding ExportConnectionCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=views:ConnectionItem}, Path=DataContext}"/>-->
                     <views:CommandButton CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=views:ConnectionItem}, Path=DataContext}" DataContext="{Binding FixCommonProblemsCommand}" />
@@ -111,7 +112,7 @@
                 <Grid
                     Grid.Row="2"
                     Grid.Column="1"
-                    Grid.ColumnSpan="4"
+                    Grid.ColumnSpan="5"
                     Margin="5"
                     Visibility="{c:Binding Model.IsInEditMode,
                                            FalseToVisibility=Collapsed}">
