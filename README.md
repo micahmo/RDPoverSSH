@@ -13,7 +13,7 @@ It is especially useful in an environment where the target machine is behind a N
 
 For some background on how reverse SSH tunnels work, check out the several great answers on this StackOverflow question. https://unix.stackexchange.com/questions/46235/how-does-reverse-ssh-tunneling-work
 
-> Note that port forwarding is required on at least one side of the connection. RDPoverSSH will not work if no port forwarding is possible.
+> Note that either direct WAN access or router port forwarding is required on at least one side of the connection. RDPoverSSH will not work if the tunnel target's port is not publicly accessible.
 
 ## Download
 
@@ -27,23 +27,31 @@ See the [wiki](https://github.com/micahmo/RDPoverSSH/wiki) for full instructions
 
 ### RDP over Normal Tunnel
 
-![image](https://user-images.githubusercontent.com/7417301/146233570-3d1c7d81-2845-419b-b882-79f7c8957f95.png)
+#### Connection Source
 
-![image](https://user-images.githubusercontent.com/7417301/146233646-5060137e-3164-42a6-b30c-5817db151f20.png)
+![image](https://github.com/micahmo/RDPoverSSH/assets/7417301/6e7f7f96-6514-4183-8bce-f02f6a339db3)
+
+#### Connection Target
+
+![image](https://github.com/micahmo/RDPoverSSH/assets/7417301/08ca77a8-f495-47de-8c71-e1d65efb3f9b)
 
 ### RDP over Reverse Tunnel
 
-![image](https://user-images.githubusercontent.com/7417301/146233725-779bbe0c-c694-4d99-9ea9-98df4e6a7598.png)
+#### Connection Source
 
-![image](https://user-images.githubusercontent.com/7417301/146233760-7b44d715-49d9-43ba-b266-d1709d77b44d.png)
+![image](https://github.com/micahmo/RDPoverSSH/assets/7417301/10b5cf31-5cbb-4212-a245-fd0f5f4758d3)
+
+#### Connection Target
+
+![image](https://github.com/micahmo/RDPoverSSH/assets/7417301/f28a343a-d8fd-4068-805d-ed517815d4e0)
 
 ### Condensed UI
 
-![image](https://user-images.githubusercontent.com/7417301/146233797-91029011-f427-45f0-a430-1110afa89168.png)
+![image](https://github.com/micahmo/RDPoverSSH/assets/7417301/fb33b4e4-a5df-4bea-bd85-78b39e083ad1)
 
 ### Dark Mode
 
-![image](https://user-images.githubusercontent.com/7417301/146233997-29b4c707-a31b-475a-905a-703313e03260.png)
+![image](https://github.com/micahmo/RDPoverSSH/assets/7417301/8556ed36-e374-41fb-9f3c-45ad717513a9)
 
 ## Requirements
 
