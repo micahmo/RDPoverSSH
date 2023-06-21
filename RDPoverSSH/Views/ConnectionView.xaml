@@ -104,6 +104,18 @@
                     Grid.Column="5"
                     Orientation="Horizontal">
                     <!--<views:CommandButton DataContext="{Binding ExportConnectionCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=views:ConnectionItem}, Path=DataContext}"/>-->
+                    <views:CommandButton
+                        CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=views:ConnectionItem}, Path=DataContext}"
+                        DataContext="{Binding MoveUpCommand}"
+                        Visibility="{c:Binding DataContext.Model.IsInEditMode,
+                                               RelativeSource={RelativeSource AncestorType=views:ConnectionItem},
+                                               FalseToVisibility=Collapsed}" />
+                    <views:CommandButton
+                        CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=views:ConnectionItem}, Path=DataContext}"
+                        DataContext="{Binding MoveDownCommand}"
+                        Visibility="{c:Binding DataContext.Model.IsInEditMode,
+                                               RelativeSource={RelativeSource AncestorType=views:ConnectionItem},
+                                               FalseToVisibility=Collapsed}" />
                     <views:CommandButton CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=views:ConnectionItem}, Path=DataContext}" DataContext="{Binding FixCommonProblemsCommand}" />
                     <views:CommandButton CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=views:ConnectionItem}, Path=DataContext}" DataContext="{Binding DuplicateConnectionCommand}" />
                     <views:CommandButton CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=views:ConnectionItem}, Path=DataContext}" DataContext="{Binding DeleteConnectionCommand}" />

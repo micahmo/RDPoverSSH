@@ -381,4 +381,10 @@
         <data name="ConnectInBrowserDescription" xml:space="preserve">
           <value>Connect over HTTP(S) to port {0} on the remote machine via localhost:{1} in the browser</value>
         </data>
+        <data name="MoveUp" xml:space="preserve">
+          <value>Move up</value>
+        </data>
+        <data name="MoveDown" xml:space="preserve">
+          <value>Move down</value>
+        </data>
 </root>

@@ -1,6 +1,5 @@
 ﻿using System;
 using LiteDB;
-using Microsoft.Toolkit.Mvvm.ComponentModel;
 using RDPoverSSH.Common;
 
 namespace RDPoverSSH.Models
@@ -45,6 +44,13 @@ namespace RDPoverSSH.Models
 
         [BsonId]
         public int ObjectId { get; set; }
+
+        public int Index
+        {
+            get => _index;
+            set => SetProperty(ref _index, value);
+        }
+        private int _index = int.MaxValue;
 
         public string Name
         {

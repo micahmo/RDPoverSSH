@@ -37,7 +37,7 @@ namespace RDPoverSSH.Models
         public void Load(ExpressionStarter<ConnectionModel> connectionPredicate)
         {
             Connections.Clear();
-            DatabaseEngine.GetCollection<ConnectionModel>().Find(connectionPredicate).ToList().ForEach(Connections.Add);
+            DatabaseEngine.GetCollection<ConnectionModel>().Find(connectionPredicate).OrderBy(c => c.Index).ToList().ForEach(Connections.Add);
         }
     }
 }

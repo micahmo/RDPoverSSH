@@ -20,6 +20,8 @@ namespace RDPoverSSH.ViewModels
 
         public MainWindowViewModel()
         {
+            Instance = this;
+            
             RootModel.Instance.Connections.CollectionChanged += (_, __) =>
             {
                 Connections = RootModel.Instance.Connections.Select(c => new ConnectionViewModel(c)).ToList();
@@ -50,15 +52,22 @@ namespace RDPoverSSH.ViewModels
                     OnPropertyChanged(nameof(ShowFilter));
 
                     // Redo the filter
-                    RootModel.Instance.Load(GeneratePredicate());
+                    Reload();
                 }
             };
 
             // Do the initial load.
-            RootModel.Instance.Load(GeneratePredicate());
+            Reload();
         }
 
         public MainWindowModel Model { get; }
+
+        public void Reload()
+        {
+            RootModel.Instance.Load(GeneratePredicate());
+        }
+
+        public static MainWindowViewModel Instance { get; private set; }
 
         #endregion
 

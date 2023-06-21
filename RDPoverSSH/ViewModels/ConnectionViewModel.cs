@@ -17,7 +17,6 @@ using RDPoverSSH.Controls;
 using RDPoverSSH.DataStore;
 using RDPoverSSH.Models;
 using RDPoverSSH.Properties;
-using RDPoverSSH.Utilities;
 using RDPoverSSH.ViewModels.Settings;
 
 namespace RDPoverSSH.ViewModels
@@ -161,6 +160,12 @@ namespace RDPoverSSH.ViewModels
         #region Public properties
 
         public ConnectionModel Model { get; }
+
+        public GenericCommandViewModel MoveUpCommand => _moveUpCommand ??= new GenericCommandViewModel(string.Empty, new RelayCommand(MoveUp), Icons.ChevronUp, Resources.MoveUp);
+        private GenericCommandViewModel _moveUpCommand;
+
+        public GenericCommandViewModel MoveDownCommand => _moveDownCommand ??= new GenericCommandViewModel(string.Empty, new RelayCommand(MoveDown), Icons.ChevronDown, Resources.MoveDown);
+        private GenericCommandViewModel _moveDownCommand;
 
         public DeleteConnectionCommandViewModel DeleteConnectionCommand { get; } = new DeleteConnectionCommandViewModel();
 
@@ -536,6 +541,42 @@ namespace RDPoverSSH.ViewModels
             {
                 await MessageBoxHelper.ShowCopyableText(string.Format(Resources.ErrorConnectingToTunnel, Model.TunnelEndpoint, Model.TunnelPort), Resources.ConnectionError, $"{LastError}{Environment.NewLine}");
             }
+        }
+
+        private void MoveUp()
+        {
+            List<ConnectionModel> allConnections = DatabaseEngine.GetCollection<ConnectionModel>().FindAll().OrderBy(c => c.Index).ToList();
+            ConnectionModel existingModel = allConnections.FirstOrDefault(c => c.ObjectId == Model.ObjectId);
+
+            int previousIndex = allConnections.IndexOf(existingModel);
+            allConnections.Remove(existingModel);
+            allConnections.Insert(Math.Max(0, previousIndex - 1), existingModel);
+
+            foreach (ConnectionModel c in allConnections.ToList())
+            {
+                c.Index = allConnections.IndexOf(c);
+                DatabaseEngine.GetCollection<ConnectionModel>().Update(c);
+            }
+
+            MainWindowViewModel.Instance.Reload();
+        }
+
+        private void MoveDown()
+        {
+            List<ConnectionModel> allConnections = DatabaseEngine.GetCollection<ConnectionModel>().FindAll().OrderBy(c => c.Index).ToList();
+            ConnectionModel existingModel = allConnections.FirstOrDefault(c => c.ObjectId == Model.ObjectId);
+
+            int previousIndex = allConnections.IndexOf(existingModel);
+            allConnections.Remove(existingModel);
+            allConnections.Insert(Math.Min(allConnections.Count, previousIndex + 1), existingModel);
+
+            foreach (ConnectionModel c in allConnections.ToList())
+            {
+                c.Index = allConnections.IndexOf(c);
+                DatabaseEngine.GetCollection<ConnectionModel>().Update(c);
+            }
+
+            MainWindowViewModel.Instance.Reload();
         }
 
         private void FixCommonProblems()
