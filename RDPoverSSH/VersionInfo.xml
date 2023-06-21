@@ -10,6 +10,6 @@
   <!-- Release notes --> 
   <!-- To account for scrollbars, always add a newline at the end of version notes. Also add 4 spaces to the end of a long line. -->
   <VersionNotes> - Fix filtered count issue
-- Allow reordering connections</VersionNotes>
+ - Allow reordering connections</VersionNotes>
   <ReleaseNotes></ReleaseNotes>
 </AppUpdate>
