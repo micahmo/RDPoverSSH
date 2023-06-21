@@ -19,6 +19,14 @@ namespace RDPoverSSH.Models
 
         #endregion
 
+        public RootModel()
+        {
+            Connections.CollectionChanged += (_, __) =>
+            {
+                ConnectionsTotalCount = DatabaseEngine.GetCollection<ConnectionModel>().Count();
+            };
+        }
+
         /// <summary>
         /// The list of connections
         /// </summary>
@@ -29,8 +37,7 @@ namespace RDPoverSSH.Models
         public void Load(ExpressionStarter<ConnectionModel> connectionPredicate)
         {
             Connections.Clear();
-            DatabaseEngine.GetCollection<ConnectionModel>().Find(connectionPredicate).ToList().ForEach(c => Connections.Add(c));
-            ConnectionsTotalCount = DatabaseEngine.GetCollection<ConnectionModel>().Count();
+            DatabaseEngine.GetCollection<ConnectionModel>().Find(connectionPredicate).ToList().ForEach(Connections.Add);
         }
     }
 }

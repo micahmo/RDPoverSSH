@@ -19,7 +19,7 @@ namespace RDPoverSSH.ViewModels
         public override string Description => Resources.DuplicateConnection;
 
         /// <inheritdoc/>
-        public override ICommand Command => _command ??= new RelayCommand<object>(DeleteConnectionItem);
+        public override ICommand Command => _command ??= new RelayCommand<object>(DuplicateConnectionItem);
         private ICommand _command;
 
         /// <inheritdoc/>
@@ -29,7 +29,7 @@ namespace RDPoverSSH.ViewModels
 
         #region Command
 
-        private void DeleteConnectionItem(object param)
+        private void DuplicateConnectionItem(object param)
         {
             if (param is ConnectionViewModel connectionViewModel)
             {
@@ -45,8 +45,8 @@ namespace RDPoverSSH.ViewModels
                 duplicateConnection.LocalTunnelPort = NetworkUtils.GetFreeTcpPort();
                 
                 // Add and save
-                RootModel.Instance.Connections.Add(duplicateConnection);
                 DatabaseEngine.GetCollection<ConnectionModel>().Insert(duplicateConnection);
+                RootModel.Instance.Connections.Add(duplicateConnection);
             }
         }
 

@@ -44,8 +44,8 @@ namespace RDPoverSSH.ViewModels
                 var res = await MessageBoxHelper.Show(string.Format(Resources.ConfirmDeleteConnection, connectionNameFormat), Resources.Confirm, MessageBoxButton.YesNo);
                 if (res == ContentDialogResult.Primary)
                 {
-                    RootModel.Instance.Connections.Remove(connectionViewModel.Model);
                     DatabaseEngine.GetCollection<ConnectionModel>().Delete(connectionViewModel.Model.ObjectId);
+                    RootModel.Instance.Connections.Remove(connectionViewModel.Model);
 
                     // Delete associated RDP Profiles
                     foreach (FileInfo fileInfo in new DirectoryInfo(Values.ApplicationDataPath).GetFiles(RdpUtils.RdpConnectionFilesWildcard(connectionViewModel.Model.ObjectId)))
