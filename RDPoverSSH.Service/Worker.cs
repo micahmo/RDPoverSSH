@@ -234,7 +234,7 @@ namespace RDPoverSSH.Service
                 {
                     try
                     {
-                        if (AreEqual(existingClient, connectionModel) && existingClient.IsConnected && existingClient.ForwardedPorts.FirstOrDefault()?.IsStarted == true)
+                        if (AreEqual(existingClient.Client, connectionModel) && existingClient.Client.IsConnected && existingClient.Client.ForwardedPorts.FirstOrDefault()?.IsStarted == true)
                         {
                             connectionServiceModel.LastError = string.Empty;
                             connectionServiceModel.Status = TunnelStatus.Connected;
@@ -265,10 +265,15 @@ namespace RDPoverSSH.Service
                     // Check if we have keys
                     if (File.Exists(Values.ClientServerPrivateKeyFilePath(connectionModel.ObjectId)))
                     {
+                        // Owned by _sshClients once tracked below, and disposed here if we fail before that.
+                        PrivateKeyFile privateKeyFile = null;
+
                         try
                         {
+                            privateKeyFile = new PrivateKeyFile(Values.ClientServerPrivateKeyFilePath(connectionModel.ObjectId));
+
                             var connectionInfo = new ConnectionInfo(connectionModel.TunnelEndpoint, connectionModel.TunnelPort, Values.RdpOverSshWindowsUsername,
-                                new PrivateKeyAuthenticationMethod(Values.RdpOverSshWindowsUsername, new PrivateKeyFile(Values.ClientServerPrivateKeyFilePath(connectionModel.ObjectId))))
+                                new PrivateKeyAuthenticationMethod(Values.RdpOverSshWindowsUsername, privateKeyFile))
                             {
                                 Timeout = TimeSpan.FromSeconds(10),
                             };
@@ -280,7 +285,10 @@ namespace RDPoverSSH.Service
 
                             // Track the client immediately after instantiating (before connecting)
                             // So that we can clean it up if anything goes wrong.
-                            _sshClients[connectionModel.ObjectId] = client;
+                            _sshClients[connectionModel.ObjectId] = (client, privateKeyFile);
+
+                            // Ownership has transferred to _sshClients, so DeleteClient disposes it from here on.
+                            privateKeyFile = null;
 
                             client.Connect();
 
@@ -312,6 +320,9 @@ namespace RDPoverSSH.Service
                         }
                         catch (Exception ex)
                         {
+                            // If we failed before the key file was tracked, DeleteClient won't cover it.
+                            privateKeyFile?.Dispose();
+
                             // In case we got far enough to create a client but failed later (e.g., while port forwarding) clean up the client
                             DeleteClient(connectionModel.ObjectId);
 
@@ -353,12 +364,22 @@ namespace RDPoverSSH.Service
             {
                 try
                 {
-                    kvp.Value?.Dispose();
+                    kvp.Value.Client?.Dispose();
                 }
                 catch
                 {
-                    // Swallow. SshClient throws a rare "collection modified" exception when disposing ports. 
+                    // Swallow. SshClient throws a rare "collection modified" exception when disposing ports.
                     // https://github.com/sshnet/SSH.NET/blob/a5bd08d655bb6a3c762306472cec354556dca3a3/src/Renci.SshNet/SshClient.cs#L167
+                }
+
+                try
+                {
+                    // Disposing the client does not dispose the key file it authenticated with, so do it here.
+                    kvp.Value.KeyFile?.Dispose();
+                }
+                catch
+                {
+                    // Swallow, so that a failure to dispose still lets us drop the tracked entry below.
                 }
 
                 _sshClients.Remove(kvp.Key);
@@ -418,8 +439,10 @@ namespace RDPoverSSH.Service
 
             try
             {
-                byte[] existingClientServerPrivateKey = (client.ConnectionInfo.AuthenticationMethods.FirstOrDefault() as PrivateKeyAuthenticationMethod)?.KeyFiles.FirstOrDefault()?.HostKey.Data;
-                byte[] currentClientServerPrivateKey = new PrivateKeyFile(Values.ClientServerPrivateKeyFilePath(connection.ObjectId)).HostKey.Data;
+                byte[] existingClientServerPrivateKey = (client.ConnectionInfo.AuthenticationMethods.FirstOrDefault() as PrivateKeyAuthenticationMethod)?.KeyFiles.FirstOrDefault()?.HostKeyAlgorithms.FirstOrDefault()?.Data;
+
+                using var currentClientServerPrivateKeyFile = new PrivateKeyFile(Values.ClientServerPrivateKeyFilePath(connection.ObjectId));
+                byte[] currentClientServerPrivateKey = currentClientServerPrivateKeyFile.HostKeyAlgorithms.FirstOrDefault()?.Data;
 
                 if (!(((IStructuralEquatable)existingClientServerPrivateKey)?.Equals(currentClientServerPrivateKey, StructuralComparisons.StructuralEqualityComparer) ?? false))
                 {
@@ -463,7 +486,9 @@ namespace RDPoverSSH.Service
         #region Private fields
 
         private readonly ServiceController _sshServiceController = new ServiceController(_sshServiceName);
-        private readonly Dictionary<int, SshClient> _sshClients = new Dictionary<int, SshClient>();
+        // The key file is tracked alongside the client because SshClient.Dispose() does not dispose the
+        // PrivateKeyFile it was constructed with, and PrivateKeyFile owns unmanaged crypto state.
+        private readonly Dictionary<int, (SshClient Client, PrivateKeyFile KeyFile)> _sshClients = new Dictionary<int, (SshClient Client, PrivateKeyFile KeyFile)>();
         private bool _skipWait;
 
         #endregion
